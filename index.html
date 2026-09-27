@@ -1,32 +1,421 @@
-<!doctype html>
-<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>THAALA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f6fb;color:#171322}
-header{background:linear-gradient(135deg,#4d126f,#c21d58);color:#fff;padding:18px 16px 22px;border-radius:0 0 24px 24px}
-.top{display:flex;align-items:center;justify-content:space-between}.logo{font-size:29px;font-weight:900;letter-spacing:3px}.bal{background:#ffffff22;border:1px solid #ffffff44;border-radius:14px;padding:8px 11px;font-size:12px}.bal b{display:block;font-size:16px}
-.marquee{margin-top:15px;background:#fff;color:#5a176f;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:700;overflow:hidden}
-nav{display:flex;gap:8px;overflow:auto;padding:12px 12px 4px}nav button{border:0;background:#fff;border-radius:20px;padding:9px 14px;white-space:nowrap;font-weight:700;color:#5b4d68}nav button.active{background:#74177f;color:#fff}
-main{padding:12px}.title{display:flex;justify-content:space-between;align-items:center}.title h2{font-size:20px;margin:12px 0}.live{color:#e31d42;font-weight:800;font-size:13px}
-.card{background:#fff;border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 4px 18px #17132210}.row{display:flex;justify-content:space-between;align-items:center}.sport{font-size:12px;color:#8a8091;font-weight:700}.teams{font-size:16px;font-weight:800;margin:10px 0}.teams span{display:block;margin:5px 0}.score{font-size:22px;font-weight:900}.tag{display:inline-block;background:#fff0f3;color:#d51d46;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:800}.join{width:100%;margin-top:12px;border:0;border-radius:12px;background:#74177f;color:#fff;padding:12px;font-weight:800}
-.drawer{display:none;position:fixed;inset:0;background:#0007;z-index:5}.drawer.open{display:block}.panel{width:82%;height:100%;background:#fff;padding:20px;overflow:auto}.close{float:right;border:0;background:#eee;border-radius:10px;padding:8px}.menu h3{margin-top:28px}.menu div{padding:12px 4px;border-bottom:1px solid #eee;font-weight:650}
-</style></head>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5fa;color:#17152a}
+header{background:linear-gradient(135deg,#4b0877,#d01962);color:white;padding:22px 16px;border-radius:0 0 28px 28px}
+.logo{font-size:32px;font-weight:900;letter-spacing:4px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.balance{background:#ffffff22;border:1px solid #ffffff55;padding:10px 15px;border-radius:15px}
+.balance b{font-size:20px}
+.container{padding:16px;max-width:900px;margin:auto}
+.card{background:white;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 4px 15px #0000000d}
+input,button{width:100%;padding:13px;border-radius:11px;font-size:15px}
+input{border:1px solid #ddd;margin:6px 0 10px}
+button{border:0;background:#7214a5;color:white;font-weight:bold;margin-top:8px}
+button.secondary{background:#eee;color:#333}
+.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}
+.tabs button{width:auto;white-space:nowrap;padding:11px 18px;background:white;color:#555}
+.tabs .active{background:#7415a4;color:white}
+.game{border:1px solid #eee;border-radius:16px;padding:15px;margin:12px 0}
+.live{color:#e51d48;font-weight:bold}
+.small{font-size:13px;color:#777}
+.hidden{display:none}
+.msg{padding:12px;background:#f1eff5;border-radius:10px;margin-top:10px}
+.logout{background:#444}
+</style>
+</head>
+
 <body>
-<header><div class="top"><button onclick="openMenu()" style="border:0;background:#ffffff22;color:#fff;border-radius:10px;padding:9px">☰</button><div class="logo">THAALA</div><div class="bal">BALANCE<b id="balance">0</b></div></div>
-<div class="marquee">🔴 LIVE • THAALA Virtual Sports — सभी गेम virtual credits पर</div></header>
-<nav><button class="active">LIVE</button><button>SPORTS</button><button>FANTASY</button><button>RESULTS</button><button>REWARDS</button><button>HELP</button></nav>
-<main><div class="title"><h2>Live Games</h2><span class="live">● LIVE</span></div><div id="games"></div></main>
-<div id="drawer" class="drawer" onclick="if(event.target.id==='drawer')closeMenu()"><div class="panel"><button class="close" onclick="closeMenu()">✕</button><div class="logo" style="margin-top:5px">THAALA</div><div class="menu"><h3>Racing Sports</h3><div>🏇 Horse Racing</div><div>🐕 Greyhound Racing</div><h3>All Sports</h3><div>🏏 Cricket</div><div>⚽ Football</div><div>🎾 Tennis</div><div>🏓 Table Tennis</div><div>🏀 Basketball</div><div>🤾 Handball</div><div>⚾ Baseball</div><h3>Virtual</h3><div>Virtual Cricket League</div><div>Dim Cricket League — 1 Over</div><div>T5 XI</div><div>T10 XI</div></div></div></div>
+
+<header>
+<div class="top">
+<div class="logo">THAALA</div>
+<div class="balance">
+BALANCE<br>
+<b id="balance">0</b>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<section id="auth">
+<div class="card">
+<h2>THAALA Login</h2>
+
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Password">
+
+<button onclick="login()">LOGIN</button>
+
+<button class="secondary" onclick="showRegister()">CREATE ACCOUNT</button>
+
+<div id="loginMsg" class="msg"></div>
+</div>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="hidden">
+<div class="card">
+<h2>Create THAALA Account</h2>
+
+<input id="regName" placeholder="Your Name">
+<input id="regEmail" type="email" placeholder="Email">
+<input id="regPassword" type="password" placeholder="Password">
+
+<button onclick="register()">REGISTER</button>
+<button class="secondary" onclick="showLogin()">BACK TO LOGIN</button>
+
+<div id="regMsg" class="msg"></div>
+</div>
+</section>
+
+<!-- APP -->
+<section id="app" class="hidden">
+
+<div class="card">
+<b>Welcome, <span id="userName"></span></b>
+<div class="small">THAALA ID: <span id="thaalaId"></span></div>
+</div>
+
+<div class="tabs">
+<button class="active">LIVE</button>
+<button>SPORTS</button>
+<button>FANTASY</button>
+<button>RESULTS</button>
+</div>
+
+<h2>🔴 Live Virtual Games</h2>
+
+<div id="games">Loading games...</div>
+
+<div id="adminBox" class="card hidden">
+<h2>Admin — Add Credits</h2>
+
+<input id="targetUser" placeholder="User UUID">
+<input id="creditAmount" type="number" placeholder="Credits">
+<input id="creditNote" placeholder="Note">
+
+<button onclick="addCredits()">ADD VIRTUAL CREDITS</button>
+
+<div id="adminMsg" class="msg"></div>
+</div>
+
+<button class="logout" onclick="logout()">LOGOUT</button>
+
+</section>
+
+</div>
+
 <script>
-const games=[
-['CRICKET','India Virtual XI','Australia Virtual XI','127/3','LIVE'],
-['FOOTBALL','Mumbai Virtual FC','Delhi Virtual FC','2 - 1','LIVE'],
-['TENNIS','Player Alpha','Player Beta','4 - 3','LIVE'],
-['BASKETBALL','Lucknow Virtual','Delhi Virtual','58 - 54','LIVE'],
-['CRICKET','South Africa Virtual XI','England Virtual XI','91/2','LIVE'],
-['FOOTBALL','United Virtual','City Virtual','1 - 1','LIVE']
-];
-function render(){document.getElementById('games').innerHTML=games.map((g,i)=>`<div class="card"><div class="row"><span class="sport">${g[0]}</span><span class="tag">● ${g[4]}</span></div><div class="row"><div class="teams"><span>${g[1]}</span><span>${g[2]}</span></div><div class="score">${g[3]}</div></div><button class="join" onclick="join(${i})">JOIN • 100 VIRTUAL CREDITS</button></div>`).join('')}
-function join(i){alert('Virtual game entry selected: '+games[i][1]+' vs '+games[i][2]+'\nNext step: Supabase connection + secure join_virtual_game().')}
-function openMenu(){document.getElementById('drawer').classList.add('open')}function closeMenu(){document.getElementById('drawer').classList.remove('open')}render();
-</script></body></html>
+
+const SUPABASE_URL =
+"https://pcenmqernxnxnbatslfo.supabase.co";
+
+/*
+==================================================
+IMPORTANT:
+नीचे अपनी COPIED anon/public key paste करो।
+यहाँ केवल anon/public key डालना है।
+service_role/secret key बिल्कुल नहीं।
+==================================================
+*/
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR";
+
+const db = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+
+// ---------- UI ----------
+
+function showRegister(){
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("register").classList.remove("hidden");
+}
+
+function showLogin(){
+document.getElementById("register").classList.add("hidden");
+document.getElementById("auth").classList.remove("hidden");
+}
+
+
+// ---------- REGISTER ----------
+
+async function register(){
+
+const name=document.getElementById("regName").value.trim();
+const email=document.getElementById("regEmail").value.trim();
+const password=document.getElementById("regPassword").value;
+
+const msg=document.getElementById("regMsg");
+
+if(!name || !email || !password){
+msg.textContent="सभी details भरें।";
+return;
+}
+
+const {data,error}=await db.auth.signUp({
+email:email,
+password:password,
+options:{
+data:{
+display_name:name
+}
+}
+});
+
+if(error){
+msg.textContent=error.message;
+return;
+}
+
+msg.textContent="✅ Account बन गया। अब Login करें।";
+
+setTimeout(showLogin,1000);
+}
+
+
+// ---------- LOGIN ----------
+
+async function login(){
+
+const email=document.getElementById("loginEmail").value.trim();
+const password=document.getElementById("loginPassword").value;
+
+const msg=document.getElementById("loginMsg");
+
+const {data,error}=await db.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+msg.textContent=error.message;
+return;
+}
+
+await loadApp();
+}
+
+
+// ---------- LOAD APP ----------
+
+async function loadApp(){
+
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("register").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+
+const {data:{user}}=await db.auth.getUser();
+
+if(!user)return;
+
+
+// profile
+const {data:profile,error:pError}=await db
+.from("profiles")
+.select("id,thaala_id,display_name,role,credits")
+.eq("id",user.id)
+.single();
+
+if(pError){
+console.log(pError);
+return;
+}
+
+document.getElementById("userName").textContent=
+profile.display_name || user.email;
+
+document.getElementById("thaalaId").textContent=
+profile.thaala_id || "-";
+
+document.getElementById("balance").textContent=
+profile.credits || 0;
+
+if(profile.role==="admin"){
+document.getElementById("adminBox").classList.remove("hidden");
+}
+
+loadGames();
+}
+
+
+// ---------- GAMES ----------
+
+async function loadGames(){
+
+const box=document.getElementById("games");
+
+const {data,error}=await db
+.from("games")
+.select("id,sport,title,home_team,away_team,status,current_state")
+.eq("status","live")
+.order("starts_at",{ascending:true});
+
+if(error){
+box.innerHTML=
+"<div class='card'>Games load error: "+
+error.message+"</div>";
+return;
+}
+
+if(!data || data.length===0){
+box.innerHTML=
+"<div class='card'>अभी कोई live game नहीं है।</div>";
+return;
+}
+
+box.innerHTML="";
+
+data.forEach(game=>{
+
+let state="";
+
+if(game.current_state){
+try{
+state=JSON.stringify(game.current_state);
+}catch(e){}
+}
+
+const div=document.createElement("div");
+
+div.className="game";
+
+div.innerHTML=`
+<div class="small">${game.sport}</div>
+<h3>${game.title}</h3>
+
+<div>
+<b>${game.home_team}</b>
+&nbsp; VS &nbsp;
+<b>${game.away_team}</b>
+</div>
+
+<p class="live">🔴 LIVE</p>
+
+<div class="small">
+${state}
+</div>
+
+<button onclick="joinGame('${game.id}')">
+JOIN • 100 VIRTUAL CREDITS
+</button>
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+
+// ---------- JOIN GAME ----------
+
+async function joinGame(gameId){
+
+if(!confirm(
+"100 virtual credits game entry से deduct होंगे. Continue?"
+))return;
+
+const {data,error}=await db.rpc(
+"join_virtual_game",
+{
+selected_game:gameId,
+entry_amount:100
+}
+);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("✅ Game joined successfully.");
+
+await loadApp();
+}
+
+
+// ---------- ADMIN CREDIT ----------
+
+async function addCredits(){
+
+const target=
+document.getElementById("targetUser").value.trim();
+
+const amount=
+Number(document.getElementById("creditAmount").value);
+
+const note=
+document.getElementById("creditNote").value.trim()
+|| "Admin credit";
+
+const msg=document.getElementById("adminMsg");
+
+if(!target || !amount || amount<=0){
+msg.textContent="User UUID और credits डालें।";
+return;
+}
+
+const {data,error}=await db.rpc(
+"admin_add_credits",
+{
+target_user:target,
+credit_amount:amount,
+note:note
+}
+);
+
+if(error){
+msg.textContent=error.message;
+return;
+}
+
+msg.textContent=
+"✅ Credits added. New balance: "+data;
+
+await loadApp();
+}
+
+
+// ---------- LOGOUT ----------
+
+async function logout(){
+
+await db.auth.signOut();
+
+location.reload();
+
+}
+
+
+// ---------- EXISTING SESSION ----------
+
+(async function(){
+
+const {data:{session}}=
+await db.auth.getSession();
+
+if(session){
+await loadApp();
+}
+
+})();
+
+</script>
+
+</body>
+</html>
