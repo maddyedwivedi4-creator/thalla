@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THAALA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f6fb;color:#171322}
+header{background:linear-gradient(135deg,#4d126f,#c21d58);color:#fff;padding:18px 16px 22px;border-radius:0 0 24px 24px}
+.top{display:flex;align-items:center;justify-content:space-between}.logo{font-size:29px;font-weight:900;letter-spacing:3px}.bal{background:#ffffff22;border:1px solid #ffffff44;border-radius:14px;padding:8px 11px;font-size:12px}.bal b{display:block;font-size:16px}
+.marquee{margin-top:15px;background:#fff;color:#5a176f;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:700;overflow:hidden}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 12px 4px}nav button{border:0;background:#fff;border-radius:20px;padding:9px 14px;white-space:nowrap;font-weight:700;color:#5b4d68}nav button.active{background:#74177f;color:#fff}
+main{padding:12px}.title{display:flex;justify-content:space-between;align-items:center}.title h2{font-size:20px;margin:12px 0}.live{color:#e31d42;font-weight:800;font-size:13px}
+.card{background:#fff;border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 4px 18px #17132210}.row{display:flex;justify-content:space-between;align-items:center}.sport{font-size:12px;color:#8a8091;font-weight:700}.teams{font-size:16px;font-weight:800;margin:10px 0}.teams span{display:block;margin:5px 0}.score{font-size:22px;font-weight:900}.tag{display:inline-block;background:#fff0f3;color:#d51d46;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:800}.join{width:100%;margin-top:12px;border:0;border-radius:12px;background:#74177f;color:#fff;padding:12px;font-weight:800}
+.drawer{display:none;position:fixed;inset:0;background:#0007;z-index:5}.drawer.open{display:block}.panel{width:82%;height:100%;background:#fff;padding:20px;overflow:auto}.close{float:right;border:0;background:#eee;border-radius:10px;padding:8px}.menu h3{margin-top:28px}.menu div{padding:12px 4px;border-bottom:1px solid #eee;font-weight:650}
+</style></head>
+<body>
+<header><div class="top"><button onclick="openMenu()" style="border:0;background:#ffffff22;color:#fff;border-radius:10px;padding:9px">☰</button><div class="logo">THAALA</div><div class="bal">BALANCE<b id="balance">0</b></div></div>
+<div class="marquee">🔴 LIVE • THAALA Virtual Sports — सभी गेम virtual credits पर</div></header>
+<nav><button class="active">LIVE</button><button>SPORTS</button><button>FANTASY</button><button>RESULTS</button><button>REWARDS</button><button>HELP</button></nav>
+<main><div class="title"><h2>Live Games</h2><span class="live">● LIVE</span></div><div id="games"></div></main>
+<div id="drawer" class="drawer" onclick="if(event.target.id==='drawer')closeMenu()"><div class="panel"><button class="close" onclick="closeMenu()">✕</button><div class="logo" style="margin-top:5px">THAALA</div><div class="menu"><h3>Racing Sports</h3><div>🏇 Horse Racing</div><div>🐕 Greyhound Racing</div><h3>All Sports</h3><div>🏏 Cricket</div><div>⚽ Football</div><div>🎾 Tennis</div><div>🏓 Table Tennis</div><div>🏀 Basketball</div><div>🤾 Handball</div><div>⚾ Baseball</div><h3>Virtual</h3><div>Virtual Cricket League</div><div>Dim Cricket League — 1 Over</div><div>T5 XI</div><div>T10 XI</div></div></div></div>
+<script>
+const games=[
+['CRICKET','India Virtual XI','Australia Virtual XI','127/3','LIVE'],
+['FOOTBALL','Mumbai Virtual FC','Delhi Virtual FC','2 - 1','LIVE'],
+['TENNIS','Player Alpha','Player Beta','4 - 3','LIVE'],
+['BASKETBALL','Lucknow Virtual','Delhi Virtual','58 - 54','LIVE'],
+['CRICKET','South Africa Virtual XI','England Virtual XI','91/2','LIVE'],
+['FOOTBALL','United Virtual','City Virtual','1 - 1','LIVE']
+];
+function render(){document.getElementById('games').innerHTML=games.map((g,i)=>`<div class="card"><div class="row"><span class="sport">${g[0]}</span><span class="tag">● ${g[4]}</span></div><div class="row"><div class="teams"><span>${g[1]}</span><span>${g[2]}</span></div><div class="score">${g[3]}</div></div><button class="join" onclick="join(${i})">JOIN • 100 VIRTUAL CREDITS</button></div>`).join('')}
+function join(i){alert('Virtual game entry selected: '+games[i][1]+' vs '+games[i][2]+'\nNext step: Supabase connection + secure join_virtual_game().')}
+function openMenu(){document.getElementById('drawer').classList.add('open')}function closeMenu(){document.getElementById('drawer').classList.remove('open')}render();
+</script></body></html>
