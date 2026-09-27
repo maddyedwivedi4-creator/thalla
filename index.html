@@ -1,421 +1,131 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>THAALA</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f5fa;color:#17152a}
-header{background:linear-gradient(135deg,#4b0877,#d01962);color:white;padding:22px 16px;border-radius:0 0 28px 28px}
-.logo{font-size:32px;font-weight:900;letter-spacing:4px}
-.top{display:flex;justify-content:space-between;align-items:center}
-.balance{background:#ffffff22;border:1px solid #ffffff55;padding:10px 15px;border-radius:15px}
-.balance b{font-size:20px}
-.container{padding:16px;max-width:900px;margin:auto}
-.card{background:white;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 4px 15px #0000000d}
-input,button{width:100%;padding:13px;border-radius:11px;font-size:15px}
-input{border:1px solid #ddd;margin:6px 0 10px}
-button{border:0;background:#7214a5;color:white;font-weight:bold;margin-top:8px}
-button.secondary{background:#eee;color:#333}
-.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}
-.tabs button{width:auto;white-space:nowrap;padding:11px 18px;background:white;color:#555}
-.tabs .active{background:#7415a4;color:white}
-.game{border:1px solid #eee;border-radius:16px;padding:15px;margin:12px 0}
-.live{color:#e51d48;font-weight:bold}
-.small{font-size:13px;color:#777}
-.hidden{display:none}
-.msg{padding:12px;background:#f1eff5;border-radius:10px;margin-top:10px}
-.logout{background:#444}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f6fa;color:#181824}.hidden{display:none!important}.app{max-width:520px;margin:auto;min-height:100vh;background:#f7f7fb}.hero{background:linear-gradient(135deg,#48108d,#c2185b);color:#fff;padding:24px 18px 26px;border-radius:0 0 24px 24px}.brand{font-size:30px;font-weight:950;letter-spacing:4px}.sub{opacity:.85;font-size:12px;margin-top:4px}.card{background:#fff;border-radius:18px;padding:18px;margin:14px;box-shadow:0 8px 28px #0000000b}.tabs{display:flex;gap:8px;margin-bottom:16px}.tab{flex:1;padding:11px;border:0;border-radius:12px;background:#eee;font-weight:800}.tab.active{background:#6b1de1;color:#fff}label{display:block;font-size:13px;font-weight:750;margin:12px 0 6px}input{width:100%;height:48px;border:1px solid #ddd;border-radius:12px;padding:0 13px;font-size:16px}button{width:100%;border:0;border-radius:12px;background:#6b1de1;color:#fff;font-weight:850;height:48px;margin-top:12px}button.secondary{background:#fff;color:#6b1de1;border:1px solid #ddd}.msg{margin-top:10px;padding:10px;border-radius:10px;background:#f3f3f7;font-size:13px;white-space:pre-wrap}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}.balance{background:#fff1fa;color:#8d125e;border-radius:12px;padding:9px 12px;font-weight:900}.nav{display:flex;gap:7px;overflow:auto;padding:12px 14px}.nav button{min-width:78px;margin:0;height:38px;background:#fff;color:#444;border:1px solid #eee}.nav button.active{background:#6518d8;color:#fff;border-color:#6518d8}.game{background:#fff;border-radius:16px;padding:15px;margin:10px 14px;box-shadow:0 5px 18px #0000000a}.game h3{margin:5px 0;font-size:16px}.teams{font-weight:750}.live{color:#c71919;font-weight:900;font-size:12px}.join{height:42px}.admin{border:2px solid #eee}.small{font-size:12px;color:#777}.footer{padding:25px 15px;text-align:center;color:#777;font-size:11px}.danger{color:#b00020}.success{color:#087a35}
 </style>
 </head>
-
 <body>
+<div class="app" id="root">
+  <div class="hero">
+    <div class="brand">THAALA</div>
+    <div class="sub">Virtual credits • No real-money wallet</div>
+  </div>
 
-<header>
-<div class="top">
-<div class="logo">THAALA</div>
-<div class="balance">
-BALANCE<br>
-<b id="balance">0</b>
+  <div id="auth" class="card">
+    <div class="tabs">
+      <button id="userTab" class="tab active">MOBILE OTP</button>
+      <button id="adminTab" class="tab">ADMIN LOGIN</button>
+    </div>
+
+    <section id="userAuth">
+      <h2>Login / Register</h2>
+      <p class="small">Mobile number se OTP lekar account create ya login karein.</p>
+      <label>Mobile Number</label>
+      <input id="phone" inputmode="tel" autocomplete="tel" placeholder="10 digit mobile number" maxlength="10">
+      <button id="sendOtp">CONTINUE</button>
+      <div id="phoneMsg" class="msg hidden"></div>
+      <div id="otpBox" class="hidden">
+        <label>6-digit OTP</label>
+        <input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter OTP">
+        <button id="verifyOtp">VERIFY & LOGIN</button>
+        <button id="resendOtp" class="secondary">RESEND OTP</button>
+      </div>
+    </section>
+
+    <section id="adminAuth" class="hidden">
+      <h2>Admin Login</h2>
+      <label>Email</label><input id="adminEmail" type="email" placeholder="Admin email">
+      <label>Password</label><input id="adminPassword" type="password" placeholder="Password">
+      <button id="adminLogin">LOGIN AS ADMIN</button>
+      <div id="adminMsg" class="msg hidden"></div>
+    </section>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <div class="card">
+      <div class="topline"><div><b>Welcome</b><div class="small">THAALA ID: <b id="thaalaId">—</b></div><div class="small" id="phoneDisplay"></div></div><div class="balance">BALANCE<br><span id="balance">0</span></div></div>
+    </div>
+    <div class="nav"><button class="active">LIVE</button><button>SPORTS</button><button>FANTASY</button><button>RESULTS</button></div>
+    <div class="card"><h2 style="margin:0">🔴 Live Virtual Games</h2><div class="small" style="margin-top:4px">All entries use virtual credits only.</div></div>
+    <div id="games"></div>
+
+    <div id="adminPanel" class="card admin hidden">
+      <h2 style="margin:0 0 8px">Admin — Add Virtual Credits</h2>
+      <div class="small">Use the user's Supabase UUID. Do not edit credits directly in the table.</div>
+      <label>User UUID</label><input id="targetUser" placeholder="User UUID">
+      <label>Credits</label><input id="creditAmount" type="number" min="1" placeholder="10000">
+      <label>Note</label><input id="creditNote" placeholder="Initial virtual credits">
+      <button id="addCredits">ADD VIRTUAL CREDITS</button>
+      <div id="creditMsg" class="msg hidden"></div>
+    </div>
+    <button id="logout" class="card" style="display:block;width:calc(100% - 28px);margin:14px;height:48px;background:#222;color:#fff">LOGOUT</button>
+  </div>
+  <div class="footer">THAALA is a virtual-credit game panel. No deposits, withdrawals or real-money wallet are included.</div>
 </div>
-</div>
-</header>
-
-<div class="container">
-
-<!-- LOGIN -->
-<section id="auth">
-<div class="card">
-<h2>THAALA Login</h2>
-
-<input id="loginEmail" type="email" placeholder="Email">
-<input id="loginPassword" type="password" placeholder="Password">
-
-<button onclick="login()">LOGIN</button>
-
-<button class="secondary" onclick="showRegister()">CREATE ACCOUNT</button>
-
-<div id="loginMsg" class="msg"></div>
-</div>
-</section>
-
-<!-- REGISTER -->
-<section id="register" class="hidden">
-<div class="card">
-<h2>Create THAALA Account</h2>
-
-<input id="regName" placeholder="Your Name">
-<input id="regEmail" type="email" placeholder="Email">
-<input id="regPassword" type="password" placeholder="Password">
-
-<button onclick="register()">REGISTER</button>
-<button class="secondary" onclick="showLogin()">BACK TO LOGIN</button>
-
-<div id="regMsg" class="msg"></div>
-</div>
-</section>
-
-<!-- APP -->
-<section id="app" class="hidden">
-
-<div class="card">
-<b>Welcome, <span id="userName"></span></b>
-<div class="small">THAALA ID: <span id="thaalaId"></span></div>
-</div>
-
-<div class="tabs">
-<button class="active">LIVE</button>
-<button>SPORTS</button>
-<button>FANTASY</button>
-<button>RESULTS</button>
-</div>
-
-<h2>🔴 Live Virtual Games</h2>
-
-<div id="games">Loading games...</div>
-
-<div id="adminBox" class="card hidden">
-<h2>Admin — Add Credits</h2>
-
-<input id="targetUser" placeholder="User UUID">
-<input id="creditAmount" type="number" placeholder="Credits">
-<input id="creditNote" placeholder="Note">
-
-<button onclick="addCredits()">ADD VIRTUAL CREDITS</button>
-
-<div id="adminMsg" class="msg"></div>
-</div>
-
-<button class="logout" onclick="logout()">LOGOUT</button>
-
-</section>
-
-</div>
-
 <script>
+const SUPABASE_URL='https://pcenmqernxnxnbatslfo.supabase.co';
+const SUPABASE_PUBLIC_KEY='sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
+let currentUser=null, currentProfile=null, pendingPhone='';
+const $=id=>document.getElementById(id);
+function showMsg(id,text,ok=false){const el=$(id);el.textContent=text;el.classList.remove('hidden');el.classList.toggle('success',ok)}
+function normalizePhone(v){const d=(v||'').replace(/\D/g,'');return d.length===10?'+91'+d:(v||'').startsWith('+')?v:''}
+function validPhone(v){return /^[6-9]\d{9}$/.test((v||'').replace(/\D/g,''))}
+function devEmail(phone){return 'dev+'+phone.replace(/\D/g,'')+'@thaala.local'}
+function devPassword(phone){return 'THAALA-DEV-'+phone.replace(/\D/g,'')+'-2026!'}
 
-const SUPABASE_URL =
-"https://pcenmqernxnxnbatslfo.supabase.co";
+$('userTab').onclick=()=>{ $('userTab').classList.add('active');$('adminTab').classList.remove('active');$('userAuth').classList.remove('hidden');$('adminAuth').classList.add('hidden') };
+$('adminTab').onclick=()=>{ $('adminTab').classList.add('active');$('userTab').classList.remove('active');$('adminAuth').classList.remove('hidden');$('userAuth').classList.add('hidden') };
 
-/*
-==================================================
-IMPORTANT:
-नीचे अपनी COPIED anon/public key paste करो।
-यहाँ केवल anon/public key डालना है।
-service_role/secret key बिल्कुल नहीं।
-==================================================
-*/
-
-const SUPABASE_ANON_KEY =
-"sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR";
-
-const db = supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
-);
-
-
-// ---------- UI ----------
-
-function showRegister(){
-document.getElementById("auth").classList.add("hidden");
-document.getElementById("register").classList.remove("hidden");
-}
-
-function showLogin(){
-document.getElementById("register").classList.add("hidden");
-document.getElementById("auth").classList.remove("hidden");
-}
-
-
-// ---------- REGISTER ----------
-
-async function register(){
-
-const name=document.getElementById("regName").value.trim();
-const email=document.getElementById("regEmail").value.trim();
-const password=document.getElementById("regPassword").value;
-
-const msg=document.getElementById("regMsg");
-
-if(!name || !email || !password){
-msg.textContent="सभी details भरें।";
-return;
-}
-
-const {data,error}=await db.auth.signUp({
-email:email,
-password:password,
-options:{
-data:{
-display_name:name
-}
-}
-});
-
-if(error){
-msg.textContent=error.message;
-return;
-}
-
-msg.textContent="✅ Account बन गया। अब Login करें।";
-
-setTimeout(showLogin,1000);
-}
-
-
-// ---------- LOGIN ----------
-
-async function login(){
-
-const email=document.getElementById("loginEmail").value.trim();
-const password=document.getElementById("loginPassword").value;
-
-const msg=document.getElementById("loginMsg");
-
-const {data,error}=await db.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-msg.textContent=error.message;
-return;
-}
-
-await loadApp();
-}
-
-
-// ---------- LOAD APP ----------
+$('sendOtp').onclick=()=>{const raw=$('phone').value.trim();if(!validPhone(raw)){showMsg('phoneMsg','Valid 10-digit Indian mobile number enter karein.');return}pendingPhone=normalizePhone(raw);$('otpBox').classList.remove('hidden');showMsg('phoneMsg','Test OTP ready. Enter 123456.',true)};
+$('verifyOtp').onclick=async()=>{const token=$('otp').value.trim();if(token!=='123456'){showMsg('phoneMsg','Development OTP गलत है. Test OTP: 123456');return}if(!pendingPhone){showMsg('phoneMsg','Mobile number enter karein.');return}const email=devEmail(pendingPhone),password=devPassword(pendingPhone);let res=await sb.auth.signInWithPassword({email,password});if(res.error&&/invalid login credentials/i.test(res.error.message)){res=await sb.auth.signUp({email,password,options:{data:{phone_number:pendingPhone,display_name:'THAALA User'}}});if(res.error){showMsg('phoneMsg','Account create nahi hua:
+'+res.error.message);return}if(!res.data.session){showMsg('phoneMsg','Development account created, but Supabase Email confirmation is ON. Auth → Providers → Email → Confirm email OFF karke retry karein.');return}}else if(res.error){showMsg('phoneMsg','Login failed:
+'+res.error.message);return}currentUser=res.data.user;await loadApp()};
+$('adminLogin').onclick=async()=>{
+  const email=$('adminEmail').value.trim(),password=$('adminPassword').value;
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){showMsg('adminMsg',error.message);return}
+  currentUser=data.user;await loadApp();
+};
 
 async function loadApp(){
-
-document.getElementById("auth").classList.add("hidden");
-document.getElementById("register").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-
-const {data:{user}}=await db.auth.getUser();
-
-if(!user)return;
-
-
-// profile
-const {data:profile,error:pError}=await db
-.from("profiles")
-.select("id,thaala_id,display_name,role,credits")
-.eq("id",user.id)
-.single();
-
-if(pError){
-console.log(pError);
-return;
+  const {data,error}=await sb.from('profiles').select('id,thaala_id,phone,display_name,role,credits').eq('id',currentUser.id).single();
+  if(error){showMsg('phoneMsg','Profile load error:\n'+error.message);return}
+  currentProfile=data;
+  $('auth').classList.add('hidden');$('dashboard').classList.remove('hidden');
+  $('thaalaId').textContent=data.thaala_id||'—';
+  $('phoneDisplay').textContent=data.phone||currentUser.phone||'';
+  $('balance').textContent=Number(data.credits||0).toLocaleString('en-IN');
+  if(data.role==='admin') $('adminPanel').classList.remove('hidden');
+  await loadGames();
 }
-
-document.getElementById("userName").textContent=
-profile.display_name || user.email;
-
-document.getElementById("thaalaId").textContent=
-profile.thaala_id || "-";
-
-document.getElementById("balance").textContent=
-profile.credits || 0;
-
-if(profile.role==="admin"){
-document.getElementById("adminBox").classList.remove("hidden");
-}
-
-loadGames();
-}
-
-
-// ---------- GAMES ----------
-
 async function loadGames(){
-
-const box=document.getElementById("games");
-
-const {data,error}=await db
-.from("games")
-.select("id,sport,title,home_team,away_team,status,current_state")
-.eq("status","live")
-.order("starts_at",{ascending:true});
-
-if(error){
-box.innerHTML=
-"<div class='card'>Games load error: "+
-error.message+"</div>";
-return;
+  const {data,error}=await sb.from('games').select('*').eq('status','live').order('starts_at',{ascending:true});
+  if(error){$('games').innerHTML='<div class="card danger">Games load error: '+escapeHtml(error.message)+'</div>';return}
+  if(!data?.length){$('games').innerHTML='<div class="card">No live games right now.</div>';return}
+  $('games').innerHTML=data.map(g=>`<div class="game"><div class="live">● LIVE · ${escapeHtml(g.sport||'Virtual')}</div><h3>${escapeHtml(g.title||g.game_code||'Virtual Game')}</h3><div class="teams">${escapeHtml(g.home_team||'Team A')} <span style="color:#888">VS</span> ${escapeHtml(g.away_team||'Team B')}</div><div class="small" style="margin-top:7px">Entry: 100 virtual credits</div><button class="join" onclick="joinGame('${g.id}')">JOIN · 100 VIRTUAL CREDITS</button></div>`).join('');
 }
-
-if(!data || data.length===0){
-box.innerHTML=
-"<div class='card'>अभी कोई live game नहीं है।</div>";
-return;
-}
-
-box.innerHTML="";
-
-data.forEach(game=>{
-
-let state="";
-
-if(game.current_state){
-try{
-state=JSON.stringify(game.current_state);
-}catch(e){}
-}
-
-const div=document.createElement("div");
-
-div.className="game";
-
-div.innerHTML=`
-<div class="small">${game.sport}</div>
-<h3>${game.title}</h3>
-
-<div>
-<b>${game.home_team}</b>
-&nbsp; VS &nbsp;
-<b>${game.away_team}</b>
-</div>
-
-<p class="live">🔴 LIVE</p>
-
-<div class="small">
-${state}
-</div>
-
-<button onclick="joinGame('${game.id}')">
-JOIN • 100 VIRTUAL CREDITS
-</button>
-`;
-
-box.appendChild(div);
-
-});
-
-}
-
-
-// ---------- JOIN GAME ----------
-
-async function joinGame(gameId){
-
-if(!confirm(
-"100 virtual credits game entry से deduct होंगे. Continue?"
-))return;
-
-const {data,error}=await db.rpc(
-"join_virtual_game",
-{
-selected_game:gameId,
-entry_amount:100
-}
-);
-
-if(error){
-alert(error.message);
-return;
-}
-
-alert("✅ Game joined successfully.");
-
-await loadApp();
-}
-
-
-// ---------- ADMIN CREDIT ----------
-
-async function addCredits(){
-
-const target=
-document.getElementById("targetUser").value.trim();
-
-const amount=
-Number(document.getElementById("creditAmount").value);
-
-const note=
-document.getElementById("creditNote").value.trim()
-|| "Admin credit";
-
-const msg=document.getElementById("adminMsg");
-
-if(!target || !amount || amount<=0){
-msg.textContent="User UUID और credits डालें।";
-return;
-}
-
-const {data,error}=await db.rpc(
-"admin_add_credits",
-{
-target_user:target,
-credit_amount:amount,
-note:note
-}
-);
-
-if(error){
-msg.textContent=error.message;
-return;
-}
-
-msg.textContent=
-"✅ Credits added. New balance: "+data;
-
-await loadApp();
-}
-
-
-// ---------- LOGOUT ----------
-
-async function logout(){
-
-await db.auth.signOut();
-
-location.reload();
-
-}
-
-
-// ---------- EXISTING SESSION ----------
-
-(async function(){
-
-const {data:{session}}=
-await db.auth.getSession();
-
-if(session){
-await loadApp();
-}
-
-})();
-
+window.joinGame=async(gameId)=>{
+  const {data,error}=await sb.rpc('join_virtual_game',{selected_game:gameId,entry_amount:100});
+  if(error){alert('Join failed: '+error.message);return}
+  alert('Game joined successfully. 100 virtual credits deducted.');
+  await loadApp();
+};
+$('addCredits').onclick=async()=>{
+  const target=$('targetUser').value.trim(),amount=Number($('creditAmount').value),note=$('creditNote').value.trim()||'Admin virtual credit';
+  if(!target||!Number.isInteger(amount)||amount<=0){showMsg('creditMsg','Valid User UUID aur positive credit amount enter karein.');return}
+  const {data,error}=await sb.rpc('admin_add_credits',{target_user:target,credit_amount:amount,note});
+  if(error){showMsg('creditMsg','Credits add nahi hue:\n'+error.message);return}
+  showMsg('creditMsg','Success: '+amount.toLocaleString('en-IN')+' virtual credits added.',true);
+};
+$('logout').onclick=async()=>{await sb.auth.signOut();location.reload()};
+sb.auth.getSession().then(async({data})=>{if(data.session){currentUser=data.session.user;await loadApp()}});
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 </script>
-
 </body>
 </html>
