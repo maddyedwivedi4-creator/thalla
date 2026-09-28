@@ -6,125 +6,285 @@
 <title>THAALA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f6fa;color:#181824}.hidden{display:none!important}.app{max-width:520px;margin:auto;min-height:100vh;background:#f7f7fb}.hero{background:linear-gradient(135deg,#48108d,#c2185b);color:#fff;padding:24px 18px 26px;border-radius:0 0 24px 24px}.brand{font-size:30px;font-weight:950;letter-spacing:4px}.sub{opacity:.85;font-size:12px;margin-top:4px}.card{background:#fff;border-radius:18px;padding:18px;margin:14px;box-shadow:0 8px 28px #0000000b}.tabs{display:flex;gap:8px;margin-bottom:16px}.tab{flex:1;padding:11px;border:0;border-radius:12px;background:#eee;font-weight:800}.tab.active{background:#6b1de1;color:#fff}label{display:block;font-size:13px;font-weight:750;margin:12px 0 6px}input{width:100%;height:48px;border:1px solid #ddd;border-radius:12px;padding:0 13px;font-size:16px}button{width:100%;border:0;border-radius:12px;background:#6b1de1;color:#fff;font-weight:850;height:48px;margin-top:12px}button.secondary{background:#fff;color:#6b1de1;border:1px solid #ddd}.msg{margin-top:10px;padding:10px;border-radius:10px;background:#f3f3f7;font-size:13px;white-space:pre-wrap}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}.balance{background:#fff1fa;color:#8d125e;border-radius:12px;padding:9px 12px;font-weight:900}.nav{display:flex;gap:7px;overflow:auto;padding:12px 14px}.nav button{min-width:78px;margin:0;height:38px;background:#fff;color:#444;border:1px solid #eee}.nav button.active{background:#6518d8;color:#fff;border-color:#6518d8}.game{background:#fff;border-radius:16px;padding:15px;margin:10px 14px;box-shadow:0 5px 18px #0000000a}.game h3{margin:5px 0;font-size:16px}.teams{font-weight:750}.live{color:#c71919;font-weight:900;font-size:12px}.join{height:42px}.admin{border:2px solid #eee}.small{font-size:12px;color:#777}.footer{padding:25px 15px;text-align:center;color:#777;font-size:11px}.danger{color:#b00020}.success{color:#087a35}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f5f9;color:#181824}.hidden{display:none!important}.app{max-width:520px;margin:auto;min-height:100vh;background:#f7f7fb}.hero{background:linear-gradient(135deg,#48108d,#c2185b);color:#fff;padding:25px 18px 27px;border-radius:0 0 24px 24px}.brand{font-size:30px;font-weight:950;letter-spacing:4px}.sub{opacity:.88;font-size:12px;margin-top:4px}.card{background:#fff;border-radius:18px;padding:18px;margin:14px;box-shadow:0 8px 28px #0000000b}.tabs{display:flex;gap:8px;margin-bottom:16px}.tab{flex:1;padding:11px;border:0;border-radius:12px;background:#eee;font-weight:800}.tab.active{background:#6b1de1;color:#fff}label{display:block;font-size:13px;font-weight:750;margin:12px 0 6px}input{width:100%;height:48px;border:1px solid #ddd;border-radius:12px;padding:0 13px;font-size:16px}button{width:100%;border:0;border-radius:12px;background:#6b1de1;color:#fff;font-weight:850;height:48px;margin-top:12px;cursor:pointer}button.secondary{background:#fff;color:#6b1de1;border:1px solid #ddd}.msg{margin-top:10px;padding:10px;border-radius:10px;background:#f3f3f7;font-size:13px;white-space:pre-wrap}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}.balance{background:#fff1fa;color:#8d125e;border-radius:12px;padding:9px 12px;font-weight:900}.nav{display:flex;gap:7px;overflow:auto;padding:12px 14px}.nav button{min-width:78px;margin:0;height:38px;background:#fff;color:#444;border:1px solid #eee}.nav button.active{background:#6518d8;color:#fff;border-color:#6518d8}.game{background:#fff;border-radius:16px;padding:15px;margin:10px 14px;box-shadow:0 5px 18px #0000000a}.game h3{margin:5px 0;font-size:16px}.teams{font-weight:750}.live{color:#c71919;font-weight:900;font-size:12px}.join{height:42px}.admin{border:2px solid #eee}.small{font-size:12px;color:#777}.footer{padding:25px 15px;text-align:center;color:#777;font-size:11px}.danger{color:#b00020}.success{color:#087a35}
 </style>
 </head>
 <body>
-<div class="app" id="root">
-  <div class="hero">
-    <div class="brand">THAALA</div>
-    <div class="sub">Virtual credits • No real-money wallet</div>
-  </div>
+<div class="app">
+  <div class="hero"><div class="brand">THAALA</div><div class="sub">Virtual credits - No real-money wallet</div></div>
 
   <div id="auth" class="card">
     <div class="tabs">
-      <button id="userTab" class="tab active">MOBILE OTP</button>
-      <button id="adminTab" class="tab">ADMIN LOGIN</button>
+      <button id="userTab" class="tab active" type="button">MOBILE OTP</button>
+      <button id="adminTab" class="tab" type="button">ADMIN LOGIN</button>
     </div>
 
     <section id="userAuth">
       <h2>Login / Register</h2>
-      <p class="small">Mobile number se OTP lekar account create ya login karein.</p>
-      <label>Mobile Number</label>
+      <p class="small">Development mode: SMS provider is not required. Test OTP is 123456.</p>
+      <label for="phone">Mobile Number</label>
       <input id="phone" inputmode="tel" autocomplete="tel" placeholder="10 digit mobile number" maxlength="10">
-      <button id="sendOtp">CONTINUE</button>
+      <button id="sendOtp" type="button">CONTINUE</button>
       <div id="phoneMsg" class="msg hidden"></div>
       <div id="otpBox" class="hidden">
-        <label>6-digit OTP</label>
+        <label for="otp">6-digit OTP</label>
         <input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Enter OTP">
-        <button id="verifyOtp">VERIFY & LOGIN</button>
-        <button id="resendOtp" class="secondary">RESEND OTP</button>
+        <button id="verifyOtp" type="button">VERIFY &amp; LOGIN</button>
+        <button id="resendOtp" class="secondary" type="button">RESEND OTP</button>
       </div>
     </section>
 
     <section id="adminAuth" class="hidden">
       <h2>Admin Login</h2>
-      <label>Email</label><input id="adminEmail" type="email" placeholder="Admin email">
-      <label>Password</label><input id="adminPassword" type="password" placeholder="Password">
-      <button id="adminLogin">LOGIN AS ADMIN</button>
+      <label for="adminEmail">Email</label><input id="adminEmail" type="email" placeholder="Admin email">
+      <label for="adminPassword">Password</label><input id="adminPassword" type="password" placeholder="Password">
+      <button id="adminLogin" type="button">LOGIN AS ADMIN</button>
       <div id="adminMsg" class="msg hidden"></div>
     </section>
   </div>
 
   <div id="dashboard" class="hidden">
     <div class="card">
-      <div class="topline"><div><b>Welcome</b><div class="small">THAALA ID: <b id="thaalaId">—</b></div><div class="small" id="phoneDisplay"></div></div><div class="balance">BALANCE<br><span id="balance">0</span></div></div>
+      <div class="topline"><div><b>Welcome</b><div class="small">THAALA ID: <b id="thaalaId">-</b></div><div class="small" id="phoneDisplay"></div></div><div class="balance">BALANCE<br><span id="balance">0</span></div></div>
     </div>
-    <div class="nav"><button class="active">LIVE</button><button>SPORTS</button><button>FANTASY</button><button>RESULTS</button></div>
-    <div class="card"><h2 style="margin:0">🔴 Live Virtual Games</h2><div class="small" style="margin-top:4px">All entries use virtual credits only.</div></div>
+    <div class="nav"><button class="active" type="button">LIVE</button><button type="button">SPORTS</button><button type="button">FANTASY</button><button type="button">RESULTS</button></div>
+    <div class="card"><h2 style="margin:0">Live Virtual Games</h2><div class="small" style="margin-top:4px">All entries use virtual credits only.</div></div>
     <div id="games"></div>
 
     <div id="adminPanel" class="card admin hidden">
-      <h2 style="margin:0 0 8px">Admin — Add Virtual Credits</h2>
-      <div class="small">Use the user's Supabase UUID. Do not edit credits directly in the table.</div>
-      <label>User UUID</label><input id="targetUser" placeholder="User UUID">
-      <label>Credits</label><input id="creditAmount" type="number" min="1" placeholder="10000">
-      <label>Note</label><input id="creditNote" placeholder="Initial virtual credits">
-      <button id="addCredits">ADD VIRTUAL CREDITS</button>
+      <h2 style="margin:0 0 8px">Admin - Add Virtual Credits</h2>
+      <div class="small">Use the user's Supabase UUID. Users cannot edit their own credits.</div>
+      <label for="targetUser">User UUID</label><input id="targetUser" placeholder="User UUID">
+      <label for="creditAmount">Credits</label><input id="creditAmount" type="number" min="1" placeholder="10000">
+      <label for="creditNote">Note</label><input id="creditNote" placeholder="Initial virtual credits">
+      <button id="addCredits" type="button">ADD VIRTUAL CREDITS</button>
       <div id="creditMsg" class="msg hidden"></div>
     </div>
-    <button id="logout" class="card" style="display:block;width:calc(100% - 28px);margin:14px;height:48px;background:#222;color:#fff">LOGOUT</button>
+    <button id="logout" type="button" style="display:block;width:calc(100% - 28px);margin:14px;height:48px;background:#222;color:#fff">LOGOUT</button>
   </div>
+
   <div class="footer">THAALA is a virtual-credit game panel. No deposits, withdrawals or real-money wallet are included.</div>
 </div>
+
 <script>
-const SUPABASE_URL='https://pcenmqernxnxnbatslfo.supabase.co';
-const SUPABASE_PUBLIC_KEY='sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
-let currentUser=null, currentProfile=null, pendingPhone='';
-const $=id=>document.getElementById(id);
-function showMsg(id,text,ok=false){const el=$(id);el.textContent=text;el.classList.remove('hidden');el.classList.toggle('success',ok)}
-function normalizePhone(v){const d=(v||'').replace(/\D/g,'');return d.length===10?'+91'+d:(v||'').startsWith('+')?v:''}
-function validPhone(v){return /^[6-9]\d{9}$/.test((v||'').replace(/\D/g,''))}
-function devEmail(phone){return 'dev+'+phone.replace(/\D/g,'')+'@thaala.local'}
-function devPassword(phone){return 'THAALA-DEV-'+phone.replace(/\D/g,'')+'-2026!'}
+'use strict';
 
-$('userTab').onclick=()=>{ $('userTab').classList.add('active');$('adminTab').classList.remove('active');$('userAuth').classList.remove('hidden');$('adminAuth').classList.add('hidden') };
-$('adminTab').onclick=()=>{ $('adminTab').classList.add('active');$('userTab').classList.remove('active');$('adminAuth').classList.remove('hidden');$('userAuth').classList.add('hidden') };
+const SUPABASE_URL = 'https://pcenmqernxnxnbatslfo.supabase.co';
+const SUPABASE_PUBLIC_KEY = 'sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR';
 
-$('sendOtp').onclick=()=>{const raw=$('phone').value.trim();if(!validPhone(raw)){showMsg('phoneMsg','Valid 10-digit Indian mobile number enter karein.');return}pendingPhone=normalizePhone(raw);$('otpBox').classList.remove('hidden');showMsg('phoneMsg','Test OTP ready. Enter 123456.',true)};
-$('verifyOtp').onclick=async()=>{const token=$('otp').value.trim();if(token!=='123456'){showMsg('phoneMsg','Development OTP galat hai. Test OTP: 123456');return}if(!pendingPhone){showMsg('phoneMsg','Mobile number enter karein.');return}const email=devEmail(pendingPhone),password=devPassword(pendingPhone);let res=await sb.auth.signInWithPassword({email,password});if(res.error&&/invalid login credentials/i.test(res.error.message)){res=await sb.auth.signUp({email,password,options:{data:{phone_number:pendingPhone,display_name:'THAALA User'}}});if(res.error){showMsg('phoneMsg','Account create nahi hua: '+res.error.message);return}if(!res.data.session){showMsg('phoneMsg','Development account created. Email confirmation OFF karein.');return}}else if(res.error){showMsg('phoneMsg','Login failed: '+res.error.message);return}currentUser=res.data.user;await loadApp()};'+res.error.message);return}if(!res.data.session){showMsg('phoneMsg','Development account created, but Supabase Email confirmation is ON. Auth → Providers → Email → Confirm email OFF karke retry karein.');return}}else if(res.error){showMsg('phoneMsg','Login failed:
-'+res.error.message);return}currentUser=res.data.user;await loadApp()};
-$('adminLogin').onclick=async()=>{
-  const email=$('adminEmail').value.trim(),password=$('adminPassword').value;
-  const {data,error}=await sb.auth.signInWithPassword({email,password});
-  if(error){showMsg('adminMsg',error.message);return}
-  currentUser=data.user;await loadApp();
+const $ = function(id){ return document.getElementById(id); };
+let sb = null;
+let currentUser = null;
+let currentProfile = null;
+let pendingPhone = '';
+
+function showMsg(id, text, ok){
+  const el = $(id);
+  if(!el) return;
+  el.textContent = text;
+  el.classList.remove('hidden');
+  el.classList.toggle('success', !!ok);
+}
+
+function normalizePhone(v){
+  const d = String(v || '').replace(/\D/g, '');
+  return d.length === 10 ? '+91' + d : '';
+}
+
+function validPhone(v){
+  return /^[6-9]\d{9}$/.test(String(v || '').replace(/\D/g, ''));
+}
+
+function devEmail(phone){
+  return 'dev' + phone.replace(/\D/g, '') + '@thaala.local';
+}
+
+function devPassword(phone){
+  return 'THAALA-DEV-' + phone.replace(/\D/g, '') + '-2026!';
+}
+
+function escapeHtml(v){
+  return String(v == null ? '' : v).replace(/[&<>\'"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];
+  });
+}
+
+function initSupabase(){
+  if(!window.supabase || typeof window.supabase.createClient !== 'function'){
+    showMsg('phoneMsg', 'Supabase library load nahi hui. Internet connection check karein.');
+    return false;
+  }
+  if(SUPABASE_PUBLIC_KEY.indexOf('PASTE_') === 0){
+    showMsg('phoneMsg', 'GitHub file me Supabase Publishable Key paste karna baki hai.');
+    return false;
+  }
+  try{
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
+    return true;
+  }catch(err){
+    showMsg('phoneMsg', 'Supabase configuration error: ' + err.message);
+    return false;
+  }
+}
+
+$('userTab').onclick = function(){
+  $('userTab').classList.add('active');
+  $('adminTab').classList.remove('active');
+  $('userAuth').classList.remove('hidden');
+  $('adminAuth').classList.add('hidden');
+};
+
+$('adminTab').onclick = function(){
+  $('adminTab').classList.add('active');
+  $('userTab').classList.remove('active');
+  $('adminAuth').classList.remove('hidden');
+  $('userAuth').classList.add('hidden');
+};
+
+$('sendOtp').onclick = function(){
+  const raw = $('phone').value.trim();
+  if(!validPhone(raw)){
+    showMsg('phoneMsg', 'Valid 10-digit Indian mobile number enter karein.');
+    return;
+  }
+  pendingPhone = normalizePhone(raw);
+  $('otpBox').classList.remove('hidden');
+  $('otp').focus();
+  showMsg('phoneMsg', 'Test OTP ready. Enter 123456.', true);
+};
+
+$('resendOtp').onclick = function(){
+  if(!pendingPhone){
+    showMsg('phoneMsg', 'Pehle mobile number enter karein.');
+    return;
+  }
+  showMsg('phoneMsg', 'Test OTP: 123456', true);
+};
+
+$('verifyOtp').onclick = async function(){
+  if(!sb && !initSupabase()) return;
+  const token = $('otp').value.trim();
+  if(token !== '123456'){
+    showMsg('phoneMsg', 'Development OTP galat hai. Test OTP: 123456');
+    return;
+  }
+  if(!pendingPhone){
+    showMsg('phoneMsg', 'Mobile number enter karein.');
+    return;
+  }
+  const email = devEmail(pendingPhone);
+  const password = devPassword(pendingPhone);
+  showMsg('phoneMsg', 'Account check ho raha hai...', true);
+
+  let res = await sb.auth.signInWithPassword({email:email, password:password});
+  if(res.error){
+    res = await sb.auth.signUp({
+      email:email,
+      password:password,
+      options:{data:{phone_number:pendingPhone, display_name:'THAALA User'}}
+    });
+  }
+  if(res.error){
+    showMsg('phoneMsg', 'Login/account error: ' + res.error.message);
+    return;
+  }
+  if(!res.data.session){
+    showMsg('phoneMsg', 'Account bana hai, lekin session nahi mila. Supabase Email confirmation OFF karke retry karein.');
+    return;
+  }
+  currentUser = res.data.user;
+  await loadApp();
+};
+
+$('adminLogin').onclick = async function(){
+  if(!sb && !initSupabase()) return;
+  const email = $('adminEmail').value.trim();
+  const password = $('adminPassword').value;
+  const res = await sb.auth.signInWithPassword({email:email, password:password});
+  if(res.error){
+    showMsg('adminMsg', res.error.message);
+    return;
+  }
+  currentUser = res.data.user;
+  await loadApp();
 };
 
 async function loadApp(){
-  const {data,error}=await sb.from('profiles').select('id,thaala_id,phone,display_name,role,credits').eq('id',currentUser.id).single();
-  if(error){showMsg('phoneMsg','Profile load error:\n'+error.message);return}
-  currentProfile=data;
-  $('auth').classList.add('hidden');$('dashboard').classList.remove('hidden');
-  $('thaalaId').textContent=data.thaala_id||'—';
-  $('phoneDisplay').textContent=data.phone||currentUser.phone||'';
-  $('balance').textContent=Number(data.credits||0).toLocaleString('en-IN');
-  if(data.role==='admin') $('adminPanel').classList.remove('hidden');
+  if(!sb && !initSupabase()) return;
+  const res = await sb.from('profiles').select('id,thaala_id,phone,display_name,role,credits').eq('id', currentUser.id).single();
+  if(res.error){
+    showMsg('phoneMsg', 'Profile load error: ' + res.error.message);
+    return;
+  }
+  currentProfile = res.data;
+  $('auth').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+  $('thaalaId').textContent = currentProfile.thaala_id || '-';
+  $('phoneDisplay').textContent = currentProfile.phone || currentUser.phone || '';
+  $('balance').textContent = Number(currentProfile.credits || 0).toLocaleString('en-IN');
+  if(currentProfile.role === 'admin') $('adminPanel').classList.remove('hidden');
   await loadGames();
 }
+
 async function loadGames(){
-  const {data,error}=await sb.from('games').select('*').eq('status','live').order('starts_at',{ascending:true});
-  if(error){$('games').innerHTML='<div class="card danger">Games load error: '+escapeHtml(error.message)+'</div>';return}
-  if(!data?.length){$('games').innerHTML='<div class="card">No live games right now.</div>';return}
-  $('games').innerHTML=data.map(g=>`<div class="game"><div class="live">● LIVE · ${escapeHtml(g.sport||'Virtual')}</div><h3>${escapeHtml(g.title||g.game_code||'Virtual Game')}</h3><div class="teams">${escapeHtml(g.home_team||'Team A')} <span style="color:#888">VS</span> ${escapeHtml(g.away_team||'Team B')}</div><div class="small" style="margin-top:7px">Entry: 100 virtual credits</div><button class="join" onclick="joinGame('${g.id}')">JOIN · 100 VIRTUAL CREDITS</button></div>`).join('');
+  const res = await sb.from('games').select('*').eq('status','live').order('starts_at',{ascending:true});
+  if(res.error){
+    $('games').innerHTML = '<div class="card danger">Games load error: ' + escapeHtml(res.error.message) + '</div>';
+    return;
+  }
+  if(!res.data || !res.data.length){
+    $('games').innerHTML = '<div class="card">No live games right now.</div>';
+    return;
+  }
+  $('games').innerHTML = res.data.map(function(g){
+    return '<div class="game"><div class="live">LIVE - ' + escapeHtml(g.sport || 'Virtual') + '</div>' +
+      '<h3>' + escapeHtml(g.title || g.game_code || 'Virtual Game') + '</h3>' +
+      '<div class="teams">' + escapeHtml(g.home_team || 'Team A') + ' <span style="color:#888">VS</span> ' + escapeHtml(g.away_team || 'Team B') + '</div>' +
+      '<div class="small" style="margin-top:7px">Entry: 100 virtual credits</div>' +
+      '<button class="join" type="button" onclick="joinGame(\'' + g.id + '\')">JOIN - 100 VIRTUAL CREDITS</button></div>';
+  }).join('');
 }
-window.joinGame=async(gameId)=>{
-  const {data,error}=await sb.rpc('join_virtual_game',{selected_game:gameId,entry_amount:100});
-  if(error){alert('Join failed: '+error.message);return}
+
+window.joinGame = async function(gameId){
+  const res = await sb.rpc('join_virtual_game', {selected_game:gameId, entry_amount:100});
+  if(res.error){
+    alert('Join failed: ' + res.error.message);
+    return;
+  }
   alert('Game joined successfully. 100 virtual credits deducted.');
   await loadApp();
 };
-$('addCredits').onclick=async()=>{
-  const target=$('targetUser').value.trim(),amount=Number($('creditAmount').value),note=$('creditNote').value.trim()||'Admin virtual credit';
-  if(!target||!Number.isInteger(amount)||amount<=0){showMsg('creditMsg','Valid User UUID aur positive credit amount enter karein.');return}
-  const {data,error}=await sb.rpc('admin_add_credits',{target_user:target,credit_amount:amount,note});
-  if(error){showMsg('creditMsg','Credits add nahi hue:\n'+error.message);return}
-  showMsg('creditMsg','Success: '+amount.toLocaleString('en-IN')+' virtual credits added.',true);
+
+$('addCredits').onclick = async function(){
+  if(!sb && !initSupabase()) return;
+  const target = $('targetUser').value.trim();
+  const amount = Number($('creditAmount').value);
+  const note = $('creditNote').value.trim() || 'Admin virtual credit';
+  if(!target || !Number.isInteger(amount) || amount <= 0){
+    showMsg('creditMsg', 'Valid User UUID aur positive credit amount enter karein.');
+    return;
+  }
+  const res = await sb.rpc('admin_add_credits', {target_user:target, credit_amount:amount, note:note});
+  if(res.error){
+    showMsg('creditMsg', 'Credits add nahi hue: ' + res.error.message);
+    return;
+  }
+  showMsg('creditMsg', 'Success: ' + amount.toLocaleString('en-IN') + ' virtual credits added.', true);
 };
-$('logout').onclick=async()=>{await sb.auth.signOut();location.reload()};
-sb.auth.getSession().then(async({data})=>{if(data.session){currentUser=data.session.user;await loadApp()}});
-function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+
+$('logout').onclick = async function(){
+  if(sb) await sb.auth.signOut();
+  location.reload();
+};
+
+(async function boot(){
+  if(!initSupabase()) return;
+  const res = await sb.auth.getSession();
+  if(res.data && res.data.session){
+    currentUser = res.data.session.user;
+    await loadApp();
+  }
+})();
 </script>
 </body>
 </html>
