@@ -42,7 +42,14 @@ input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}
 .liveScore{margin-top:14px;padding:11px;background:#fff6f8;border-radius:12px;text-align:center;font-size:13px;font-weight:850;color:#9f1239}
 .gameFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px}.virtualTag{font-size:11px;font-weight:800;color:#777}
 .join{width:auto;min-width:125px;border:0;border-radius:13px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:12px 15px;font-weight:900;box-shadow:0 5px 12px rgba(101,31,255,.22)}.join:active{transform:scale(.97)}.join:disabled{background:#d3d0d8;box-shadow:none}
-.adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}
+.adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}
+.historyCard{background:#fff;border-radius:18px;padding:15px;box-shadow:0 6px 18px rgba(30,20,60,.07);border:1px solid #eee}
+.historyTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.historySport{font-size:12px;font-weight:900;color:#5b21b6}
+.historyStatus{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:#f1f1f1;color:#666}
+.historyTitle{font-weight:900;margin-top:10px}
+.historyMeta{font-size:12px;color:#777;margin-top:7px;line-height:1.5}
+.historyAmount{margin-top:10px;font-weight:900;color:#5b21b6}.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}
 .logout{width:100%;border:0;border-radius:15px;background:#fff0f0;color:#b91c1c;padding:14px;font-weight:900}
 
 /* FIXED DRAWER: no horizontal movement */
@@ -128,6 +135,7 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
     <button class="navItem" data-filter="all" type="button">SPORTS</button>
     <button class="navItem" data-filter="Fantasy" type="button">FANTASY</button>
     <button class="navItem" data-filter="finished" type="button">RESULTS</button>
+    <button class="navItem" data-filter="mygames" type="button">MY GAMES</button>
     <button class="navItem" data-filter="rewards" type="button">REWARDS</button>
     <button class="navItem" data-filter="help" type="button">HELP</button>
   </div>
@@ -155,6 +163,10 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
 
   <div class="sectionTitle">Live Virtual Games</div>
   <div id="gameList" class="gameGrid"><div class="empty">Loading games...</div></div>
+  <div id="myGamesSection" class="hidden">
+    <div class="sectionTitle">My Games / History</div>
+    <div id="myGamesList" class="gameGrid"><div class="empty">Loading your games...</div></div>
+  </div>
 
   <div class="bottom"><button id="logout" class="logout" type="button">LOG OUT</button></div>
 </div>
@@ -197,7 +209,7 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
    SUPABASE CONFIG
    ========================= */
 const SUPABASE_URL="https://pcenmqernxnxnbatslfo.supabase.co";
-const SUPABASE_PUBLIC_KEY="sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR";
+const SUPABASE_PUBLIC_KEY="PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
 
 const $=id=>document.getElementById(id);
@@ -288,6 +300,7 @@ function matchesFilter(g){
   if(activeFilter==="all")return true;
   if(activeFilter==="live")return g.status==="live";
   if(activeFilter==="finished")return g.status==="finished";
+  if(activeFilter==="mygames")return false;
   if(["rewards","help","Fantasy"].includes(activeFilter))return true;
   return (g.sport||"").toLowerCase()===activeFilter.toLowerCase();
 }
@@ -336,6 +349,103 @@ function renderGames(){
   list.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>joinGame(b.dataset.game)));
 }
 
+/* MY GAMES / HISTORY */
+async function loadMyGames(){
+  const box=$("myGamesList");
+  if(!box||!currentUser)return;
+
+  box.innerHTML='<div class="empty">Loading your games...</div>';
+
+  const result=await sb
+    .from("game_entries")
+    .select("id,game_id,user_id,entry_credits,status,result,reward_credits,created_at,completed_at")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(100);
+
+  if(result.error){
+    console.error("MY GAMES",result.error);
+    box.innerHTML='<div class="empty">History load nahi hui. Supabase permissions check karein.</div>';
+    return;
+  }
+
+  const entries=result.data||[];
+
+  if(!entries.length){
+    box.innerHTML='<div class="empty"><div style="font-size:38px">🎮</div><div style="font-weight:900;color:#4c1d95">No games joined yet</div><div style="font-size:13px;margin-top:5px">Jab aap virtual game join karenge, woh yahan dikhega.</div></div>';
+    return;
+  }
+
+  const ids=[...new Set(entries.map(e=>e.game_id).filter(Boolean))];
+  let gameMap={};
+
+  if(ids.length){
+    const gr=await sb
+      .from("games")
+      .select("id,sport,title,home_team,away_team,status")
+      .in("id",ids);
+
+    if(!gr.error){
+      (gr.data||[]).forEach(g=>gameMap[g.id]=g);
+    }
+  }
+
+  box.innerHTML=entries.map(e=>{
+    const g=gameMap[e.game_id]||{};
+
+    const status=String(e.status||g.status||"joined").toUpperCase();
+    const resultText=e.result?String(e.result):"—";
+    const entryCredits=fmt(e.entry_credits);
+    const rewardCredits=fmt(e.reward_credits);
+
+    const created=e.created_at
+      ?new Date(e.created_at).toLocaleString("en-IN")
+      :"—";
+
+    const completed=e.completed_at
+      ?new Date(e.completed_at).toLocaleString("en-IN")
+      :"—";
+
+    return `
+      <div class="historyCard">
+
+        <div class="historyTop">
+          <div class="historySport">
+            ${sportIcon(g.sport||"SPORTS")}
+            ${escapeHtml(g.sport||"SPORTS")}
+          </div>
+
+          <div class="historyStatus">
+            ${escapeHtml(status)}
+          </div>
+        </div>
+
+        <div class="historyTitle">
+          ${escapeHtml(g.title||"Virtual Game")}
+        </div>
+
+        <div class="historyMeta">
+          ${escapeHtml(g.home_team||"Home")}
+          vs
+          ${escapeHtml(g.away_team||"Away")}
+        </div>
+
+        <div class="historyAmount">
+          💰 Entry: ${entryCredits} Virtual Credits
+        </div>
+
+        <div class="historyMeta">
+          📌 Result: ${escapeHtml(resultText)}<br>
+          🎁 Reward: ${rewardCredits} Virtual Credits<br>
+          🕒 Joined: ${escapeHtml(created)}<br>
+          ✅ Completed: ${escapeHtml(completed)}
+        </div>
+
+      </div>
+    `;
+  }).join("");
+}
+
 /* JOIN */
 async function joinGame(gameId){
   if(!currentUser){alert("Please login first.");return;}
@@ -347,6 +457,7 @@ async function joinGame(gameId){
   if(result.error){alert("JOIN failed: "+result.error.message);return;}
   alert("Game joined successfully. Virtual credits deducted.");
   await loadProfile();
+  if(activeFilter==="mygames")await loadMyGames();
 }
 
 /* ADMIN CREDITS */
@@ -451,7 +562,10 @@ $("logout").addEventListener("click",async()=>{
 function setFilter(filter){
   activeFilter=filter;
   document.querySelectorAll(".navItem").forEach(el=>el.classList.toggle("active",el.dataset.filter===filter));
-  renderGames();
+  const historyMode=filter==="mygames";
+  $("gameList").classList.toggle("hidden",historyMode);
+  $("myGamesSection").classList.toggle("hidden",!historyMode);
+  if(historyMode)loadMyGames(); else renderGames();
   closeDrawer();
   window.scrollTo({top:0,behavior:"smooth"});
 }
