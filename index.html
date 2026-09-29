@@ -9,7 +9,7 @@
 *{box-sizing:border-box}
 :root{--p:#651fff;--p2:#8b2be2;--red:#e11d48;--ink:#171521;--muted:#6b7280;--bg:#f5f4fa;--card:#fff;--line:#eceaf2}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{overflow-x:hidden}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.app{min-height:100vh}
+body{overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.app{min-height:100vh}
 .hero{background:linear-gradient(135deg,#5b16b8,#7c1fd1 48%,#df1767);color:#fff;padding:28px 24px 32px;border-radius:0 0 34px 34px}
 .brand{font-size:48px;font-weight:900;letter-spacing:7px}.tagline{margin-top:8px;font-size:16px;opacity:.92}
 .card{background:#fff;border-radius:26px;box-shadow:0 10px 30px rgba(30,20,60,.08);padding:22px;margin:20px 16px}
@@ -17,13 +17,11 @@ body{overflow-x:hidden}button,input{font:inherit}button{cursor:pointer}.hidden{d
 .tab.active{background:linear-gradient(135deg,#6d18e8,#7b20dd)}.tab:not(.active){color:#555;background:#eee}
 h2{font-size:28px;margin:0 0 12px}.small{color:var(--muted);font-size:14px;line-height:1.5}
 label{display:block;font-weight:700;margin:16px 0 8px}
-input{width:100%;padding:15px 16px;border:1px solid #ddd;border-radius:15px;outline:none;background:#fff;color:#111827}
-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}
+input,select{width:100%;padding:15px 16px;border:1px solid #ddd;border-radius:15px;outline:none;background:#fff;color:#111827}
+input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}
 .btn{width:100%;border:0;border-radius:16px;padding:15px 16px;font-weight:800;background:linear-gradient(135deg,#651fff,#7b1fe8);color:#fff;margin-top:14px}
 .btn.secondary{background:#f0ecff;color:#5b21b6}.msg{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff3f3;color:#b91c1c;font-size:14px}.msg.ok{background:#ecfdf5;color:#15803d}
 .footer{text-align:center;padding:20px;color:#777;font-size:12px}
-
-/* DASHBOARD */
 .topbar{position:sticky;top:0;z-index:100;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line)}
 .menuBtn{width:43px;height:43px;border:0;border-radius:13px;background:#f0eaff;color:#5b21b6;font-size:24px}
 .topBrand{font-weight:950;letter-spacing:2px;color:#5b21b6;font-size:21px;flex:1}
@@ -43,54 +41,38 @@ input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}
 .gameFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px}.virtualTag{font-size:11px;font-weight:800;color:#777}
 .join{width:auto;min-width:125px;border:0;border-radius:13px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:12px 15px;font-weight:900;box-shadow:0 5px 12px rgba(101,31,255,.22)}.join:active{transform:scale(.97)}.join:disabled{background:#d3d0d8;box-shadow:none}
 .adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}
+.adminUserBox{background:#f8f5ff;border:1px solid #e8ddff;border-radius:16px;padding:12px;margin-top:10px}
+.adminUserName{font-weight:900;color:#4c1d95}.adminUserMeta{font-size:12px;color:#777;margin-top:4px}
 .historyCard{background:#fff;border-radius:18px;padding:15px;box-shadow:0 6px 18px rgba(30,20,60,.07);border:1px solid #eee}
-.historyTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.historySport{font-size:12px;font-weight:900;color:#5b21b6}
-.historyStatus{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:#f1f1f1;color:#666}
-.historyTitle{font-weight:900;margin-top:10px}
-.historyMeta{font-size:12px;color:#777;margin-top:7px;line-height:1.5}
-.historyAmount{margin-top:10px;font-weight:900;color:#5b21b6}.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}
+.historyTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.historySport{font-size:12px;font-weight:900;color:#5b21b6}.historyStatus{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:#f1f1f1;color:#666}.historyTitle{font-weight:900;margin-top:10px}.historyMeta{font-size:12px;color:#777;margin-top:7px;line-height:1.5}.historyAmount{margin-top:10px;font-weight:900;color:#5b21b6}
+.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}
 .logout{width:100%;border:0;border-radius:15px;background:#fff0f0;color:#b91c1c;padding:14px;font-weight:900}
-
-/* FIXED DRAWER: no horizontal movement */
 .drawerBackdrop{position:fixed;inset:0;width:100vw;height:100dvh;background:rgba(0,0,0,.45);z-index:1999;touch-action:none;overscroll-behavior:none}
-.drawer{position:fixed;left:0;top:0;width:320px;max-width:85vw;height:100dvh;background:#fff;z-index:2000;padding:calc(18px + env(safe-area-inset-top)) 16px 30px;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;box-shadow:8px 0 30px rgba(0,0,0,.22);transform:translateX(0);contain:layout paint}
+.drawer{position:fixed;left:0;top:0;width:320px;max-width:85vw;height:100dvh;background:#fff;z-index:2000;padding:calc(18px + env(safe-area-inset-top)) 16px 30px;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;box-shadow:8px 0 30px rgba(0,0,0,.22);contain:layout paint}
 .drawerHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.drawerTitle{font-weight:950;color:#5b21b6;font-size:22px}
-.closeBtn{width:44px;height:44px;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#8b2be2);color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(101,31,255,.30);flex:none;transition:transform .15s ease,box-shadow .15s ease}
-.closeBtn:active{transform:scale(.92);box-shadow:0 3px 8px rgba(101,31,255,.20)}
-.menuSection{font-size:11px;color:#888;font-weight:900;margin:18px 4px 7px;text-transform:uppercase}.menuLink{width:100%;text-align:left;border:0;background:#f7f5fb;margin:5px 0;padding:13px 14px;border-radius:13px;font-weight:750;color:#29233a}.menuLink.active{background:#eee6ff;color:#5b21b6}
-
-/* Prevent page/drawer horizontal swipe */
-html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}
-body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!important}
+.closeBtn{width:44px;height:44px;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#8b2be2);color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(101,31,255,.30);flex:none}
+.menuSection{font-size:11px;color:#888;font-weight:900;margin:18px 4px 7px;text-transform:uppercase}.menuLink{width:100%;text-align:left;border:0;background:#f7f5fb;margin:5px 0;padding:13px 14px;border-radius:13px;font-weight:750;color:#29233a}
+html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{overflow:hidden!important}
 @media(min-width:700px){.card{max-width:620px;margin:30px auto}.hero{max-width:900px;margin:auto}.gameGrid{max-width:900px;margin:auto;grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- AUTH -->
 <div id="authView">
-  <div class="hero">
-    <div class="brand">THAALA</div>
-    <div class="tagline">Virtual credits • No real-money wallet</div>
-  </div>
-
+  <div class="hero"><div class="brand">THAALA</div><div class="tagline">Virtual credits • No real-money wallet</div></div>
   <div class="card">
     <div class="tabs">
       <button id="userTab" class="tab active" type="button">MOBILE OTP</button>
       <button id="adminTab" class="tab" type="button">ADMIN LOGIN</button>
     </div>
-
     <section id="userAuth">
       <h2>Login / Register</h2>
       <p class="small">Development mode: SMS provider is not required.<br>Test OTP is <b>123456</b>.</p>
-
       <label for="phone">Mobile Number</label>
       <input id="phone" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10 digit mobile number">
       <button id="sendOtp" class="btn" type="button">CONTINUE</button>
       <div id="phoneMsg" class="msg hidden"></div>
-
       <div id="otpBox" class="hidden">
         <label for="otp">6-digit OTP</label>
         <input id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456">
@@ -98,7 +80,6 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
         <button id="resendOtp" class="btn secondary" type="button">RESEND TEST OTP</button>
       </div>
     </section>
-
     <section id="adminAuth" class="hidden">
       <h2>Admin Login</h2>
       <p class="small">Use the Supabase Auth email/password of your THAALA admin account.</p>
@@ -113,23 +94,19 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
   <div class="footer">THAALA • Virtual credits only • No real-money wallet</div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" class="hidden">
   <div class="topbar">
-    <button id="menuBtn" class="menuBtn" type="button" aria-label="Open menu">☰</button>
+    <button id="menuBtn" class="menuBtn" type="button">☰</button>
     <div class="topBrand">THAALA</div>
     <div class="balancePill">💰 <span id="miniBalance">0</span></div>
   </div>
-
   <div class="announce">🔴 LIVE • Virtual sports are running in shared simulation mode.</div>
-
   <div class="quickRow">
     <button class="quick" type="button" data-filter="live">🔴 LIVE</button>
     <button class="quick" type="button" data-filter="Cricket">🏏 Cricket</button>
     <button class="quick" type="button" data-filter="Football">⚽ Football</button>
     <button class="quick" type="button" data-filter="all">🎮 All Games</button>
   </div>
-
   <div class="navRow">
     <button class="navItem active" data-filter="live" type="button">LIVE</button>
     <button class="navItem" data-filter="all" type="button">SPORTS</button>
@@ -150,19 +127,31 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
 
   <div id="adminPanel" class="adminCard hidden">
     <h3>Admin — Add Virtual Credits</h3>
-    <p class="small">Only admin can change balances. Enter the user's Supabase Auth UUID.</p>
-    <label for="targetUid">User UUID</label>
-    <input id="targetUid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+    <p class="small">Select a user by name or THAALA ID. The Auth UUID is handled automatically.</p>
+
+    <label for="userSearch">Search User</label>
+    <input id="userSearch" autocomplete="off" placeholder="Name / THAALA ID / Mobile">
+
+    <label for="targetUser">Select User</label>
+    <select id="targetUser">
+      <option value="">Loading users...</option>
+    </select>
+
+    <div id="selectedUserBox" class="adminUserBox hidden"></div>
+
     <label for="creditAmount">Credits to add</label>
-    <input id="creditAmount" type="number" min="1" step="1" placeholder="1000">
+    <input id="creditAmount" type="number" min="1" step="1" placeholder="10000">
+
     <label for="creditNote">Description</label>
     <input id="creditNote" placeholder="Admin credit">
+
     <button id="addCredits" class="btn" type="button">ADD CREDITS</button>
     <div id="creditMsg" class="msg hidden"></div>
   </div>
 
   <div class="sectionTitle">Live Virtual Games</div>
   <div id="gameList" class="gameGrid"><div class="empty">Loading games...</div></div>
+
   <div id="myGamesSection" class="hidden">
     <div class="sectionTitle">My Games / History</div>
     <div id="myGamesList" class="gameGrid"><div class="empty">Loading your games...</div></div>
@@ -171,24 +160,16 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
   <div class="bottom"><button id="logout" class="logout" type="button">LOG OUT</button></div>
 </div>
 
-<!-- SIDE MENU -->
 <div id="drawerBackdrop" class="drawerBackdrop hidden"></div>
-<aside id="drawer" class="drawer hidden" aria-hidden="true">
-  <div class="drawerHead">
-    <div class="drawerTitle">THAALA MENU</div>
-    <button id="closeDrawer" class="closeBtn" type="button" aria-label="Close menu">✕</button>
-  </div>
-
+<aside id="drawer" class="drawer hidden">
+  <div class="drawerHead"><div class="drawerTitle">THAALA MENU</div><button id="closeDrawer" class="closeBtn" type="button">✕</button></div>
   <input id="menuSearch" placeholder="Search sports..." autocomplete="off">
-
   <div class="menuSection">Quick</div>
   <button class="menuLink" data-filter="live" type="button">🔴 Live Games</button>
   <button class="menuLink" data-filter="all" type="button">🏆 All Sports</button>
-
   <div class="menuSection">Racing Sports</div>
   <button class="menuLink" data-filter="Horse Racing" type="button">🐎 Horse Racing</button>
   <button class="menuLink" data-filter="Greyhound Racing" type="button">🐕 Greyhound Racing</button>
-
   <div class="menuSection">Sports</div>
   <button class="menuLink" data-filter="Cricket" type="button">🏏 Cricket</button>
   <button class="menuLink" data-filter="Virtual Cricket League" type="button">🏏 Virtual Cricket League</button>
@@ -205,25 +186,16 @@ body.drawer-open{overflow:hidden!important}.drawerBackdrop.hidden{display:none!i
 <script>
 "use strict";
 
-/* =========================
-   SUPABASE CONFIG
-   ========================= */
 const SUPABASE_URL="https://pcenmqernxnxnbatslfo.supabase.co";
 const SUPABASE_PUBLIC_KEY="sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
 
 const $=id=>document.getElementById(id);
-let pendingPhone="";
-let currentUser=null;
-let currentProfile=null;
-let allGames=[];
-let activeFilter="live";
+let pendingPhone="",currentUser=null,currentProfile=null,allGames=[],activeFilter="live",adminUsers=[];
 
 function showMsg(id,text,ok=false){
-  const el=$(id); if(!el)return;
-  el.textContent=text;
-  el.classList.remove("hidden","ok");
-  if(ok)el.classList.add("ok");
+  const el=$(id);if(!el)return;
+  el.textContent=text;el.classList.remove("hidden","ok");if(ok)el.classList.add("ok");
 }
 function hideMsg(id){const el=$(id);if(el)el.classList.add("hidden");}
 function normalizePhone(v){return v.replace(/\D/g,"").slice(-10);}
@@ -231,56 +203,100 @@ function validPhone(v){return /^[6-9]\d{9}$/.test(normalizePhone(v));}
 function devEmail(phone){return "dev"+normalizePhone(phone)+"@thaala.local";}
 function devPassword(phone){return "ThaalaDev@"+normalizePhone(phone)+"#2026";}
 function fmt(n){return Number(n||0).toLocaleString("en-IN");}
-function escapeHtml(s){
-  return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
 
-/* DRAWER - locked horizontal movement */
 function openDrawer(){
-  $("drawer").classList.remove("hidden");
-  $("drawerBackdrop").classList.remove("hidden");
-  $("drawer").setAttribute("aria-hidden","false");
-  document.body.classList.add("drawer-open");
-  document.documentElement.style.overflowX="hidden";
+  $("drawer").classList.remove("hidden");$("drawerBackdrop").classList.remove("hidden");
+  document.body.classList.add("drawer-open");document.documentElement.style.overflowX="hidden";
 }
 function closeDrawer(){
-  $("drawer").classList.add("hidden");
-  $("drawerBackdrop").classList.add("hidden");
-  $("drawer").setAttribute("aria-hidden","true");
-  document.body.classList.remove("drawer-open");
-  document.documentElement.style.overflowX="";
+  $("drawer").classList.add("hidden");$("drawerBackdrop").classList.add("hidden");
+  document.body.classList.remove("drawer-open");document.documentElement.style.overflowX="";
 }
-
-/* AUTH TABS */
 function setAuthTab(tab){
   const user=tab==="user";
-  $("userTab").classList.toggle("active",user);
-  $("adminTab").classList.toggle("active",!user);
-  $("userAuth").classList.toggle("hidden",!user);
-  $("adminAuth").classList.toggle("hidden",user);
+  $("userTab").classList.toggle("active",user);$("adminTab").classList.toggle("active",!user);
+  $("userAuth").classList.toggle("hidden",!user);$("adminAuth").classList.toggle("hidden",user);
 }
-function showDashboard(){
-  $("authView").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
-}
-function showAuth(){
-  $("dashboard").classList.add("hidden");
-  $("authView").classList.remove("hidden");
-}
+function showDashboard(){$("authView").classList.add("hidden");$("dashboard").classList.remove("hidden");}
+function showAuth(){$("dashboard").classList.add("hidden");$("authView").classList.remove("hidden");}
 
-/* PROFILE */
 async function loadProfile(){
   if(!currentUser)return null;
   const result=await sb.from("profiles").select("*").eq("id",currentUser.id).single();
   if(result.error){console.error("PROFILE",result.error);return null;}
-  const data=result.data;
-  currentProfile=data;
+  const data=result.data;currentProfile=data;
   $("thaalaId").textContent=data.thaala_id||"—";
-  $("balance").textContent=fmt(data.credits);
-  $("miniBalance").textContent=fmt(data.credits);
+  $("balance").textContent=fmt(data.credits);$("miniBalance").textContent=fmt(data.credits);
   $("roleBadge").textContent=(data.role||"user").toUpperCase();
   $("adminPanel").classList.toggle("hidden",data.role!=="admin");
+  if(data.role==="admin")await loadAdminUsers();
   return data;
+}
+
+/* ADMIN USER LIST */
+async function loadAdminUsers(){
+  const select=$("targetUser");
+  if(!select)return;
+  select.innerHTML='<option value="">Loading users...</option>';
+
+  const result=await sb.from("profiles")
+    .select("id,thaala_id,display_name,phone,role,credits")
+    .order("thaala_id",{ascending:true})
+    .limit(1000);
+
+  if(result.error){
+    console.error("ADMIN USERS",result.error);
+    select.innerHTML='<option value="">Users load nahi hue</option>';
+    showMsg("creditMsg","User list load nahi hui: "+result.error.message);
+    return;
+  }
+
+  adminUsers=result.data||[];
+  renderAdminUsers("");
+}
+
+function renderAdminUsers(query){
+  const select=$("targetUser");
+  if(!select)return;
+
+  const q=String(query||"").trim().toLowerCase();
+  const users=adminUsers.filter(u=>{
+    if(!q)return true;
+    return [
+      u.display_name,
+      u.thaala_id,
+      u.phone
+    ].filter(Boolean).some(v=>String(v).toLowerCase().includes(q));
+  });
+
+  select.innerHTML='<option value="">-- Select User --</option>';
+
+  users.forEach(u=>{
+    const option=document.createElement("option");
+    option.value=u.id;
+    option.textContent=`${u.thaala_id||"NO ID"} — ${u.display_name||"THAALA User"}${u.phone?" • "+String(u.phone).slice(-4):""}`;
+    select.appendChild(option);
+  });
+
+  if(!users.length){
+    select.innerHTML='<option value="">No matching user</option>';
+  }
+}
+
+function showSelectedUser(){
+  const uid=$("targetUser").value;
+  const box=$("selectedUserBox");
+  const u=adminUsers.find(x=>x.id===uid);
+  if(!u){box.classList.add("hidden");box.innerHTML="";return;}
+  box.classList.remove("hidden");
+  box.innerHTML=`
+    <div class="adminUserName">${escapeHtml(u.display_name||"THAALA User")}</div>
+    <div class="adminUserMeta">
+      THAALA ID: <b>${escapeHtml(u.thaala_id||"—")}</b>
+      ${u.phone?" • Mobile: ******"+escapeHtml(String(u.phone).slice(-4)):""}
+      <br>Current Credits: <b>${fmt(u.credits)}</b>
+    </div>`;
 }
 
 /* GAMES */
@@ -293,8 +309,7 @@ async function loadGames(){
     list.innerHTML='<div class="empty">Games load nahi hue. Supabase permissions check karein.</div>';
     return;
   }
-  allGames=result.data||[];
-  renderGames();
+  allGames=result.data||[];renderGames();
 }
 function matchesFilter(g){
   if(activeFilter==="all")return true;
@@ -306,143 +321,50 @@ function matchesFilter(g){
 }
 function sportIcon(sport){
   const s=(sport||"").toLowerCase();
-  if(s.includes("cricket"))return "🏏";
-  if(s.includes("football"))return "⚽";
-  if(s.includes("tennis"))return "🎾";
-  if(s.includes("basketball"))return "🏀";
-  if(s.includes("handball"))return "🤾";
-  if(s.includes("baseball"))return "⚾";
-  if(s.includes("horse"))return "🐎";
-  if(s.includes("greyhound"))return "🐕";
-  return "🎮";
+  if(s.includes("cricket"))return "🏏";if(s.includes("football"))return "⚽";if(s.includes("tennis"))return "🎾";
+  if(s.includes("basketball"))return "🏀";if(s.includes("handball"))return "🤾";if(s.includes("baseball"))return "⚾";
+  if(s.includes("horse"))return "🐎";if(s.includes("greyhound"))return "🐕";return "🎮";
 }
 function renderGames(){
-  const list=$("gameList");
-  const games=allGames.filter(matchesFilter);
+  const list=$("gameList"),games=allGames.filter(matchesFilter);
   if(!games.length){
-    list.innerHTML='<div class="empty"><div style="font-size:38px;margin-bottom:8px">🎮</div><div style="font-weight:900;color:#4c1d95">No games available</div><div style="font-size:13px;margin-top:5px">Is category mein abhi koi virtual game nahi hai.</div></div>';
-    return;
+    list.innerHTML='<div class="empty"><div style="font-size:38px;margin-bottom:8px">🎮</div><div style="font-weight:900;color:#4c1d95">No games available</div><div style="font-size:13px;margin-top:5px">Is category mein abhi koi virtual game nahi hai.</div></div>';return;
   }
   list.innerHTML=games.map(g=>{
     const state=g.current_state&&typeof g.current_state==="object"?g.current_state:{};
     const score=state.score?`<div class="liveScore">📊 ${escapeHtml(String(state.score))}</div>`:"";
     const canJoin=g.status==="live";
-    return `
-      <div class="game">
-        <div class="gameTop">
-          <div class="sportBadge">${sportIcon(g.sport)} ${escapeHtml(g.sport||"SPORTS")}</div>
-          <div class="statusBadge ${g.status==="live"?"statusLive":"statusOther"}">${g.status==="live"?"● LIVE":escapeHtml((g.status||"").toUpperCase())}</div>
-        </div>
-        <div class="matchTitle">${escapeHtml(g.title||"Virtual Match")}</div>
-        <div class="teams">
-          <div class="team"><div class="teamIcon">🏠</div><div>${escapeHtml(g.home_team||"Home")}</div></div>
-          <div class="vs">VS</div>
-          <div class="team"><div class="teamIcon">🏳️</div><div>${escapeHtml(g.away_team||"Away")}</div></div>
-        </div>
-        ${score}
-        <div class="gameFooter">
-          <div class="virtualTag">💰 Virtual Credits</div>
-          <button class="join" data-game="${escapeHtml(g.id)}" ${canJoin?"":"disabled"}>${canJoin?"JOIN GAME":"NOT LIVE"}</button>
-        </div>
-      </div>`;
+    return `<div class="game">
+      <div class="gameTop"><div class="sportBadge">${sportIcon(g.sport)} ${escapeHtml(g.sport||"SPORTS")}</div><div class="statusBadge ${g.status==="live"?"statusLive":"statusOther"}">${g.status==="live"?"● LIVE":escapeHtml((g.status||"").toUpperCase())}</div></div>
+      <div class="matchTitle">${escapeHtml(g.title||"Virtual Match")}</div>
+      <div class="teams"><div class="team"><div class="teamIcon">🏠</div><div>${escapeHtml(g.home_team||"Home")}</div></div><div class="vs">VS</div><div class="team"><div class="teamIcon">🏳️</div><div>${escapeHtml(g.away_team||"Away")}</div></div></div>
+      ${score}
+      <div class="gameFooter"><div class="virtualTag">💰 Virtual Credits</div><button class="join" data-game="${escapeHtml(g.id)}" ${canJoin?"":"disabled"}>${canJoin?"JOIN GAME":"NOT LIVE"}</button></div>
+    </div>`;
   }).join("");
   list.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>joinGame(b.dataset.game)));
 }
 
-/* MY GAMES / HISTORY */
+/* MY GAMES */
 async function loadMyGames(){
-  const box=$("myGamesList");
-  if(!box||!currentUser)return;
-
+  const box=$("myGamesList");if(!box||!currentUser)return;
   box.innerHTML='<div class="empty">Loading your games...</div>';
-
-  const result=await sb
-    .from("game_entries")
-    .select("id,game_id,user_id,entry_credits,status,result,reward_credits,created_at,completed_at")
-    .eq("user_id",currentUser.id)
-    .order("created_at",{ascending:false})
-    .limit(100);
-
-  if(result.error){
-    console.error("MY GAMES",result.error);
-    box.innerHTML='<div class="empty">History load nahi hui. Supabase permissions check karein.</div>';
-    return;
-  }
-
+  const result=await sb.from("game_entries").select("id,game_id,user_id,entry_credits,status,result,reward_credits,created_at,completed_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
+  if(result.error){console.error("MY GAMES",result.error);box.innerHTML='<div class="empty">History load nahi hui. Supabase permissions check karein.</div>';return;}
   const entries=result.data||[];
-
-  if(!entries.length){
-    box.innerHTML='<div class="empty"><div style="font-size:38px">🎮</div><div style="font-weight:900;color:#4c1d95">No games joined yet</div><div style="font-size:13px;margin-top:5px">Jab aap virtual game join karenge, woh yahan dikhega.</div></div>';
-    return;
-  }
-
-  const ids=[...new Set(entries.map(e=>e.game_id).filter(Boolean))];
-  let gameMap={};
-
-  if(ids.length){
-    const gr=await sb
-      .from("games")
-      .select("id,sport,title,home_team,away_team,status")
-      .in("id",ids);
-
-    if(!gr.error){
-      (gr.data||[]).forEach(g=>gameMap[g.id]=g);
-    }
-  }
-
+  if(!entries.length){box.innerHTML='<div class="empty"><div style="font-size:38px">🎮</div><div style="font-weight:900;color:#4c1d95">No games joined yet</div><div style="font-size:13px;margin-top:5px">Jab aap virtual game join karenge, woh yahan dikhega.</div></div>';return;}
+  const ids=[...new Set(entries.map(e=>e.game_id).filter(Boolean))];let gameMap={};
+  if(ids.length){const gr=await sb.from("games").select("id,sport,title,home_team,away_team,status").in("id",ids);if(!gr.error)(gr.data||[]).forEach(g=>gameMap[g.id]=g);}
   box.innerHTML=entries.map(e=>{
     const g=gameMap[e.game_id]||{};
-
     const status=String(e.status||g.status||"joined").toUpperCase();
-    const resultText=e.result?String(e.result):"—";
-    const entryCredits=fmt(e.entry_credits);
-    const rewardCredits=fmt(e.reward_credits);
-
-    const created=e.created_at
-      ?new Date(e.created_at).toLocaleString("en-IN")
-      :"—";
-
-    const completed=e.completed_at
-      ?new Date(e.completed_at).toLocaleString("en-IN")
-      :"—";
-
-    return `
-      <div class="historyCard">
-
-        <div class="historyTop">
-          <div class="historySport">
-            ${sportIcon(g.sport||"SPORTS")}
-            ${escapeHtml(g.sport||"SPORTS")}
-          </div>
-
-          <div class="historyStatus">
-            ${escapeHtml(status)}
-          </div>
-        </div>
-
-        <div class="historyTitle">
-          ${escapeHtml(g.title||"Virtual Game")}
-        </div>
-
-        <div class="historyMeta">
-          ${escapeHtml(g.home_team||"Home")}
-          vs
-          ${escapeHtml(g.away_team||"Away")}
-        </div>
-
-        <div class="historyAmount">
-          💰 Entry: ${entryCredits} Virtual Credits
-        </div>
-
-        <div class="historyMeta">
-          📌 Result: ${escapeHtml(resultText)}<br>
-          🎁 Reward: ${rewardCredits} Virtual Credits<br>
-          🕒 Joined: ${escapeHtml(created)}<br>
-          ✅ Completed: ${escapeHtml(completed)}
-        </div>
-
-      </div>
-    `;
+    return `<div class="historyCard">
+      <div class="historyTop"><div class="historySport">${sportIcon(g.sport||"SPORTS")} ${escapeHtml(g.sport||"SPORTS")}</div><div class="historyStatus">${escapeHtml(status)}</div></div>
+      <div class="historyTitle">${escapeHtml(g.title||"Virtual Game")}</div>
+      <div class="historyMeta">${escapeHtml(g.home_team||"Home")} vs ${escapeHtml(g.away_team||"Away")}</div>
+      <div class="historyAmount">💰 Entry: ${fmt(e.entry_credits)} Virtual Credits</div>
+      <div class="historyMeta">📌 Result: ${escapeHtml(e.result?String(e.result):"—")}<br>🎁 Reward: ${fmt(e.reward_credits)} Virtual Credits<br>🕒 Joined: ${escapeHtml(e.created_at?new Date(e.created_at).toLocaleString("en-IN"):"—")}<br>✅ Completed: ${escapeHtml(e.completed_at?new Date(e.completed_at).toLocaleString("en-IN"):"—")}</div>
+    </div>`;
   }).join("");
 }
 
@@ -462,19 +384,32 @@ async function joinGame(gameId){
 
 /* ADMIN CREDITS */
 async function addCredits(){
-  const uid=$("targetUid").value.trim();
+  hideMsg("creditMsg");
+  const uid=$("targetUser").value;
   const amount=Number($("creditAmount").value);
   const note=$("creditNote").value.trim()||"Admin credit";
-  if(!uid){showMsg("creditMsg","User UUID enter karein.");return;}
+
+  if(!uid){showMsg("creditMsg","Pehle user select karein.");return;}
   if(!Number.isInteger(amount)||amount<=0){showMsg("creditMsg","Valid credits amount enter karein.");return;}
-  const result=await sb.rpc("admin_add_credits",{
-  target_user_uuid:uid,
-  credit_amount:amount,
-  note:note
-});
-  if(result.error){showMsg("creditMsg","Credit failed: "+result.error.message);return;}
+
+  const result=await sb.rpc("admin_add_credits_v2",{
+    target_user_uuid:uid,
+    credit_amount:amount,
+    note:note
+  });
+
+  if(result.error){
+    console.error("ADMIN CREDIT",result.error);
+    showMsg("creditMsg","Credit failed: "+result.error.message);
+    return;
+  }
+
   showMsg("creditMsg","Credits successfully add ho gaye.",true);
   $("creditAmount").value="";
+  await loadAdminUsers();
+  renderAdminUsers($("userSearch").value);
+  $("targetUser").value=uid;
+  showSelectedUser();
   await loadProfile();
 }
 
@@ -485,110 +420,73 @@ async function loadApp(){
   currentUser=result.data.user;
   const profile=await loadProfile();
   if(!profile){showAuth();showMsg("phoneMsg","Profile load nahi hua. Supabase permissions check karein.");return;}
-  showDashboard();
-  await loadGames();
+  showDashboard();await loadGames();
 }
 
-/* ADMIN LOGIN */
 async function loginAdmin(){
   hideMsg("adminMsg");
-  const email=$("adminEmail").value.trim();
-  const password=$("adminPassword").value;
+  const email=$("adminEmail").value.trim(),password=$("adminPassword").value;
   if(!email||!password){showMsg("adminMsg","Email aur password dono enter karein.");return;}
   const result=await sb.auth.signInWithPassword({email,password});
   if(result.error){showMsg("adminMsg","Login failed: "+result.error.message);return;}
   currentUser=result.data.user;
   const profile=await loadProfile();
-  if(!profile||profile.role!=="admin"){
-    await sb.auth.signOut();currentUser=null;
-    showMsg("adminMsg","Ye account THAALA admin nahi hai.");return;
-  }
-  showDashboard();
-  await loadGames();
+  if(!profile||profile.role!=="admin"){await sb.auth.signOut();currentUser=null;showMsg("adminMsg","Ye account THAALA admin nahi hai.");return;}
+  showDashboard();await loadGames();
 }
 
-/* DEVELOPMENT OTP */
 async function loginDevPhone(){
   hideMsg("phoneMsg");
   const token=$("otp").value.trim();
   if(token!=="123456"){showMsg("phoneMsg","Development OTP galat hai. Test OTP: 123456");return;}
   if(!pendingPhone){showMsg("phoneMsg","Mobile number enter karein.");return;}
-  const email=devEmail(pendingPhone);
-  const password=devPassword(pendingPhone);
-
+  const email=devEmail(pendingPhone),password=devPassword(pendingPhone);
   let result=await sb.auth.signInWithPassword({email,password});
-
   if(result.error){
-    const signup=await sb.auth.signUp({
-      email,password,
-      options:{data:{phone_number:pendingPhone,display_name:"THAALA User"}}
-    });
+    const signup=await sb.auth.signUp({email,password,options:{data:{phone_number:pendingPhone,display_name:"THAALA User"}}});
     if(signup.error){showMsg("phoneMsg","Account create/login failed: "+signup.error.message);return;}
-    if(!signup.data.session){
-      showMsg("phoneMsg","Account created. Supabase mein Confirm Email OFF karke phir VERIFY karein.");return;
-    }
+    if(!signup.data.session){showMsg("phoneMsg","Account created. Supabase mein Confirm Email OFF karke phir VERIFY karein.");return;}
     result=signup;
   }
   if(result.error){showMsg("phoneMsg","Login failed: "+result.error.message);return;}
-  currentUser=result.data.user;
-  await loadApp();
+  currentUser=result.data.user;await loadApp();
 }
 
 /* EVENTS */
 $("userTab").addEventListener("click",()=>setAuthTab("user"));
 $("adminTab").addEventListener("click",()=>setAuthTab("admin"));
-
 $("sendOtp").addEventListener("click",()=>{
   const raw=$("phone").value.trim();
   if(!validPhone(raw)){showMsg("phoneMsg","Valid 10-digit Indian mobile number enter karein.");return;}
-  pendingPhone=normalizePhone(raw);
-  $("otpBox").classList.remove("hidden");
-  showMsg("phoneMsg","Test OTP ready. Enter 123456.",true);
+  pendingPhone=normalizePhone(raw);$("otpBox").classList.remove("hidden");showMsg("phoneMsg","Test OTP ready. Enter 123456.",true);
 });
-$("resendOtp").addEventListener("click",()=>{
-  if(!pendingPhone){showMsg("phoneMsg","Pehle mobile number enter karein.");return;}
-  showMsg("phoneMsg","Test OTP: 123456",true);
-});
+$("resendOtp").addEventListener("click",()=>{if(!pendingPhone){showMsg("phoneMsg","Pehle mobile number enter karein.");return;}showMsg("phoneMsg","Test OTP: 123456",true);});
 $("verifyOtp").addEventListener("click",loginDevPhone);
 $("adminLogin").addEventListener("click",loginAdmin);
-
 $("menuBtn").addEventListener("click",openDrawer);
 $("closeDrawer").addEventListener("click",closeDrawer);
 $("drawerBackdrop").addEventListener("click",closeDrawer);
 $("addCredits").addEventListener("click",addCredits);
-
-$("logout").addEventListener("click",async()=>{
-  await sb.auth.signOut();
-  currentUser=null;currentProfile=null;allGames=[];
-  closeDrawer();showAuth();
-});
+$("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
+$("targetUser").addEventListener("change",showSelectedUser);
+$("logout").addEventListener("click",async()=>{await sb.auth.signOut();currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
 
 function setFilter(filter){
   activeFilter=filter;
   document.querySelectorAll(".navItem").forEach(el=>el.classList.toggle("active",el.dataset.filter===filter));
   const historyMode=filter==="mygames";
-  $("gameList").classList.toggle("hidden",historyMode);
-  $("myGamesSection").classList.toggle("hidden",!historyMode);
-  if(historyMode)loadMyGames(); else renderGames();
-  closeDrawer();
-  window.scrollTo({top:0,behavior:"smooth"});
+  $("gameList").classList.toggle("hidden",historyMode);$("myGamesSection").classList.toggle("hidden",!historyMode);
+  if(historyMode)loadMyGames();else renderGames();
+  closeDrawer();window.scrollTo({top:0,behavior:"smooth"});
 }
 document.querySelectorAll(".quick,.navItem,.menuLink").forEach(el=>el.addEventListener("click",()=>setFilter(el.dataset.filter)));
-
 $("menuSearch").addEventListener("input",()=>{
   const q=$("menuSearch").value.trim().toLowerCase();
   document.querySelectorAll(".menuLink").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(q)?"block":"none");
 });
 
-/* SESSION */
-sb.auth.getSession().then(async({data})=>{
-  if(data?.session){currentUser=data.session.user;await loadApp();}
-});
-
-/* REALTIME */
-sb.channel("thaala-live").on("postgres_changes",{event:"*",schema:"public",table:"games"},async()=>{
-  if(currentUser)await loadGames();
-}).subscribe();
+sb.auth.getSession().then(async({data})=>{if(data?.session){currentUser=data.session.user;await loadApp();}});
+sb.channel("thaala-live").on("postgres_changes",{event:"*",schema:"public",table:"games"},async()=>{if(currentUser)await loadGames();}).subscribe();
 </script>
 </body>
 </html>
