@@ -375,7 +375,7 @@ async function joinGame(gameId){
   if(amountRaw===null)return;
   const amount=Number(amountRaw);
   if(!Number.isInteger(amount)||amount<=0){alert("Valid whole-number credits enter karein.");return;}
-  const result=await sb.rpc("join_virtual_game",{p_game_id:gameId,p_amount:amount});
+  const result=await sb.rpc("join_virtual_game_v2",{p_game_id:gameId,p_amount:amount});
   if(result.error){alert("JOIN failed: "+result.error.message);return;}
   alert("Game joined successfully. Virtual credits deducted.");
   await loadProfile();
