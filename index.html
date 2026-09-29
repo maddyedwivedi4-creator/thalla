@@ -467,7 +467,11 @@ async function addCredits(){
   const note=$("creditNote").value.trim()||"Admin credit";
   if(!uid){showMsg("creditMsg","User UUID enter karein.");return;}
   if(!Number.isInteger(amount)||amount<=0){showMsg("creditMsg","Valid credits amount enter karein.");return;}
-  const result=await sb.rpc("admin_add_credits",{p_user_id:uid,p_amount:amount,p_description:note});
+  const result=await sb.rpc("admin_add_credits",{
+  target_user_uuid:uid,
+  credit_amount:amount,
+  note:note
+});
   if(result.error){showMsg("creditMsg","Credit failed: "+result.error.message);return;}
   showMsg("creditMsg","Credits successfully add ho gaye.",true);
   $("creditAmount").value="";
