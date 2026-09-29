@@ -40,6 +40,7 @@ input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,
 .statusBadge{padding:7px 10px;border-radius:10px;font-size:11px;font-weight:950}.statusLive{background:#ffe7ed;color:#dc2626}.statusOther{background:#f1f1f1;color:#666}
 .matchTitle{font-size:14px;font-weight:800;margin-top:14px;color:#444}.teams{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px}.team{width:40%;text-align:center;font-size:14px;font-weight:900}.teamIcon{font-size:28px;margin-bottom:5px}.vs{font-size:12px;font-weight:950;color:#999}
 .liveScore{margin-top:14px;padding:11px;background:#fff6f8;border-radius:12px;text-align:center;font-size:13px;font-weight:850;color:#9f1239}
+.winnerBox{margin-top:12px;padding:12px 14px;background:#fff7d6;border:1px solid #f2d27a;border-radius:14px;text-align:center;font-size:14px;font-weight:950;color:#7a4b00}.winnerBox strong{font-size:15px}
 .gameFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px}.virtualTag{font-size:11px;font-weight:800;color:#777}
 .join{width:auto;min-width:125px;border:0;border-radius:13px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:12px 15px;font-weight:900;box-shadow:0 5px 12px rgba(101,31,255,.22)}.join:active{transform:scale(.97)}.join:disabled{background:#d3d0d8;box-shadow:none}
 .adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}
@@ -434,12 +435,15 @@ function renderGames(){
   list.innerHTML=games.map(g=>{
     const state=g.current_state&&typeof g.current_state==="object"?g.current_state:{};
     const score=state.score?`<div class="liveScore">📊 ${escapeHtml(String(state.score))}</div>`:"";
+    const winnerRaw=state.winner || (g.status==="finished" ? state.result : "");
+    const winnerText=winnerRaw?String(winnerRaw).replace(/\s+won\s*$/i,""):"";
+    const winnerBox=g.status==="finished" && winnerText?`<div class="winnerBox">🏆 Winner: <strong>${escapeHtml(winnerText)}</strong></div>`:"";
     const canJoin=g.status==="live";
     return `<div class="game">
       <div class="gameTop"><div class="sportBadge">${sportIcon(g.sport)} ${escapeHtml(g.sport||"SPORTS")}</div><div class="statusBadge ${g.status==="live"?"statusLive":"statusOther"}">${g.status==="live"?"● LIVE":escapeHtml((g.status||"").toUpperCase())}</div></div>
       <div class="matchTitle">${escapeHtml(g.title||"Virtual Match")}</div>
       <div class="teams"><div class="team"><div class="teamIcon">🏠</div><div>${escapeHtml(g.home_team||"Home")}</div></div><div class="vs">VS</div><div class="team"><div class="teamIcon">🏳️</div><div>${escapeHtml(g.away_team||"Away")}</div></div></div>
-      ${score}
+      ${score}${winnerBox}
       <div class="gameFooter"><div class="virtualTag">💰 Virtual Credits</div><button class="join" data-game="${escapeHtml(g.id)}" ${canJoin?"":"disabled"}>${canJoin?"JOIN GAME":"NOT LIVE"}</button></div>
     </div>`;
   }).join("");
@@ -455,16 +459,20 @@ async function loadMyGames(){
   const entries=result.data||[];
   if(!entries.length){box.innerHTML='<div class="empty"><div style="font-size:38px">🎮</div><div style="font-weight:900;color:#4c1d95">No games joined yet</div><div style="font-size:13px;margin-top:5px">Jab aap virtual game join karenge, woh yahan dikhega.</div></div>';return;}
   const ids=[...new Set(entries.map(e=>e.game_id).filter(Boolean))];let gameMap={};
-  if(ids.length){const gr=await sb.from("games").select("id,sport,title,home_team,away_team,status").in("id",ids);if(!gr.error)(gr.data||[]).forEach(g=>gameMap[g.id]=g);}
+  if(ids.length){const gr=await sb.from("games").select("id,sport,title,home_team,away_team,status,current_state").in("id",ids);if(!gr.error)(gr.data||[]).forEach(g=>gameMap[g.id]=g);}
   box.innerHTML=entries.map(e=>{
     const g=gameMap[e.game_id]||{};
     const status=String(e.status||g.status||"joined").toUpperCase();
+    const gs=g.current_state&&typeof g.current_state==="object"?g.current_state:{};
+    const winner=gs.winner || (gs.result?String(gs.result).replace(/\s+won\s*$/i,""):"");
+    const resultText=e.result?String(e.result):winner;
     return `<div class="historyCard">
       <div class="historyTop"><div class="historySport">${sportIcon(g.sport||"SPORTS")} ${escapeHtml(g.sport||"SPORTS")}</div><div class="historyStatus">${escapeHtml(status)}</div></div>
       <div class="historyTitle">${escapeHtml(g.title||"Virtual Game")}</div>
       <div class="historyMeta">${escapeHtml(g.home_team||"Home")} vs ${escapeHtml(g.away_team||"Away")}</div>
+      ${winner?`<div class="winnerBox">🏆 Winner: <strong>${escapeHtml(winner)}</strong></div>`:""}
       <div class="historyAmount">💰 Entry: ${fmt(e.entry_credits)} Virtual Credits</div>
-      <div class="historyMeta">📌 Result: ${escapeHtml(e.result?String(e.result):"—")}<br>🎁 Reward: ${fmt(e.reward_credits)} Virtual Credits<br>🕒 Joined: ${escapeHtml(e.created_at?new Date(e.created_at).toLocaleString("en-IN"):"—")}<br>✅ Completed: ${escapeHtml(e.completed_at?new Date(e.completed_at).toLocaleString("en-IN"):"—")}</div>
+      <div class="historyMeta">📌 Result: ${escapeHtml(resultText||"—")}<br>🎁 Reward: ${fmt(e.reward_credits)} Virtual Credits<br>🕒 Joined: ${escapeHtml(e.created_at?new Date(e.created_at).toLocaleString("en-IN"):"—")}<br>✅ Completed: ${escapeHtml(e.completed_at?new Date(e.completed_at).toLocaleString("en-IN"):"—")}</div>
     </div>`;
   }).join("");
 }
