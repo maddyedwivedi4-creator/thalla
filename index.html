@@ -343,28 +343,43 @@ background:#cfc9dc
 
 .drawerBackdrop{
 position:fixed;
-inset:0;
-background:rgba(0,0,0,.38);
-z-index:1999
+left:0;
+top:0;
+width:100vw;
+height:100dvh;
+
+background:rgba(0,0,0,.45);
+
+z-index:1999;
+
+touch-action:none;
+
+overscroll-behavior:none;
 }
 
 .drawer{
 position:fixed;
 left:0;
 top:0;
-bottom:0;
-width:min(320px,calc(100vw - 20px));
+width:320px;
+max-width:85vw;
 height:100dvh;
-max-width:none;
 background:#fff;
 z-index:2000;
-padding:calc(18px + env(safe-area-inset-top)) 16px 24px;
+
+padding:calc(18px + env(safe-area-inset-top)) 16px 30px;
+
 overflow-y:auto;
 overflow-x:hidden;
-overscroll-behavior:contain;
+
+overscroll-behavior-x:none;
+overscroll-behavior-y:contain;
+
 -webkit-overflow-scrolling:touch;
-box-shadow:8px 0 30px rgba(0,0,0,.25);
+
 touch-action:pan-y;
+
+box-shadow:8px 0 30px rgba(0,0,0,.22);
 }
 
 .drawerHead{
@@ -379,22 +394,36 @@ font-weight:950;
 color:#5b21b6;
 font-size:22px
 }
-
 .closeBtn{
+width:44px;
+height:44px;
+
 border:0;
-background:#651fff;
+border-radius:14px;
+
+background:linear-gradient(135deg,#651fff,#8b2be2);
+
 color:#fff;
-border-radius:12px;
-min-width:75px;
-height:40px;
-font-size:13px;
+
+font-size:22px;
 font-weight:900;
+
 display:flex;
 align-items:center;
 justify-content:center;
-position:relative;
-z-index:3000;
+
+box-shadow:0 6px 16px rgba(101,31,255,.30);
+
+flex:none;
+
+transition:transform .15s ease,box-shadow .15s ease;
 }
+
+.closeBtn:active{
+transform:scale(.92);
+box-shadow:0 3px 8px rgba(101,31,255,.20);
+}
+
 
 .menuSection{
 font-size:11px;
