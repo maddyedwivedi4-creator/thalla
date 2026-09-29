@@ -33,6 +33,8 @@ input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,
 .userCard{margin:8px 14px;padding:18px;border-radius:22px;background:linear-gradient(135deg,#fff,#f8f3ff);border:1px solid #eee7ff}
 .userLine{display:flex;justify-content:space-between;gap:12px;align-items:center}.idText{font-size:14px;color:#6b21a8;font-weight:800}.creditBig{font-size:31px;font-weight:950;color:#5b21b6;margin-top:3px}
 .sectionTitle{padding:10px 14px 6px;font-size:18px;font-weight:900}.gameGrid{padding:6px 14px 24px;display:grid;gap:12px}
+.adminGameBox{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.adminGameBox h4{margin:0 0 6px;font-size:16px;color:#4c1d95}.adminGameBox .btn.finish{background:linear-gradient(135deg,#e11d48,#be123c)}
 .game{background:#fff;border-radius:22px;padding:16px;box-shadow:0 7px 22px rgba(30,20,60,.08);border:1px solid #eee;overflow:hidden}
 .gameTop{display:flex;justify-content:space-between;align-items:center;gap:10px}.sportBadge{display:inline-flex;align-items:center;gap:6px;background:#f1ebff;color:#5b21b6;padding:7px 10px;border-radius:10px;font-size:12px;font-weight:900}
 .statusBadge{padding:7px 10px;border-radius:10px;font-size:11px;font-weight:950}.statusLive{background:#ffe7ed;color:#dc2626}.statusOther{background:#f1f1f1;color:#666}
@@ -147,6 +149,22 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
 
     <button id="addCredits" class="btn" type="button">ADD CREDITS</button>
     <div id="creditMsg" class="msg hidden"></div>
+
+    <div class="adminGameBox">
+      <h4>Finish Live Virtual Game</h4>
+      <p class="small">Live game select karke result save karein. Isse joined entries <b>Completed</b> ho jayengi.</p>
+
+      <label for="adminGameSelect">Live Game</label>
+      <select id="adminGameSelect">
+        <option value="">Loading live games...</option>
+      </select>
+
+      <label for="gameResult">Game Result</label>
+      <input id="gameResult" placeholder="Example: Mumbai Strikers won" maxlength="120">
+
+      <button id="finishGame" class="btn finish" type="button">FINISH GAME</button>
+      <div id="gameMsg" class="msg hidden"></div>
+    </div>
   </div>
 
   <div class="sectionTitle">Live Virtual Games</div>
@@ -230,7 +248,10 @@ async function loadProfile(){
   $("balance").textContent=fmt(data.credits);$("miniBalance").textContent=fmt(data.credits);
   $("roleBadge").textContent=(data.role||"user").toUpperCase();
   $("adminPanel").classList.toggle("hidden",data.role!=="admin");
-  if(data.role==="admin")await loadAdminUsers();
+  if(data.role==="admin"){
+    await loadAdminUsers();
+    await loadAdminLiveGames();
+  }
   return data;
 }
 
@@ -297,6 +318,62 @@ function showSelectedUser(){
       ${u.phone?" • Mobile: ******"+escapeHtml(String(u.phone).slice(-4)):""}
       <br>Current Credits: <b>${fmt(u.credits)}</b>
     </div>`;
+}
+
+/* ADMIN GAME RESULT */
+async function loadAdminLiveGames(){
+  const select=$("adminGameSelect");
+  if(!select)return;
+  select.innerHTML='<option value="">Loading live games...</option>';
+  const result=await sb.from("games")
+    .select("id,sport,title,home_team,away_team,status")
+    .eq("status","live")
+    .order("starts_at",{ascending:true})
+    .limit(100);
+  if(result.error){
+    console.error("ADMIN LIVE GAMES",result.error);
+    select.innerHTML='<option value="">Live games load nahi hue</option>';
+    showMsg("gameMsg","Live games load nahi hue: "+result.error.message);
+    return;
+  }
+  const games=result.data||[];
+  select.innerHTML='<option value="">-- Select Live Game --</option>';
+  games.forEach(g=>{
+    const option=document.createElement("option");
+    option.value=g.id;
+    option.textContent=`${g.sport||"SPORTS"} — ${g.title||"Virtual Game"} — ${g.home_team||"Home"} vs ${g.away_team||"Away"}`;
+    select.appendChild(option);
+  });
+  if(!games.length)select.innerHTML='<option value="">No live games</option>';
+}
+
+async function finishGame(){
+  hideMsg("gameMsg");
+  const gameId=$("adminGameSelect").value;
+  const resultText=$("gameResult").value.trim();
+  if(!gameId){showMsg("gameMsg","Pehle live game select karein.");return;}
+  if(!resultText){showMsg("gameMsg","Game result enter karein.");return;}
+
+  const ok=confirm("Is live game ko finish karke result save karna hai?");
+  if(!ok)return;
+
+  const result=await sb.rpc("admin_finish_virtual_game_v1",{
+    p_game_id:gameId,
+    p_result:resultText
+  });
+
+  if(result.error){
+    console.error("FINISH GAME",result.error);
+    showMsg("gameMsg","Game finish failed: "+result.error.message);
+    return;
+  }
+
+  const completed=result.data?.completed_entries??0;
+  showMsg("gameMsg",`Game finished. ${completed} joined entr${completed===1?"y was":"ies were"} completed.`,true);
+  $("gameResult").value="";
+  await loadAdminLiveGames();
+  await loadGames();
+  await loadProfile();
 }
 
 /* GAMES */
@@ -467,6 +544,7 @@ $("menuBtn").addEventListener("click",openDrawer);
 $("closeDrawer").addEventListener("click",closeDrawer);
 $("drawerBackdrop").addEventListener("click",closeDrawer);
 $("addCredits").addEventListener("click",addCredits);
+$("finishGame").addEventListener("click",finishGame);
 $("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
 $("targetUser").addEventListener("change",showSelectedUser);
 $("logout").addEventListener("click",async()=>{await sb.auth.signOut();currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
