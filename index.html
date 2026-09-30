@@ -602,12 +602,12 @@ async function loadCricket(){
     const other=matches.filter(m=>!m?.matchEnded && !(m?.matchStarted===true&&!m?.matchEnded));
     let html='';
     if(live.length){
-      html+=`<div class="subHeading">🔴 LIVE CRICKET <span>${live.length}</span></div>`;
+      html+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length}</span></div>`;
       html+=live.map(cricketMatchCard).join('');
     }
     if(other.length){
       html+=`<div class="subHeading upcomingHeading">🏏 CURRENT / UPCOMING <span>${other.length}</span></div>`;
-      html+=other.slice(0,12).map(cricketMatchCard).join('');
+      html+=other.map(cricketMatchCard).join('');
     }
     box.innerHTML=html;
   }catch(e){
