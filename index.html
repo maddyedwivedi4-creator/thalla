@@ -59,6 +59,8 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
 @media(min-width:700px){.card{max-width:620px;margin:30px auto}.hero{max-width:900px;margin:auto}.gameGrid{max-width:900px;margin:auto;grid-template-columns:1fr 1fr}}
 
 .realFootball{margin:8px 14px 24px}.realHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.realTitle{font-size:18px;font-weight:900}.refreshReal{border:0;border-radius:12px;background:#eee9ff;color:#5b21b6;padding:9px 12px;font-weight:800}.realCard{background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-top:10px;box-shadow:0 7px 20px rgba(30,20,60,.07)}.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;color:#dc2626;background:#ffe7ed;padding:6px 9px;border-radius:9px}.realTeams{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-weight:900;font-size:14px}.realLogo{width:34px;height:34px;object-fit:contain;margin-bottom:5px}.realScore{font-size:16px;font-weight:950;color:#111827}.realMinute{font-size:11px;color:#777;margin-top:5px}.realEmpty{padding:20px;text-align:center;background:#fff;border-radius:18px;color:#777}.realMeta{font-size:11px;color:#777;text-align:center;margin-top:10px}.realBtn{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:13px 14px;font-weight:900;margin-top:12px;box-shadow:0 5px 12px rgba(101,31,255,.18)}.realBtn:active{transform:scale(.98)}
+
+.valuePanel{margin-top:12px;padding:12px;border-radius:15px;background:linear-gradient(135deg,#f7f1ff,#fff5f8);border:1px solid #eadfff}.valueTitle{font-size:12px;font-weight:950;color:#5b21b6;margin-bottom:8px}.valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.valueItem{background:#fff;border-radius:11px;padding:9px 5px;text-align:center;border:1px solid #eee}.valueStake{font-size:11px;color:#6b7280;font-weight:800}.valueReward{font-size:13px;color:#111827;font-weight:950;margin-top:3px}.valueNote{font-size:10px;color:#777;margin-top:8px;line-height:1.4}.feeBox{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f8f7fb;color:#555;font-size:11px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -81,7 +83,7 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
       <div id="otpBox" class="hidden">
         <label for="otp">6-digit OTP</label>
         <input id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456">
-        <button id="verifyOtp" class="btn" type="button">VERIFY & OPEN THAALA</button>
+        <button id="verifyOtp" class="btn" type="button">LOGIN & OPEN THAALA</button>
         <button id="resendOtp" class="btn secondary" type="button">RESEND TEST OTP</button>
       </div>
     </section>
@@ -103,9 +105,9 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
   <div class="topbar">
     <button id="menuBtn" class="menuBtn" type="button">☰</button>
     <div class="topBrand">THAALA</div>
-    <div class="balancePill">💰 <span id="miniBalance">0</span></div>
+    <div class="balancePill">💰 <span id="miniBalance">0</span> VC</div>
   </div>
-  <div class="announce">🔴 LIVE • Virtual sports are running in shared simulation mode.</div>
+  <div class="announce">🔴 LIVE • Real matches & virtual credits • Login required to enter.</div>
   <div class="quickRow">
     <button class="quick" type="button" data-filter="live">🔴 LIVE</button>
     <button class="quick" type="button" data-filter="Cricket">🏏 Cricket</button>
@@ -127,7 +129,7 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
       <div><div class="idText">THAALA ID</div><div id="thaalaId">Loading...</div></div>
       <span id="roleBadge" class="badge">USER</span>
     </div>
-    <div style="margin-top:13px"><div class="small">Virtual Credits Balance</div><div class="creditBig">₹ <span id="balance">0</span></div></div>
+    <div style="margin-top:13px"><div class="small">Virtual Credits Balance</div><div class="creditBig"><span id="balance">0</span> VC</div></div>
   </div>
 
   <div id="adminPanel" class="adminCard hidden">
@@ -172,7 +174,7 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
     </div>
   </div>
 
-  <section id="realFootball" class="realFootball">
+  <section id="realFootball" class="realFootball"><div style="margin:0 0 10px;padding:11px 13px;border-radius:13px;background:#f4efff;color:#5b21b6;font-size:12px;font-weight:800">🔐 You are logged in. Live matches are available below. VC is required to play.</div>
     <div class="realHeader">
       <div class="realTitle">⚽ Real Live Football</div>
       <button id="refreshReal" class="refreshReal" type="button">↻ Refresh</button>
@@ -414,68 +416,69 @@ async function finishGame(){
 /* REAL FOOTBALL */
 const SPORTS_LIVE_URL=SUPABASE_URL+"/functions/v1/sports-live";
 async function loadRealFootball(){
-  const box=$("realFootballList");
-  if(!box)return;
+  const box=$("realFootballList"); if(!box)return;
   box.innerHTML='<div class="realEmpty">Loading real matches...</div>';
   try{
     const res=await fetch(SPORTS_LIVE_URL,{method:"GET",headers:{"Accept":"application/json"}});
     const data=await res.json();
-    if(!res.ok || !data.success) throw new Error(data?.error||data?.message||"Live football data unavailable");
+    if(!res.ok||!data.success)throw new Error(data?.error||"Live football unavailable");
     const matches=Array.isArray(data.response)?data.response:[];
     if(!matches.length){box.innerHTML='<div class="realEmpty">Abhi koi live football match available nahi hai.</div>';return;}
+    const estimate=(stake,hs,as,min)=>{
+      // Fixed transparent virtual-value formula; it does not depend on other users' stakes.
+      const diff=Number(hs)-Number(as); let mult=1.50;
+      if(diff>0)mult=1.35; else if(diff<0)mult=1.65;
+      if(Number(min)>=75)mult += diff>0?-0.05:0.05;
+      if(Number(min)>=85)mult += diff>0?-0.03:0.03;
+      mult=Math.max(1.20,Math.min(1.85,mult)); return Math.floor(stake*mult);
+    };
     box.innerHTML=matches.map(m=>{
-      const f=m.fixture||{},t=m.teams||{},sc=m.goals||{},league=m.league||{};
-      const home=t.home||{},away=t.away||{};
-      const homeScore=sc.home==null?"-":sc.home,awayScore=sc.away==null?"-":sc.away;
-      const elapsed=f.status?.elapsed!=null?`${f.status.elapsed}'`:f.status?.short||"LIVE";
-      const fixtureId=Number(f.id||0);
-      const matchDate=f.date||"";
+      const f=m.fixture||{},t=m.teams||{},sc=m.goals||{},l=m.league||{},home=t.home||{},away=t.away||{};
+      const hs=sc.home==null?0:sc.home,as=sc.away==null?0:sc.away,min=Number(f.status?.elapsed||0);
+      const elapsed=f.status?.elapsed!=null?`${f.status.elapsed}'`:f.status?.short||'LIVE';
+      const date=f.date||'';
+      const r1=estimate(1000,hs,as,min),r2=estimate(2000,hs,as,min),r5=estimate(5000,hs,as,min);
       return `<div class="realCard">
-        <div class="realTop"><div class="realLeague">⚽ ${escapeHtml(league.name||"Football")}</div><div class="realLive">● ${escapeHtml(elapsed)}</div></div>
+        <div class="realTop"><div class="realLeague">⚽ ${escapeHtml(l.name||'Football')}</div><div class="realLive">● ${escapeHtml(elapsed)}</div></div>
         <div class="realTeams">
-          <div class="realTeam">${home.logo?`<img class="realLogo" src="${escapeHtml(home.logo)}" alt="">`:"⚽"}<div>${escapeHtml(home.name||"Home")}</div></div>
-          <div style="text-align:center"><div class="realScore">${escapeHtml(String(homeScore))} : ${escapeHtml(String(awayScore))}</div><div class="realMinute">LIVE</div></div>
-          <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:"⚽"}<div>${escapeHtml(away.name||"Away")}</div></div>
+          <div class="realTeam">${home.logo?`<img class="realLogo" src="${escapeHtml(home.logo)}" alt="">`:'⚽'}<div>${escapeHtml(home.name||'Home')}</div></div>
+          <div style="text-align:center"><div class="realScore">${hs} : ${as}</div><div class="realMinute">LIVE</div></div>
+          <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:'⚽'}<div>${escapeHtml(away.name||'Away')}</div></div>
         </div>
-        <div class="realMeta">${escapeHtml(league.country||"")} • ${matchDate?escapeHtml(new Date(matchDate).toLocaleString("en-IN")):""}</div>
-        <button class="realBtn realJoin" type="button" data-fixture="${fixtureId}" data-league="${escapeHtml(league.name||"Football")}" data-home="${escapeHtml(home.name||"Home")}" data-away="${escapeHtml(away.name||"Away")}" data-date="${escapeHtml(matchDate)}">JOIN GAME</button>
+        <div class="realMeta">${escapeHtml(l.country||'')} • ${date?escapeHtml(new Date(date).toLocaleString('en-IN')):''}</div>
+        <div class="valuePanel">
+          <div class="valueTitle">LIVE VIRTUAL VALUE • ${hs}:${as} • ${escapeHtml(elapsed)}</div>
+          <div class="valueGrid">
+            <div class="valueItem"><div class="valueStake">1000 VC</div><div class="valueReward">${fmt(r1)} VC</div></div>
+            <div class="valueItem"><div class="valueStake">2000 VC</div><div class="valueReward">${fmt(r2)} VC</div></div>
+            <div class="valueItem"><div class="valueStake">5000 VC</div><div class="valueReward">${fmt(r5)} VC</div></div>
+          </div>
+          <div class="valueNote">Estimated virtual reward. Calculation is based on the match state and fixed THAALA rules, not on other users' stakes.</div>
+        </div>
+        <div class="feeBox">Minimum wallet: <b>1500 VC</b> • Joining fee: <b>500 VC</b> • Match allocation: <b>1000 / 2000 / 5000 VC</b></div>
+        <button class="realBtn realJoin" type="button" data-fixture="${Number(f.id||0)}" data-league="${escapeHtml(l.name||'Football')}" data-home="${escapeHtml(home.name||'Home')}" data-away="${escapeHtml(away.name||'Away')}" data-date="${escapeHtml(date)}">PLAY MATCH</button>
       </div>`;
-    }).join("");
-    box.querySelectorAll(".realJoin").forEach(b=>b.addEventListener("click",()=>joinRealFootball({
-      fixtureId:Number(b.dataset.fixture),league:b.dataset.league,home:b.dataset.home,away:b.dataset.away,startsAt:b.dataset.date
-    })));
-  }catch(e){
-    console.error("REAL FOOTBALL",e);
-    box.innerHTML='<div class="realEmpty">Real football data load nahi hua. Refresh karke try karein.</div>';
-  }
+    }).join('');
+    box.querySelectorAll('.realJoin').forEach(b=>b.addEventListener('click',()=>joinRealFootball({fixtureId:Number(b.dataset.fixture),league:b.dataset.league,home:b.dataset.home,away:b.dataset.away,startsAt:b.dataset.date})));
+  }catch(e){console.error('REAL FOOTBALL',e);box.innerHTML='<div class="realEmpty">Real football data load nahi hua. Refresh karke try karein.</div>';}
 }
 
 async function joinRealFootball(match){
-  if(!currentUser){alert("Please login first.");return;}
-  if(!match.fixtureId){alert("Match ID unavailable.");return;}
-  const amountRaw=prompt(`Virtual credits entry amount for ${match.home} vs ${match.away}:`,"100");
-  if(amountRaw===null)return;
-  const amount=Number(amountRaw);
-  if(!Number.isInteger(amount)||amount<=0){alert("Valid whole-number credits enter karein.");return;}
-  const ok=confirm(`${amount.toLocaleString("en-IN")} Virtual Credits se ${match.home} vs ${match.away} join karna hai?`);
-  if(!ok)return;
-  const result=await sb.rpc("join_real_football_v1",{
-    p_fixture_id:match.fixtureId,
-    p_amount:amount,
-    p_league:match.league,
-    p_home_team:match.home,
-    p_away_team:match.away,
-    p_starts_at:match.startsAt||null
-  });
-  if(result.error){
-    console.error("REAL JOIN",result.error);
-    alert("JOIN failed: "+result.error.message);
-    return;
-  }
-  const newBalance=result.data?.balance;
-  alert(`Game joined successfully. ${amount.toLocaleString("en-IN")} Virtual Credits deducted.${newBalance!=null?`\nNew balance: ${Number(newBalance).toLocaleString("en-IN")}`:""}`);
-  await loadProfile();
-  await loadMyGames();
+  if(!currentUser){alert('Please login first.');return;}
+  if(!match.fixtureId){alert('Match ID unavailable.');return;}
+  const balance=Number(currentProfile?.credits||0);
+  if(balance<1500){alert('Play karne ke liye minimum 1500 VC balance required hai.');return;}
+  const raw=prompt(`Match allocation for ${match.home} vs ${match.away}\nJoining fee: 500 VC\nSelect: 1000 / 2000 / 5000 VC`,`1000`);
+  if(raw===null)return;
+  const amount=Number(raw);
+  if(![1000,2000,5000].includes(amount)){alert('Sirf 1000, 2000 ya 5000 VC select karein.');return;}
+  const total=500+amount;
+  if(balance<total){alert(`Required: ${fmt(total)} VC (500 joining fee + ${fmt(amount)} match VC). Current balance: ${fmt(balance)} VC`);return;}
+  if(!confirm(`${match.home} vs ${match.away}\n\nJoining fee: 500 VC\nMatch allocation: ${fmt(amount)} VC\nTotal deduction: ${fmt(total)} VC\n\nContinue?`))return;
+  const result=await sb.rpc('join_real_football_v2',{p_fixture_id:match.fixtureId,p_amount:amount,p_joining_fee:500,p_league:match.league,p_home_team:match.home,p_away_team:match.away,p_starts_at:match.startsAt||null});
+  if(result.error){console.error('REAL JOIN',result.error);alert('PLAY failed: '+result.error.message);return;}
+  alert(`Match joined successfully.\nMatch VC: ${fmt(amount)}\nJoining fee: 500 VC\nTotal deducted: ${fmt(total)} VC\nNew balance: ${fmt(result.data?.balance??0)} VC`);
+  await loadProfile(); await loadMyGames();
 }
 
 /* GAMES */
@@ -675,7 +678,6 @@ $("menuSearch").addEventListener("input",()=>{
 });
 
 sb.auth.getSession().then(async({data})=>{if(data?.session){currentUser=data.session.user;await loadApp();}});
-loadRealFootball();
 sb.channel("thaala-live").on("postgres_changes",{event:"*",schema:"public",table:"games"},async()=>{if(currentUser)await loadGames();}).subscribe();
 </script>
 </body>
