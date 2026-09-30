@@ -57,6 +57,8 @@ input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,
 .menuSection{font-size:11px;color:#888;font-weight:900;margin:18px 4px 7px;text-transform:uppercase}.menuLink{width:100%;text-align:left;border:0;background:#f7f5fb;margin:5px 0;padding:13px 14px;border-radius:13px;font-weight:750;color:#29233a}
 html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{overflow:hidden!important}
 @media(min-width:700px){.card{max-width:620px;margin:30px auto}.hero{max-width:900px;margin:auto}.gameGrid{max-width:900px;margin:auto;grid-template-columns:1fr 1fr}}
+
+.realFootball{margin:8px 14px 24px}.realHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.realTitle{font-size:18px;font-weight:900}.refreshReal{border:0;border-radius:12px;background:#eee9ff;color:#5b21b6;padding:9px 12px;font-weight:800}.realCard{background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-top:10px;box-shadow:0 7px 20px rgba(30,20,60,.07)}.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;color:#dc2626;background:#ffe7ed;padding:6px 9px;border-radius:9px}.realTeams{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-weight:900;font-size:14px}.realLogo{width:34px;height:34px;object-fit:contain;margin-bottom:5px}.realScore{font-size:16px;font-weight:950;color:#111827}.realMinute{font-size:11px;color:#777;margin-top:5px}.realEmpty{padding:20px;text-align:center;background:#fff;border-radius:18px;color:#777}
 </style>
 </head>
 <body>
@@ -174,6 +176,12 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
     <div class="sectionTitle">⚽ Real Live Football</div>
     <div id="realFootballList"><div class="realEmpty">Loading real matches...</div></div>
   </div>
+
+
+  <section id="realFootball" class="realFootball">
+    <div class="realHeader"><div class="realTitle">⚽ Real Live Football</div><button id="refreshReal" class="refreshReal" type="button">↻ Refresh</button></div>
+    <div id="realFootballList"><div class="realEmpty">Loading real matches...</div></div>
+  </section>
 
   <div class="sectionTitle">Live Virtual Games</div>
   <div id="gameList" class="gameGrid"><div class="empty">Loading games...</div></div>
@@ -442,6 +450,38 @@ async function loadRealFootball(){
   }
 }
 
+/* REAL FOOTBALL */
+const SPORTS_LIVE_URL="https://pcenmqernxnxnbatslfo.supabase.co/functions/v1/sports-live";
+async function loadRealFootball(){
+  const box=$("realFootballList");
+  if(!box)return;
+  box.innerHTML='<div class="realEmpty">Loading real matches...</div>';
+  try{
+    const res=await fetch(SPORTS_LIVE_URL,{method:"GET",headers:{"Accept":"application/json"}});
+    const data=await res.json();
+    if(!res.ok || !data.success) throw new Error(data?.error||data?.message||"Live football data unavailable");
+    const matches=Array.isArray(data.response)?data.response:[];
+    if(!matches.length){box.innerHTML='<div class="realEmpty">Abhi koi live football match available nahi hai.</div>';return;}
+    box.innerHTML=matches.map(m=>{
+      const f=m.fixture||{},t=m.teams||{},sc=m.goals||{},league=m.league||{};
+      const home=t.home||{},away=t.away||{};
+      const homeScore=sc.home==null?"-":sc.home,awayScore=sc.away==null?"-":sc.away;
+      const elapsed=f.status?.elapsed!=null?`${f.status.elapsed}'`:f.status?.short||"LIVE";
+      return `<div class="realCard">
+        <div class="realTop"><div class="realLeague">${escapeHtml(league.name||"Football")}</div><div class="realLive">● ${escapeHtml(elapsed)}</div></div>
+        <div class="realTeams">
+          <div class="realTeam">${home.logo?`<img class="realLogo" src="${escapeHtml(home.logo)}" alt="">`:"⚽"}<div>${escapeHtml(home.name||"Home")}</div></div>
+          <div class="realScore">${homeScore} : ${awayScore}</div>
+          <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:"⚽"}<div>${escapeHtml(away.name||"Away")}</div></div>
+        </div>
+      </div>`;
+    }).join("");
+  }catch(e){
+    console.error("REAL FOOTBALL",e);
+    box.innerHTML='<div class="realEmpty">Real football data load nahi hua. Refresh karke try karein.</div>';
+  }
+}
+
 /* GAMES */
 async function loadGames(){
   const list=$("gameList");
@@ -618,6 +658,7 @@ $("closeDrawer").addEventListener("click",closeDrawer);
 $("drawerBackdrop").addEventListener("click",closeDrawer);
 $("addCredits").addEventListener("click",addCredits);
 $("finishGame").addEventListener("click",finishGame);
+$("refreshReal").addEventListener("click",loadRealFootball);
 $("adminGameSelect").addEventListener("change",updateWinnerOptions);
 $("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
 $("targetUser").addEventListener("change",showSelectedUser);
@@ -638,6 +679,7 @@ $("menuSearch").addEventListener("input",()=>{
 });
 
 sb.auth.getSession().then(async({data})=>{if(data?.session){currentUser=data.session.user;await loadApp();}});
+loadRealFootball();
 sb.channel("thaala-live").on("postgres_changes",{event:"*",schema:"public",table:"games"},async()=>{if(currentUser)await loadGames();}).subscribe();
 </script>
 </body>
