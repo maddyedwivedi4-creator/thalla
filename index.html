@@ -541,203 +541,99 @@ async function joinRealFootball(match){
 const CRICKET_WORKER_URL="https://yellow-water-e57c.maddye-dwivedi4.workers.dev/";
 
 function cricketVirtualValue(stake,match){
-  // Fixed virtual-credit estimate from objective match state only.
-  const live=match?.liveStatus==="live";
+  // Transparent fixed virtual estimate. It never uses other users' stakes.
+  const live=match?.thaalaStatus==='LIVE' || (match?.matchStarted===true && !match?.matchEnded);
+  const scoreCount=Array.isArray(match?.score)?match.score.length:0;
   let mult=live?1.45:1.25;
-  const scoreSignal=Array.isArray(match?.score)?match.score.length:(match?.scoreText?1:0);
-  mult+=Math.min(0.20,scoreSignal*0.03);
+  mult += Math.min(0.20,scoreCount*0.03);
   return Math.floor(stake*mult);
 }
 
 function cricketTeamNames(m){
-  // CricketData uses slightly different shapes between currentMatches
-  // and cricScore. Handle all common forms so names never fall back
-  // to "Team 1 / Team 2" when the feed contains real names.
-  const candidates=[
-    Array.isArray(m?.teams)?m.teams:[],
-    Array.isArray(m?.teamInfo)?m.teamInfo.map(x=>x?.name||x?.shortname||""):[],
-    [m?.t1,m?.t2],
-    [m?.team1,m?.team2],
-    [m?.teamA,m?.teamB],
-    [m?.homeTeam,m?.awayTeam],
-    [m?.home_team,m?.away_team]
-  ];
-
-  for(const pair of candidates){
-    if(Array.isArray(pair) && pair.length>=2){
-      const a=typeof pair[0]==="string"?pair[0]:(pair[0]?.name||pair[0]?.shortname||"");
-      const b=typeof pair[1]==="string"?pair[1]:(pair[1]?.name||pair[1]?.shortname||"");
-      if(a && b) return [a,b];
-    }
-  }
-
-  // Last fallback: many simple-score feeds put "A vs B" in name/title.
-  const title=String(m?.name||m?.title||"");
-  const parts=title.split(/\\s+v(?:s)?\\.?\\s+/i);
-  if(parts.length>=2 && parts[0].trim() && parts[1].trim()){
-    return [parts[0].trim(),parts[1].trim().split(/,\\s*/)[0]];
-  }
-
-  return ["Team 1","Team 2"];
+  if(Array.isArray(m?.teams) && m.teams.length>=2) return [String(m.teams[0]),String(m.teams[1])];
+  const a=String(m?.homeTeam||m?.team1||'Team 1').trim();
+  const b=String(m?.awayTeam||m?.team2||'Team 2').trim();
+  return [a||'Team 1',b||'Team 2'];
 }
 
-function cricketScoreText(m){
-  if(typeof m?.scoreText==="string" && m.scoreText.trim()){
-    return escapeHtml(m.scoreText.trim());
-  }
-
-  if(typeof m?.t1s==="string" || typeof m?.t2s==="string"){
-    const a=m?.t1s?String(m.t1s).trim():"";
-    const b=m?.t2s?String(m.t2s).trim():"";
-    if(a || b) return escapeHtml([a,b].filter(Boolean).join(" • "));
-  }
-
-  const scores=Array.isArray(m?.score)?m.score:[];
-  return scores.map(x=>{
-    const r=x?.r==null?"-":x.r;
-    const w=x?.w==null?"":`/${x.w}`;
-    const o=x?.o==null?"":` (${x.o} ov)`;
-    return `${escapeHtml(String(r)+String(w)+String(o))}`;
-  }).join(" • ");
+function cricketIsLive(m){
+  return m?.thaalaStatus==='LIVE' || (m?.matchStarted===true && m?.matchEnded!==true);
 }
 
 function cricketMatchCard(m){
   const [home,away]=cricketTeamNames(m);
-  const status=m?.liveStatus==="live"?"LIVE":"UPCOMING";
-  const statusClass=status==="LIVE"?"cricketStatus":"upcomingBadge";
-
-  const when=m?.dateTimeGMT
-    ? new Date(m.dateTimeGMT).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})
-    :(m?.date||"");
-
-  const rawTitle=String(m?.name||m?.title||"");
-  const series=(rawTitle && rawTitle.toLowerCase()!=="cricket")
-    ? rawTitle
-    : (m?.seriesName||m?.series||m?.matchType||"Cricket");
-
-  const score=cricketScoreText(m);
-  const r1=cricketVirtualValue(1000,m);
-  const r2=cricketVirtualValue(2000,m);
-  const r5=cricketVirtualValue(5000,m);
-
+  const scores=Array.isArray(m?.score)?m.score:[];
+  const scoreRows=scores.map(x=>{
+    const name=x?.inning||x?.team||'Innings';
+    const r=x?.r==null?'-':x.r;
+    const w=x?.w==null?'':`/${x.w}`;
+    const o=x?.o==null?'':` (${x.o} ov)`;
+    return `<div class="cricketScoreRow"><span class="cricketTeam">${escapeHtml(name)}</span><span class="cricketRuns">${escapeHtml(String(r)+String(w)+String(o))}</span></div>`;
+  }).join('');
+  const live=cricketIsLive(m);
+  const status=live?'LIVE':'UPCOMING';
+  const statusClass=live?'cricketStatus':'upcomingBadge';
+  const when=m?.dateTimeGMT?new Date(m.dateTimeGMT).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):(m?.date||m?.dateTime||'');
+  const series=m?.name||m?.series_id||'Cricket';
+  const r1=cricketVirtualValue(1000,m),r2=cricketVirtualValue(2000,m),r5=cricketVirtualValue(5000,m);
   return `<div class="realCard">
-    <div class="realTop">
-      <div class="realLeague">🏏 ${escapeHtml(series)}</div>
-      <div class="${statusClass}">${status==="LIVE"?"🔴 ":""}${status}</div>
-    </div>
-
+    <div class="realTop"><div class="realLeague">🏏 ${escapeHtml(series)}</div><div class="${statusClass}">${live?'🔴 ':''}${status}</div></div>
     <div class="realTeams">
-      <div class="realTeam">
-        🏏
-        <div>${escapeHtml(home)}</div>
-      </div>
-
-      <div style="text-align:center">
-        <div class="vs">VS</div>
-        <div class="realMinute">${escapeHtml(when)}</div>
-      </div>
-
-      <div class="realTeam">
-        🏏
-        <div>${escapeHtml(away)}</div>
-      </div>
+      <div class="realTeam">🏏<div>${escapeHtml(home)}</div></div>
+      <div style="text-align:center"><div class="vs">VS</div><div class="realMinute">${escapeHtml(when)}</div></div>
+      <div class="realTeam">🏏<div>${escapeHtml(away)}</div></div>
     </div>
-
-    <div class="cricketScore">
-      <div class="cricketScoreRow">
-        <span class="cricketTeam">${status==="LIVE"?"LIVE SCORE":"MATCH"}</span>
-        <span class="cricketRuns">
-          ${score || (status==="LIVE" ? "Score updating..." : "Score not available yet.")}
-        </span>
-      </div>
-    </div>
-
-    <div class="cricketMeta">
-      ${escapeHtml(m?.venue||"Venue unavailable")}
-      •
-      ${escapeHtml(m?.matchType||"cricket")}
-    </div>
-
+    ${scoreRows?`<div class="cricketScore">${scoreRows}</div>`:'<div class="cricketScore">Score not available yet.</div>'}
+    <div class="cricketMeta">${escapeHtml(m?.venue||'Venue unavailable')} • ${escapeHtml(m?.matchType||'cricket')}</div>
     <div class="valuePanel panelStyle cricketPanel">
-      <div class="valueTitle">
-        <span>THAALA VIRTUAL VALUE</span>
-        <span class="liveDot">${status==="LIVE"?"● LIVE":"UPCOMING"}</span>
-      </div>
-
+      <div class="valueTitle"><span>THAALA VIRTUAL VALUE</span><span class="liveDot">● ${status}</span></div>
       <div class="valueGrid">
-        <div class="valueItem">
-          <div class="valueStake">1K ENTRY</div>
-          <div class="valueReward">${compactVC(r1)}</div>
-        </div>
-
-        <div class="valueItem">
-          <div class="valueStake">2K ENTRY</div>
-          <div class="valueReward">${compactVC(r2)}</div>
-        </div>
-
-        <div class="valueItem">
-          <div class="valueStake">5K ENTRY</div>
-          <div class="valueReward">${compactVC(r5)}</div>
-        </div>
+        <div class="valueItem"><div class="valueStake">1K ENTRY</div><div class="valueReward">${compactVC(r1)}</div></div>
+        <div class="valueItem"><div class="valueStake">2K ENTRY</div><div class="valueReward">${compactVC(r2)}</div></div>
+        <div class="valueItem"><div class="valueStake">5K ENTRY</div><div class="valueReward">${compactVC(r5)}</div></div>
       </div>
-
-      <div class="valueNote">
-        ${status==="LIVE"
-          ?"Live estimate based on the match feed/state."
-          :"Fixed virtual estimate for the upcoming match."}
-        It is virtual only, not betting odds or pooled stakes.
-      </div>
+      <div class="valueNote">Virtual estimate based on match state only. Not betting odds and not based on other users' stakes.</div>
     </div>
   </div>`;
 }
 
 async function loadCricket(){
-  const box=$("realCricketList");
-  if(!box)return;
-
+  const box=$("realCricketList"); if(!box)return;
   box.innerHTML='<div class="realEmpty">Loading all cricket matches...</div>';
-
   try{
-    const res=await fetch(CRICKET_WORKER_URL,{
-      method:"GET",
-      headers:{"Accept":"application/json"},
-      cache:"no-store"
-    });
-
+    const res=await fetch(CRICKET_WORKER_URL,{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"});
     const data=await res.json();
-
-    if(!res.ok || data?.success===false){
-      throw new Error(data?.error||data?.message||"Cricket data unavailable");
-    }
-
+    if(!res.ok || data?.success===false) throw new Error(data?.error||data?.message||"Cricket data unavailable");
     const matches=Array.isArray(data?.data)?data.data:[];
-
-    const live=matches.filter(m=>m?.liveStatus==="live");
-    const upcoming=matches.filter(m=>m?.liveStatus==="upcoming");
-
-    let out='';
-
-    out+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length}</span></div>`;
-    out+=live.length
-      ? live.map(cricketMatchCard).join("")
-      : '<div class="liveNotice">अभी कोई live cricket match नहीं है.</div>';
-
-    out+=`<div class="subHeading upcomingHeading">🟢 UPCOMING CRICKET <span>${upcoming.length}</span></div>`;
-    out+=upcoming.length
-      ? upcoming.map(cricketMatchCard).join("")
-      : '<div class="realEmpty">अभी upcoming cricket matches feed में उपलब्ध नहीं हैं.</div>';
-
-    box.innerHTML=out;
-
+    const live=matches.filter(cricketIsLive);
+    const upcoming=matches.filter(m=>!cricketIsLive(m) && m?.thaalaStatus==='UPCOMING');
+    let html=`<div class="cricketMeta" style="margin:0 0 12px;text-align:left">Live: <b>${live.length}</b> • Upcoming: <b>${upcoming.length}</b> • All competitions • Auto refresh: 30 sec</div>`;
+    if(live.length){
+      html+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length}</span></div>`;
+      html+=live.map(cricketMatchCard).join('');
+    }
+    if(upcoming.length){
+      html+=`<div class="subHeading upcomingHeading">🏏 ALL UPCOMING CRICKET <span>${upcoming.length}</span></div>`;
+      html+=upcoming.map(cricketMatchCard).join('');
+    }
+    if(!live.length&&!upcoming.length) html+='<div class="realEmpty">No live or upcoming cricket matches are currently returned by the CricketData feed.</div>';
+    box.innerHTML=html;
   }catch(e){
-    console.error("CRICKET",e);
-
-    box.innerHTML=`<div class="realEmpty">
-      <b>Cricket data load नहीं हुआ.</b><br>
-      <span style="font-size:12px">${escapeHtml(e.message||"Unknown error")}</span><br>
-      <button class="refreshReal" style="margin-top:10px" type="button" onclick="loadCricket()">↻ TRY AGAIN</button>
-    </div>`;
+    console.error('CRICKET',e);
+    box.innerHTML=`<div class="realEmpty"><b>Cricket data load नहीं हुआ.</b><br><span style="font-size:12px">${escapeHtml(e.message||'Unknown error')}</span><br><button class="refreshReal" style="margin-top:10px" type="button" onclick="loadCricket()">↻ TRY AGAIN</button></div>`;
   }
+}
+
+let cricketRefreshTimer=null;
+function startCricketAutoRefresh(){
+  if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);
+  cricketRefreshTimer=setInterval(()=>{
+    if(currentUser && activeFilter==='Cricket') loadCricket();
+  },30000);
+}
+function stopCricketAutoRefresh(){
+  if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);
+  cricketRefreshTimer=null;
 }
 
 /* GAMES */
@@ -920,7 +816,7 @@ $("refreshCricket").addEventListener("click",loadCricket);
 $("adminGameSelect").addEventListener("change",updateWinnerOptions);
 $("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
 $("targetUser").addEventListener("change",showSelectedUser);
-$("logout").addEventListener("click",async()=>{await sb.auth.signOut();if(liveRefreshTimer) clearInterval(liveRefreshTimer);liveRefreshTimer=null;currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
+$("logout").addEventListener("click",async()=>{await sb.auth.signOut();if(liveRefreshTimer) clearInterval(liveRefreshTimer);liveRefreshTimer=null;if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);cricketRefreshTimer=null;currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
 
 function setFilter(filter){
   activeFilter=filter;
@@ -930,9 +826,8 @@ function setFilter(filter){
   $("myGamesSection").classList.toggle("hidden",!historyMode);
   $("realFootball").classList.toggle("hidden",historyMode||cricketMode);
   $("realCricket").classList.toggle("hidden",!cricketMode||historyMode);
-  if(historyMode)loadMyGames();
-  else if(cricketMode)loadCricket();
-  else loadRealFootball();
+  if(historyMode){stopCricketAutoRefresh();loadMyGames();}
+  else if(cricketMode){loadCricket();startCricketAutoRefresh();}else{stopCricketAutoRefresh();loadRealFootball();}
   closeDrawer();window.scrollTo({top:0,behavior:"smooth"});
 }
 document.querySelectorAll(".quick,.navItem,.menuLink").forEach(el=>el.addEventListener("click",()=>setFilter(el.dataset.filter)));
