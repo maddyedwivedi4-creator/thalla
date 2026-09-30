@@ -596,20 +596,50 @@ async function loadCricket(){
     const res=await fetch(CRICKET_WORKER_URL,{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"});
     const data=await res.json();
     if(!res.ok || data?.success===false) throw new Error(data?.error||data?.message||"Cricket data unavailable");
+
     const matches=Array.isArray(data?.data)?data.data:[];
-    if(!matches.length){box.innerHTML='<div class="realEmpty">अभी कोई current cricket match उपलब्ध नहीं है. Refresh करके फिर देखें.</div>';return;}
-    const live=matches.filter(m=>m?.matchStarted===true&&!m?.matchEnded);
-    const other=matches.filter(m=>!m?.matchEnded && !(m?.matchStarted===true&&!m?.matchEnded));
+    const now=Date.now();
+
+    // LIVE: only genuinely started and not ended.
+    const live=matches.filter(m=>m?.matchStarted===true && !m?.matchEnded);
+
+    // UPCOMING: scheduled/future matches only. Finished matches stay hidden.
+    const upcoming=matches
+      .filter(m=>{
+        if(!m || m?.matchEnded) return false;
+        if(m?.matchStarted===true) return false;
+        const t=m?.dateTimeGMT ? new Date(m.dateTimeGMT).getTime() : NaN;
+        return Number.isNaN(t) || t>=now;
+      })
+      .sort((a,b)=>{
+        const ta=a?.dateTimeGMT?new Date(a.dateTimeGMT).getTime():Infinity;
+        const tb=b?.dateTimeGMT?new Date(b.dateTimeGMT).getTime():Infinity;
+        return ta-tb;
+      });
+
     let html='';
+
     if(live.length){
-      html+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length}</span></div>`;
+      html+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length} match${live.length===1?'':'es'}</span></div>`;
       html+=live.map(cricketMatchCard).join('');
+    }else{
+      html+=`<div class="liveNotice">अभी कोई live cricket match नहीं है.</div>`;
     }
-    if(other.length){
-      html+=`<div class="subHeading upcomingHeading">🏏 CURRENT / UPCOMING <span>${other.length}</span></div>`;
-      html+=other.map(cricketMatchCard).join('');
+
+    if(upcoming.length){
+      html+=`<div class="subHeading upcomingHeading">🟢 UPCOMING CRICKET <span>${upcoming.length} match${upcoming.length===1?'':'es'}</span></div>`;
+      html+=upcoming.map(cricketMatchCard).join('');
     }
-    box.innerHTML=html;
+
+    if(!live.length && !upcoming.length){
+      html+='<div class="realEmpty">अभी live या upcoming cricket match उपलब्ध नहीं है.</div>';
+    }
+
+    const sourceNote=data?.source
+      ? `<div style="margin-top:8px;font-size:10px;color:#888;text-align:center">Feed: ${escapeHtml(String(data.source))}</div>`
+      : '';
+
+    box.innerHTML=html+sourceNote;
   }catch(e){
     console.error('CRICKET',e);
     box.innerHTML=`<div class="realEmpty"><b>Cricket data load नहीं हुआ.</b><br><span style="font-size:12px">${escapeHtml(e.message||'Unknown error')}</span><br><button class="refreshReal" style="margin-top:10px" type="button" onclick="loadCricket()">↻ TRY AGAIN</button></div>`;
