@@ -60,7 +60,7 @@ html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{
 
 .realFootball{margin:8px 14px 24px}.realHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.realTitle{font-size:18px;font-weight:900}.refreshReal{border:0;border-radius:12px;background:#eee9ff;color:#5b21b6;padding:9px 12px;font-weight:800}.realCard{background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-top:10px;box-shadow:0 7px 20px rgba(30,20,60,.07)}.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;color:#dc2626;background:#ffe7ed;padding:6px 9px;border-radius:9px}.realTeams{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-weight:900;font-size:14px}.realLogo{width:34px;height:34px;object-fit:contain;margin-bottom:5px}.realScore{font-size:16px;font-weight:950;color:#111827}.realMinute{font-size:11px;color:#777;margin-top:5px}.realEmpty{padding:20px;text-align:center;background:#fff;border-radius:18px;color:#777}.realMeta{font-size:11px;color:#777;text-align:center;margin-top:10px}.realBtn{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:13px 14px;font-weight:900;margin-top:12px;box-shadow:0 5px 12px rgba(101,31,255,.18)}.realBtn:active{transform:scale(.98)}
 
-.valuePanel{margin-top:12px;padding:12px;border-radius:15px;background:linear-gradient(135deg,#f7f1ff,#fff5f8);border:1px solid #eadfff}.valueTitle{font-size:12px;font-weight:950;color:#5b21b6;margin-bottom:8px}.valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.valueItem{background:#fff;border-radius:11px;padding:9px 5px;text-align:center;border:1px solid #eee}.valueStake{font-size:11px;color:#6b7280;font-weight:800}.valueReward{font-size:13px;color:#111827;font-weight:950;margin-top:3px}.valueNote{font-size:10px;color:#777;margin-top:8px;line-height:1.4}.feeBox{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f8f7fb;color:#555;font-size:11px;line-height:1.5}
+.panelStyle{border-radius:8px;background:#f7f7f7;border:1px solid #d8d8d8;padding:8px}.panelStyle .valueTitle{display:flex;justify-content:space-between;align-items:center;background:#333;color:#fff;border-radius:5px;padding:7px 8px;margin:-1px -1px 8px;font-size:11px}.liveDot{color:#86efac;font-weight:950}.panelScore{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px;background:#fff;border:1px solid #ddd;padding:8px;border-radius:5px;font-size:11px}.panelScore b:first-child{text-align:left}.panelScore b:last-child{text-align:right}.panelScore strong{font-size:16px}.panelStyle .valueGrid{gap:3px;margin-top:5px}.panelStyle .valueItem{border-radius:4px;padding:7px 3px;background:#eef6ff;border:1px solid #c9dff2}.panelStyle .valueItem:nth-child(2){background:#fff0f5}.panelStyle .valueItem:nth-child(3){background:#f0f8f0}.panelStyle .valueReward{font-size:16px}.panelStyle .valueStake{font-size:10px}.cricketPanel{margin-top:10px}..valuePanel{margin-top:12px;padding:12px;border-radius:15px;background:linear-gradient(135deg,#f7f1ff,#fff5f8);border:1px solid #eadfff}.valueTitle{font-size:12px;font-weight:950;color:#5b21b6;margin-bottom:8px}.valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.valueItem{background:#fff;border-radius:11px;padding:9px 5px;text-align:center;border:1px solid #eee}.valueStake{font-size:11px;color:#6b7280;font-weight:800}.valueReward{font-size:13px;color:#111827;font-weight:950;margin-top:3px}.valueNote{font-size:10px;color:#777;margin-top:8px;line-height:1.4}.feeBox{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f8f7fb;color:#555;font-size:11px;line-height:1.5}
  .subHeading{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 8px;font-size:13px;font-weight:950;color:#5b21b6}.subHeading span{font-size:11px;color:#777;font-weight:800}.upcomingHeading{margin-top:20px}.upcomingBadge{font-size:11px;font-weight:950;color:#2563eb;background:#eff6ff;padding:6px 9px;border-radius:9px}.liveNotice{margin:10px 0;padding:12px 13px;border-radius:13px;background:#fff8e7;color:#8a5a00;font-size:12px;font-weight:800;line-height:1.45}.upcomingNote{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f5f3ff;color:#5b21b6;font-size:11px;font-weight:800;line-height:1.4}.upcomingCard{border-color:#e8e1ff}
 </style>
 </head>
@@ -229,6 +229,21 @@ function validPhone(v){return /^[6-9]\d{9}$/.test(normalizePhone(v));}
 function devEmail(phone){return "dev"+normalizePhone(phone)+"@thaala.local";}
 function devPassword(phone){return "ThaalaDev@"+normalizePhone(phone)+"#2026";}
 function fmt(n){return Number(n||0).toLocaleString("en-IN");}
+function compactVC(n){
+  const v=Number(n||0);
+  if(v>=1000000) return (v/1000000).toFixed(v%1000000?2:0).replace(/\.00$/,'')+'M';
+  if(v>=1000) return (v/1000).toFixed(v%1000?2:0).replace(/\.00$/,'').replace(/\.0$/,'')+'K';
+  return String(Math.round(v));
+}
+let liveRefreshTimer=null;
+function startLiveRefresh(){
+  if(liveRefreshTimer) clearInterval(liveRefreshTimer);
+  liveRefreshTimer=setInterval(()=>{
+    if(!currentUser) return;
+    if(activeFilter==='Cricket') loadCricket();
+    else if(activeFilter==='live' || activeFilter==='Football') loadRealFootball();
+  },30000);
+}
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
 
 function openDrawer(){
@@ -437,14 +452,15 @@ function realMatchCard(m,{live=false}={}){
         <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:'⚽'}<div>${escapeHtml(away.name||'Away')}</div></div>
       </div>
       <div class="realMeta">${escapeHtml(l.country||'')} • ${escapeHtml(when)}</div>
-      <div class="valuePanel">
-        <div class="valueTitle">LIVE VIRTUAL VALUE • ${hs}:${as} • ${escapeHtml(statusText)}</div>
+      <div class="valuePanel panelStyle">
+        <div class="valueTitle"><span>LIVE THAALA VALUE</span><span class="liveDot">● LIVE</span></div>
+        <div class="panelScore"><b>${escapeHtml(home.name||'Home')}</b><strong>${hs} : ${as}</strong><b>${escapeHtml(away.name||'Away')}</b></div>
         <div class="valueGrid">
-          <div class="valueItem"><div class="valueStake">1000 VC</div><div class="valueReward">${fmt(r1)} VC</div></div>
-          <div class="valueItem"><div class="valueStake">2000 VC</div><div class="valueReward">${fmt(r2)} VC</div></div>
-          <div class="valueItem"><div class="valueStake">5000 VC</div><div class="valueReward">${fmt(r5)} VC</div></div>
+          <div class="valueItem"><div class="valueStake">1K ENTRY</div><div class="valueReward">${compactVC(r1)}</div></div>
+          <div class="valueItem"><div class="valueStake">2K ENTRY</div><div class="valueReward">${compactVC(r2)}</div></div>
+          <div class="valueItem"><div class="valueStake">5K ENTRY</div><div class="valueReward">${compactVC(r5)}</div></div>
         </div>
-        <div class="valueNote">Estimated virtual value. Calculation uses the match state and fixed THAALA rules, not other users' stakes.</div>
+        <div class="valueNote">Live estimate refreshes every 30 seconds from the match state. It is a fixed virtual-credit calculation, not betting odds or pooled stakes.</div>
       </div>
       <div class="feeBox">Minimum wallet: <b>1500 VC</b> • Joining fee: <b>500 VC</b> • Match allocation: <b>1000 / 2000 / 5000 VC</b></div>
       <button class="realBtn realJoin" type="button" data-fixture="${Number(f.id||0)}" data-league="${escapeHtml(l.name||'Football')}" data-home="${escapeHtml(home.name||'Home')}" data-away="${escapeHtml(away.name||'Away')}" data-date="${escapeHtml(date)}">PLAY MATCH</button>
@@ -561,7 +577,15 @@ function cricketMatchCard(m){
     </div>
     ${scoreRows?`<div class="cricketScore">${scoreRows}</div>`:'<div class="cricketScore">Score not available yet.</div>'}
     <div class="cricketMeta">${escapeHtml(m?.venue||'Venue unavailable')} • ${escapeHtml(m?.matchType||'cricket')}</div>
-    <div class="cricketVirtual">Virtual value estimate: <b>1000 VC → ${fmt(r1)} VC</b> • <b>2000 VC → ${fmt(r2)} VC</b> • <b>5000 VC → ${fmt(r5)} VC</b><br>Fixed THAALA estimate based only on match state; not based on other users' stakes.</div>
+    <div class="valuePanel panelStyle cricketPanel">
+      <div class="valueTitle"><span>LIVE THAALA VALUE</span><span class="liveDot">● ${status}</span></div>
+      <div class="valueGrid">
+        <div class="valueItem"><div class="valueStake">1K ENTRY</div><div class="valueReward">${compactVC(r1)}</div></div>
+        <div class="valueItem"><div class="valueStake">2K ENTRY</div><div class="valueReward">${compactVC(r2)}</div></div>
+        <div class="valueItem"><div class="valueStake">5K ENTRY</div><div class="valueReward">${compactVC(r5)}</div></div>
+      </div>
+      <div class="valueNote">Live estimate refreshes every 30 seconds from the match state. It is a fixed virtual-credit calculation, not betting odds or pooled stakes.</div>
+    </div>
   </div>`;
 }
 
@@ -575,7 +599,7 @@ async function loadCricket(){
     const matches=Array.isArray(data?.data)?data.data:[];
     if(!matches.length){box.innerHTML='<div class="realEmpty">अभी कोई current cricket match उपलब्ध नहीं है. Refresh करके फिर देखें.</div>';return;}
     const live=matches.filter(m=>m?.matchStarted===true&&!m?.matchEnded);
-    const other=matches.filter(m=>!(m?.matchStarted===true&&!m?.matchEnded));
+    const other=matches.filter(m=>!m?.matchEnded && !(m?.matchStarted===true&&!m?.matchEnded));
     let html='';
     if(live.length){
       html+=`<div class="subHeading">🔴 LIVE CRICKET <span>${live.length}</span></div>`;
@@ -719,7 +743,7 @@ async function loadApp(){
   currentUser=result.data.user;
   const profile=await loadProfile();
   if(!profile){showAuth();showMsg("phoneMsg","Profile load nahi hua. Supabase permissions check karein.");return;}
-  showDashboard();await loadRealFootball();
+  showDashboard();await loadRealFootball();startLiveRefresh();
 }
 
 async function loginAdmin(){
@@ -731,7 +755,7 @@ async function loginAdmin(){
   currentUser=result.data.user;
   const profile=await loadProfile();
   if(!profile||profile.role!=="admin"){await sb.auth.signOut();currentUser=null;showMsg("adminMsg","Ye account THAALA admin nahi hai.");return;}
-  showDashboard();await loadRealFootball();
+  showDashboard();await loadRealFootball();startLiveRefresh();
 }
 
 async function loginDevPhone(){
@@ -772,7 +796,7 @@ $("refreshCricket").addEventListener("click",loadCricket);
 $("adminGameSelect").addEventListener("change",updateWinnerOptions);
 $("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
 $("targetUser").addEventListener("change",showSelectedUser);
-$("logout").addEventListener("click",async()=>{await sb.auth.signOut();currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
+$("logout").addEventListener("click",async()=>{await sb.auth.signOut();if(liveRefreshTimer) clearInterval(liveRefreshTimer);liveRefreshTimer=null;currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
 
 function setFilter(filter){
   activeFilter=filter;
