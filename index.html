@@ -3,841 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="thaala-build" content="final-2026-09-30"><title>THAALA — Virtual Football & Cricket</title>
+<meta name="thaala-build" content="final-2026-10-01-cricket-v3">
+<title>THAALA — Virtual Football & Cricket</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-:root{--p:#651fff;--p2:#8b2be2;--red:#e11d48;--ink:#171521;--muted:#6b7280;--bg:#f5f4fa;--card:#fff;--line:#eceaf2}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.app{min-height:100vh}
-.hero{background:linear-gradient(135deg,#5b16b8,#7c1fd1 48%,#df1767);color:#fff;padding:28px 24px 32px;border-radius:0 0 34px 34px}
-.brand{font-size:48px;font-weight:900;letter-spacing:7px}.tagline{margin-top:8px;font-size:16px;opacity:.92}
-.card{background:#fff;border-radius:26px;box-shadow:0 10px 30px rgba(30,20,60,.08);padding:22px;margin:20px 16px}
-.tabs{display:flex;gap:10px;margin-bottom:24px}.tab{flex:1;border:0;border-radius:18px;padding:17px 8px;font-weight:800;color:#fff;background:#ddd}
-.tab.active{background:linear-gradient(135deg,#6d18e8,#7b20dd)}.tab:not(.active){color:#555;background:#eee}
-h2{font-size:28px;margin:0 0 12px}.small{color:var(--muted);font-size:14px;line-height:1.5}
-label{display:block;font-weight:700;margin:16px 0 8px}
-input,select{width:100%;padding:15px 16px;border:1px solid #ddd;border-radius:15px;outline:none;background:#fff;color:#111827}
-input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}
-.btn{width:100%;border:0;border-radius:16px;padding:15px 16px;font-weight:800;background:linear-gradient(135deg,#651fff,#7b1fe8);color:#fff;margin-top:14px}
-.btn.secondary{background:#f0ecff;color:#5b21b6}.msg{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff3f3;color:#b91c1c;font-size:14px}.msg.ok{background:#ecfdf5;color:#15803d}
-.footer{text-align:center;padding:20px;color:#777;font-size:12px}
-.topbar{position:sticky;top:0;z-index:100;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line)}
-.menuBtn{width:43px;height:43px;border:0;border-radius:13px;background:#f0eaff;color:#5b21b6;font-size:24px}
-.topBrand{font-weight:950;letter-spacing:2px;color:#5b21b6;font-size:21px;flex:1}
-.balancePill{background:#f9e9f3;border-radius:13px;padding:9px 11px;font-weight:850;color:#a21caf;font-size:13px}
-.announce{margin:12px 14px 0;padding:11px 14px;border-radius:14px;background:#fff0f5;color:#9f1239;font-size:13px;font-weight:700}
-.quickRow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px 14px}
-.quick{border:0;border-radius:15px;background:#fff;padding:12px 4px;font-size:12px;font-weight:800;color:#4c1d95;box-shadow:0 5px 18px rgba(30,20,60,.06)}
+*{box-sizing:border-box} :root{--p:#651fff;--p2:#8b2be2;--red:#e11d48;--ink:#171521;--muted:#6b7280;--bg:#f5f4fa;--line:#eceaf2}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{overflow-x:hidden}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.hero{background:linear-gradient(135deg,#5b16b8,#7c1fd1 48%,#df1767);color:#fff;padding:28px 24px 32px;border-radius:0 0 34px 34px}.brand{font-size:48px;font-weight:900;letter-spacing:7px}.tagline{margin-top:8px;font-size:16px;opacity:.92}
+.card{background:#fff;border-radius:26px;box-shadow:0 10px 30px rgba(30,20,60,.08);padding:22px;margin:20px 16px}.tabs{display:flex;gap:10px;margin-bottom:24px}.tab{flex:1;border:0;border-radius:18px;padding:17px 8px;font-weight:800}.tab.active{background:linear-gradient(135deg,#6d18e8,#7b20dd);color:#fff}.tab:not(.active){background:#eee;color:#555}
+h2{font-size:28px;margin:0 0 12px}.small{color:var(--muted);font-size:14px;line-height:1.5}label{display:block;font-weight:700;margin:16px 0 8px}input,select{width:100%;padding:15px 16px;border:1px solid #ddd;border-radius:15px;outline:none;background:#fff;color:#111827}
+input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(101,31,255,.12)}.btn{width:100%;border:0;border-radius:16px;padding:15px 16px;font-weight:800;background:linear-gradient(135deg,#651fff,#7b1fe8);color:#fff;margin-top:14px}.btn.secondary{background:#f0ecff;color:#5b21b6}
+.msg{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff3f3;color:#b91c1c;font-size:14px}.msg.ok{background:#ecfdf5;color:#15803d}.footer{text-align:center;padding:20px;color:#777;font-size:12px}
+.topbar{position:sticky;top:0;z-index:100;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line)}.menuBtn{width:43px;height:43px;border:0;border-radius:13px;background:#f0eaff;color:#5b21b6;font-size:24px}.topBrand{font-weight:950;letter-spacing:2px;color:#5b21b6;font-size:21px;flex:1}.balancePill{background:#f9e9f3;border-radius:13px;padding:9px 11px;font-weight:850;color:#a21caf;font-size:13px}
+.announce{margin:12px 14px 0;padding:11px 14px;border-radius:14px;background:#fff0f5;color:#9f1239;font-size:13px;font-weight:700}.quickRow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px 14px}.quick{border:0;border-radius:15px;background:#fff;padding:12px 4px;font-size:12px;font-weight:800;color:#4c1d95;box-shadow:0 5px 18px rgba(30,20,60,.06)}
 .navRow{display:flex;gap:8px;overflow:auto;padding:0 14px 12px}.navItem{white-space:nowrap;border:0;border-radius:13px;background:#eee9ff;color:#5b21b6;padding:10px 14px;font-weight:800;font-size:13px}.navItem.active{background:#e11d48;color:#fff}
-.userCard{margin:8px 14px;padding:18px;border-radius:22px;background:linear-gradient(135deg,#fff,#f8f3ff);border:1px solid #eee7ff}
-.userLine{display:flex;justify-content:space-between;gap:12px;align-items:center}.idText{font-size:14px;color:#6b21a8;font-weight:800}.creditBig{font-size:31px;font-weight:950;color:#5b21b6;margin-top:3px}
-.sectionTitle{padding:10px 14px 6px;font-size:18px;font-weight:900}.gameGrid{padding:6px 14px 24px;display:grid;gap:12px}
-.adminGameBox{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
-.adminGameBox h4{margin:0 0 6px;font-size:16px;color:#4c1d95}.adminGameBox .btn.finish{background:linear-gradient(135deg,#e11d48,#be123c)}
-.game{background:#fff;border-radius:22px;padding:16px;box-shadow:0 7px 22px rgba(30,20,60,.08);border:1px solid #eee;overflow:hidden}
-.gameTop{display:flex;justify-content:space-between;align-items:center;gap:10px}.sportBadge{display:inline-flex;align-items:center;gap:6px;background:#f1ebff;color:#5b21b6;padding:7px 10px;border-radius:10px;font-size:12px;font-weight:900}
-.statusBadge{padding:7px 10px;border-radius:10px;font-size:11px;font-weight:950}.statusLive{background:#ffe7ed;color:#dc2626}.statusOther{background:#f1f1f1;color:#666}
-.matchTitle{font-size:14px;font-weight:800;margin-top:14px;color:#444}.teams{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px}.team{width:40%;text-align:center;font-size:14px;font-weight:900}.teamIcon{font-size:28px;margin-bottom:5px}.vs{font-size:12px;font-weight:950;color:#999}
-.liveScore{margin-top:14px;padding:11px;background:#fff6f8;border-radius:12px;text-align:center;font-size:13px;font-weight:850;color:#9f1239}
-.winnerBox{margin-top:12px;padding:12px 14px;background:#fff7d6;border:1px solid #f2d27a;border-radius:14px;text-align:center;font-size:14px;font-weight:950;color:#7a4b00}.winnerBox strong{font-size:15px}
-.gameFooter{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px}.virtualTag{font-size:11px;font-weight:800;color:#777}
-.join{width:auto;min-width:125px;border:0;border-radius:13px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:12px 15px;font-weight:900;box-shadow:0 5px 12px rgba(101,31,255,.22)}.join:active{transform:scale(.97)}.join:disabled{background:#d3d0d8;box-shadow:none}
-#realFootballSection{margin-top:8px}.realCard{background:#fff;border-radius:22px;padding:16px;box-shadow:0 7px 22px rgba(30,20,60,.08);border:1px solid #eee}.realCard+.realCard{margin-top:12px}.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;background:#ffe7ed;color:#dc2626;padding:7px 10px;border-radius:10px}.realTeams{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-size:14px;font-weight:900}.realScore{margin-top:12px;padding:10px;background:#fff6f8;border-radius:12px;text-align:center;font-weight:900;color:#9f1239}.realMeta{margin-top:10px;text-align:center;color:#777;font-size:11px}.realEmpty{padding:20px;text-align:center;color:#888;background:#fff;border-radius:18px}.realLogo{width:34px;height:34px;object-fit:contain;display:block;margin:0 auto 5px}.realBtn{width:100%;margin-top:12px;border:0;border-radius:13px;background:#f0ecff;color:#5b21b6;padding:11px;font-weight:900}.cricketStatus{font-size:11px;font-weight:950;background:#ecfdf5;color:#15803d;padding:6px 9px;border-radius:9px}.cricketScore{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:12px;color:#166534;font-size:13px;font-weight:850;line-height:1.55}.cricketScoreRow{display:flex;justify-content:space-between;gap:10px;padding:4px 0}.cricketTeam{font-weight:900}.cricketRuns{font-weight:950}.cricketVirtual{margin-top:10px;padding:10px;border-radius:12px;background:#f7f5fb;color:#4c1d95;font-size:11px;font-weight:800;line-height:1.45}.cricketMeta{margin-top:9px;text-align:center;color:#777;font-size:11px}.adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}
-.adminUserBox{background:#f8f5ff;border:1px solid #e8ddff;border-radius:16px;padding:12px;margin-top:10px}
-.adminUserName{font-weight:900;color:#4c1d95}.adminUserMeta{font-size:12px;color:#777;margin-top:4px}
-.historyCard{background:#fff;border-radius:18px;padding:15px;box-shadow:0 6px 18px rgba(30,20,60,.07);border:1px solid #eee}
-.historyTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.historySport{font-size:12px;font-weight:900;color:#5b21b6}.historyStatus{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:#f1f1f1;color:#666}.historyTitle{font-weight:900;margin-top:10px}.historyMeta{font-size:12px;color:#777;margin-top:7px;line-height:1.5}.historyAmount{margin-top:10px;font-weight:900;color:#5b21b6}
-.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}
-.logout{width:100%;border:0;border-radius:15px;background:#fff0f0;color:#b91c1c;padding:14px;font-weight:900}
-.drawerBackdrop{position:fixed;inset:0;width:100vw;height:100dvh;background:rgba(0,0,0,.45);z-index:1999;touch-action:none;overscroll-behavior:none}
-.drawer{position:fixed;left:0;top:0;width:320px;max-width:85vw;height:100dvh;background:#fff;z-index:2000;padding:calc(18px + env(safe-area-inset-top)) 16px 30px;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;box-shadow:8px 0 30px rgba(0,0,0,.22);contain:layout paint}
-.drawerHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.drawerTitle{font-weight:950;color:#5b21b6;font-size:22px}
-.closeBtn{width:44px;height:44px;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#8b2be2);color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(101,31,255,.30);flex:none}
-.menuSection{font-size:11px;color:#888;font-weight:900;margin:18px 4px 7px;text-transform:uppercase}.menuLink{width:100%;text-align:left;border:0;background:#f7f5fb;margin:5px 0;padding:13px 14px;border-radius:13px;font-weight:750;color:#29233a}
-html{overflow-x:hidden}.drawer,.drawerBackdrop{max-width:100vw}body.drawer-open{overflow:hidden!important}
-@media(min-width:700px){.card{max-width:620px;margin:30px auto}.hero{max-width:900px;margin:auto}.gameGrid{max-width:900px;margin:auto;grid-template-columns:1fr 1fr}}
-
-.realFootball{margin:8px 14px 24px}.realHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.realTitle{font-size:18px;font-weight:900}.refreshReal{border:0;border-radius:12px;background:#eee9ff;color:#5b21b6;padding:9px 12px;font-weight:800}.realCard{background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-top:10px;box-shadow:0 7px 20px rgba(30,20,60,.07)}.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;color:#dc2626;background:#ffe7ed;padding:6px 9px;border-radius:9px}.realTeams{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-weight:900;font-size:14px}.realLogo{width:34px;height:34px;object-fit:contain;margin-bottom:5px}.realScore{font-size:16px;font-weight:950;color:#111827}.realMinute{font-size:11px;color:#777;margin-top:5px}.realEmpty{padding:20px;text-align:center;background:#fff;border-radius:18px;color:#777}.realMeta{font-size:11px;color:#777;text-align:center;margin-top:10px}.realBtn{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:13px 14px;font-weight:900;margin-top:12px;box-shadow:0 5px 12px rgba(101,31,255,.18)}.realBtn:active{transform:scale(.98)}
-
-.panelStyle{border-radius:8px;background:#f7f7f7;border:1px solid #d8d8d8;padding:8px}.panelStyle .valueTitle{display:flex;justify-content:space-between;align-items:center;background:#333;color:#fff;border-radius:5px;padding:7px 8px;margin:-1px -1px 8px;font-size:11px}.liveDot{color:#86efac;font-weight:950}.panelScore{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px;background:#fff;border:1px solid #ddd;padding:8px;border-radius:5px;font-size:11px}.panelScore b:first-child{text-align:left}.panelScore b:last-child{text-align:right}.panelScore strong{font-size:16px}.panelStyle .valueGrid{gap:3px;margin-top:5px}.panelStyle .valueItem{border-radius:4px;padding:7px 3px;background:#eef6ff;border:1px solid #c9dff2}.panelStyle .valueItem:nth-child(2){background:#fff0f5}.panelStyle .valueItem:nth-child(3){background:#f0f8f0}.panelStyle .valueReward{font-size:16px}.panelStyle .valueStake{font-size:10px}.cricketPanel{margin-top:10px}..valuePanel{margin-top:12px;padding:12px;border-radius:15px;background:linear-gradient(135deg,#f7f1ff,#fff5f8);border:1px solid #eadfff}.valueTitle{font-size:12px;font-weight:950;color:#5b21b6;margin-bottom:8px}.valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.valueItem{background:#fff;border-radius:11px;padding:9px 5px;text-align:center;border:1px solid #eee}.valueStake{font-size:11px;color:#6b7280;font-weight:800}.valueReward{font-size:13px;color:#111827;font-weight:950;margin-top:3px}.valueNote{font-size:10px;color:#777;margin-top:8px;line-height:1.4}.feeBox{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f8f7fb;color:#555;font-size:11px;line-height:1.5}
- .subHeading{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 8px;font-size:13px;font-weight:950;color:#5b21b6}.subHeading span{font-size:11px;color:#777;font-weight:800}.upcomingHeading{margin-top:20px}.upcomingBadge{font-size:11px;font-weight:950;color:#2563eb;background:#eff6ff;padding:6px 9px;border-radius:9px}.liveNotice{margin:10px 0;padding:12px 13px;border-radius:13px;background:#fff8e7;color:#8a5a00;font-size:12px;font-weight:800;line-height:1.45}.upcomingNote{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f5f3ff;color:#5b21b6;font-size:11px;font-weight:800;line-height:1.4}.upcomingCard{border-color:#e8e1ff}
+.userCard{margin:8px 14px;padding:18px;border-radius:22px;background:linear-gradient(135deg,#fff,#f8f3ff);border:1px solid #eee7ff}.userLine{display:flex;justify-content:space-between;gap:12px;align-items:center}.idText{font-size:14px;color:#6b21a8;font-weight:800}.creditBig{font-size:31px;font-weight:950;color:#5b21b6;margin-top:3px}
+.adminCard{margin:16px 14px;padding:18px;background:#fff;border-radius:22px;box-shadow:0 7px 22px rgba(0,0,0,.07)}.adminGameBox{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.adminGameBox h4{margin:0 0 6px;color:#4c1d95}.adminUserBox{background:#f8f5ff;border:1px solid #e8ddff;border-radius:16px;padding:12px;margin-top:10px}.adminUserName{font-weight:900;color:#4c1d95}.adminUserMeta{font-size:12px;color:#777;margin-top:4px}
+.realFootball{margin:8px 14px 24px}.realHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.realTitle{font-size:18px;font-weight:900}.refreshReal{border:0;border-radius:12px;background:#eee9ff;color:#5b21b6;padding:9px 12px;font-weight:800}.realCard{background:#fff;border:1px solid #eee;border-radius:20px;padding:15px;margin-top:10px;box-shadow:0 7px 20px rgba(30,20,60,.07)}
+.realTop{display:flex;justify-content:space-between;align-items:center;gap:8px}.realLeague{font-size:12px;font-weight:900;color:#5b21b6}.realLive{font-size:11px;font-weight:950;color:#dc2626;background:#ffe7ed;padding:6px 9px;border-radius:9px}.realTeams{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.realTeam{width:42%;text-align:center;font-weight:900;font-size:14px}.realLogo,.cricketLogo{width:38px;height:38px;object-fit:contain;display:block;margin:0 auto 5px}.realScore{font-size:16px;font-weight:950;color:#111827}.realMinute{font-size:11px;color:#777;margin-top:5px}.realEmpty{padding:20px;text-align:center;background:#fff;border-radius:18px;color:#777}.realMeta{font-size:11px;color:#777;text-align:center;margin-top:10px}.realBtn,.cricketJoin{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#7b20e8);color:#fff;padding:13px 14px;font-weight:900;margin-top:12px}
+.subHeading{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 8px;font-size:13px;font-weight:950;color:#5b21b6}.subHeading span{font-size:11px;color:#777}.upcomingHeading{margin-top:20px}.upcomingBadge{font-size:11px;font-weight:950;color:#2563eb;background:#eff6ff;padding:6px 9px;border-radius:9px}.liveNotice{margin:10px 0;padding:12px 13px;border-radius:13px;background:#fff8e7;color:#8a5a00;font-size:12px;font-weight:800;line-height:1.45}.upcomingNote{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f5f3ff;color:#5b21b6;font-size:11px;font-weight:800;line-height:1.4}
+.panelStyle{border-radius:8px;background:#f7f7f7;border:1px solid #d8d8d8;padding:8px}.panelStyle .valueTitle{display:flex;justify-content:space-between;align-items:center;background:#333;color:#fff;border-radius:5px;padding:7px 8px;margin:-1px -1px 8px;font-size:11px}.liveDot{color:#86efac;font-weight:950}.panelScore{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px;background:#fff;border:1px solid #ddd;padding:8px;border-radius:5px;font-size:11px}.panelScore strong{font-size:16px}.valuePanel{margin-top:12px;padding:12px;border-radius:15px;background:linear-gradient(135deg,#f7f1ff,#fff5f8);border:1px solid #eadfff}.valueTitle{font-size:12px;font-weight:950;color:#5b21b6;margin-bottom:8px}.valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.valueItem{background:#fff;border-radius:11px;padding:9px 5px;text-align:center;border:1px solid #eee}.valueStake{font-size:11px;color:#6b7280;font-weight:800}.valueReward{font-size:13px;color:#111827;font-weight:950;margin-top:3px}.valueNote{font-size:10px;color:#777;margin-top:8px;line-height:1.4}.feeBox{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f8f7fb;color:#555;font-size:11px;line-height:1.5}
+.cricketStatus{font-size:11px;font-weight:950;background:#ecfdf5;color:#15803d;padding:6px 9px;border-radius:9px}.cricketScore{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:12px;color:#166534;font-size:13px;font-weight:850;line-height:1.55}.cricketScoreRow{display:flex;justify-content:space-between;gap:10px;padding:4px 0}.detailPanel{margin-top:10px;padding:12px;border-radius:14px;background:#faf9ff;border:1px solid #e9e2ff}.detailRow{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #eee}.detailRow:last-child{border-bottom:0}.detailLabel{color:#777;font-size:11px;font-weight:800}.detailValue{text-align:right;font-size:12px;font-weight:900;color:#333}.playersBox{margin-top:10px;padding:11px;border-radius:12px;background:#fff;border:1px solid #eee}.playersTitle{font-weight:950;color:#5b21b6;font-size:12px}.playerNote{font-size:11px;color:#777;line-height:1.45;margin-top:7px}.cricketDetailsBtn{width:100%;border:0;border-radius:13px;background:#f0ecff;color:#5b21b6;padding:11px;font-weight:900;margin-top:10px}
+.historyCard{background:#fff;border-radius:18px;padding:15px;box-shadow:0 6px 18px rgba(30,20,60,.07);border:1px solid #eee}.historyTop{display:flex;justify-content:space-between;gap:10px}.historySport{font-size:12px;font-weight:900;color:#5b21b6}.historyStatus{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:#f1f1f1;color:#666}.historyTitle{font-weight:900;margin-top:10px}.historyMeta{font-size:12px;color:#777;margin-top:7px;line-height:1.5}.historyAmount{margin-top:10px;font-weight:900;color:#5b21b6}.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:900}.empty{padding:24px;text-align:center;color:#888;background:#fff;border-radius:18px}.bottom{padding:0 14px 30px}.logout{width:100%;border:0;border-radius:15px;background:#fff0f0;color:#b91c1c;padding:14px;font-weight:900}
+.drawerBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1999}.drawer{position:fixed;left:0;top:0;width:320px;max-width:85vw;height:100dvh;background:#fff;z-index:2000;padding:calc(18px + env(safe-area-inset-top)) 16px 30px;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,.22)}.drawerHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.drawerTitle{font-weight:950;color:#5b21b6;font-size:22px}.closeBtn{width:44px;height:44px;border:0;border-radius:14px;background:linear-gradient(135deg,#651fff,#8b2be2);color:#fff;font-size:22px;font-weight:900}.menuSection{font-size:11px;color:#888;font-weight:900;margin:18px 4px 7px;text-transform:uppercase}.menuLink{width:100%;text-align:left;border:0;background:#f7f5fb;margin:5px 0;padding:13px 14px;border-radius:13px;font-weight:750;color:#29233a}body.drawer-open{overflow:hidden!important}
+@media(min-width:700px){.card{max-width:620px;margin:30px auto}.hero{max-width:900px;margin:auto}}
 </style>
 </head>
-<noscript><div style="padding:20px;font-family:system-ui;background:#fff3f3;color:#991b1b">THAALA needs JavaScript enabled.</div></noscript>
 <body>
-<div class="app">
-
 <div id="authView">
-  <div class="hero"><div class="brand">THAALA</div><div class="tagline">Virtual credits • No real-money wallet</div></div>
-  <div class="card">
-    <div class="tabs">
-      <button id="userTab" class="tab active" type="button">MOBILE OTP</button>
-      <button id="adminTab" class="tab" type="button">ADMIN LOGIN</button>
-    </div>
-    <section id="userAuth">
-      <h2>Login / Register</h2>
-      <p class="small">Development mode: SMS provider is not required.<br>Test OTP is <b>123456</b>.</p>
-      <label for="phone">Mobile Number</label>
-      <input id="phone" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10 digit mobile number">
-      <button id="sendOtp" class="btn" type="button">CONTINUE</button>
-      <div id="phoneMsg" class="msg hidden"></div>
-      <div id="otpBox" class="hidden">
-        <label for="otp">6-digit OTP</label>
-        <input id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456">
-        <button id="verifyOtp" class="btn" type="button">LOGIN & OPEN THAALA</button>
-        <button id="resendOtp" class="btn secondary" type="button">RESEND TEST OTP</button>
-      </div>
-    </section>
-    <section id="adminAuth" class="hidden">
-      <h2>Admin Login</h2>
-      <p class="small">Use the Supabase Auth email/password of your THAALA admin account.</p>
-      <label for="adminEmail">Email</label>
-      <input id="adminEmail" type="email" autocomplete="username" placeholder="admin email">
-      <label for="adminPassword">Password</label>
-      <input id="adminPassword" type="password" autocomplete="current-password" placeholder="password">
-      <button id="adminLogin" class="btn" type="button">ADMIN LOGIN</button>
-      <div id="adminMsg" class="msg hidden"></div>
-    </section>
-  </div>
-  <div class="footer">THAALA • Virtual credits only • No real-money wallet</div>
+<div class="hero"><div class="brand">THAALA</div><div class="tagline">Virtual credits • No real-money wallet</div></div>
+<div class="card">
+<div class="tabs"><button id="userTab" class="tab active">MOBILE OTP</button><button id="adminTab" class="tab">ADMIN LOGIN</button></div>
+<section id="userAuth"><h2>Login / Register</h2><p class="small">Development mode. Test OTP: <b>123456</b>.</p><label>Mobile Number</label><input id="phone" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number"><button id="sendOtp" class="btn">CONTINUE</button><div id="phoneMsg" class="msg hidden"></div><div id="otpBox" class="hidden"><label>6-digit OTP</label><input id="otp" inputmode="numeric" maxlength="6" placeholder="123456"><button id="verifyOtp" class="btn">LOGIN & OPEN THAALA</button><button id="resendOtp" class="btn secondary">RESEND TEST OTP</button></div></section>
+<section id="adminAuth" class="hidden"><h2>Admin Login</h2><p class="small">Use your THAALA admin email/password.</p><label>Email</label><input id="adminEmail" type="email" placeholder="admin email"><label>Password</label><input id="adminPassword" type="password" placeholder="password"><button id="adminLogin" class="btn">ADMIN LOGIN</button><div id="adminMsg" class="msg hidden"></div></section>
+</div><div class="footer">THAALA • Virtual credits only • No real-money wallet</div>
 </div>
 
 <div id="dashboard" class="hidden">
-  <div class="topbar">
-    <button id="menuBtn" class="menuBtn" type="button">☰</button>
-    <div class="topBrand">THAALA</div>
-    <div class="balancePill">💰 <span id="miniBalance">0</span> VC</div>
-  </div>
-  <div class="announce">🔴 LIVE FOOTBALL • Real-world matches • Virtual credits only • Login required.</div>
-  <div class="quickRow">
-    <button class="quick" type="button" data-filter="live">🔴 LIVE FOOTBALL</button>
-    <button class="quick" type="button" data-filter="Football">⚽ FOOTBALL</button>
-    <button class="quick" type="button" data-filter="Cricket">🏏 CRICKET</button>
-    <button class="quick" type="button" data-filter="mygames">📋 MY GAMES</button>
-  </div>
-  <div class="navRow">
-                    <button class="navItem active" data-filter="live" type="button">⚽ LIVE FOOTBALL</button>
-    <button class="navItem" data-filter="mygames" type="button">📋 MY GAMES</button>
-          </div>
+<div class="topbar"><button id="menuBtn" class="menuBtn">☰</button><div class="topBrand">THAALA</div><div class="balancePill">💰 <span id="miniBalance">0 VC</span></div></div>
+<div class="announce">🔴 LIVE SPORTS • Real-world matches • Virtual credits only.</div>
+<div class="quickRow"><button class="quick" data-filter="live">🔴 LIVE</button><button class="quick" data-filter="Football">⚽ FOOTBALL</button><button class="quick" data-filter="Cricket">🏏 CRICKET</button><button class="quick" data-filter="mygames">📋 MY GAMES</button></div>
+<div class="navRow"><button class="navItem active" data-filter="live">⚽ LIVE FOOTBALL</button><button class="navItem" data-filter="Cricket">🏏 CRICKET</button><button class="navItem" data-filter="mygames">📋 MY GAMES</button></div>
+<div class="userCard"><div class="userLine"><div><div class="idText">THAALA ID</div><div id="thaalaId">Loading...</div></div><span id="roleBadge" class="badge">USER</span></div><div style="margin-top:13px"><div class="small">Virtual Credits Balance</div><div class="creditBig"><span id="balance">0 VC</span></div></div></div>
 
-  <div class="userCard">
-    <div class="userLine">
-      <div><div class="idText">THAALA ID</div><div id="thaalaId">Loading...</div></div>
-      <span id="roleBadge" class="badge">USER</span>
-    </div>
-    <div style="margin-top:13px"><div class="small">Virtual Credits Balance</div><div class="creditBig"><span id="balance">0</span> VC</div></div>
-  </div>
+<div id="adminPanel" class="adminCard hidden"><h3>Admin — Add Virtual Credits</h3><p class="small">Select a user by name or THAALA ID.</p><label>Search User</label><input id="userSearch" placeholder="Name / THAALA ID / Mobile"><label>Select User</label><select id="targetUser"></select><div id="selectedUserBox" class="adminUserBox hidden"></div><label>Credits to add</label><input id="creditAmount" type="number" min="1" placeholder="10000"><label>Description</label><input id="creditNote" placeholder="Admin credit"><button id="addCredits" class="btn">ADD CREDITS</button><div id="creditMsg" class="msg hidden"></div>
+<div class="adminGameBox"><h4>Finish Live Virtual Game</h4><label>Live Game</label><select id="adminGameSelect"></select><label>Select Winner</label><select id="gameWinner"><option value="">-- Select Winning Team --</option></select><button id="finishGame" class="btn">FINISH GAME</button><div id="gameMsg" class="msg hidden"></div></div></div>
 
-  <div id="adminPanel" class="adminCard hidden">
-    <h3>Admin — Add Virtual Credits</h3>
-    <p class="small">Select a user by name or THAALA ID. The Auth UUID is handled automatically.</p>
-
-    <label for="userSearch">Search User</label>
-    <input id="userSearch" autocomplete="off" placeholder="Name / THAALA ID / Mobile">
-
-    <label for="targetUser">Select User</label>
-    <select id="targetUser">
-      <option value="">Loading users...</option>
-    </select>
-
-    <div id="selectedUserBox" class="adminUserBox hidden"></div>
-
-    <label for="creditAmount">Credits to add</label>
-    <input id="creditAmount" type="number" min="1" step="1" placeholder="10000">
-
-    <label for="creditNote">Description</label>
-    <input id="creditNote" placeholder="Admin credit">
-
-    <button id="addCredits" class="btn" type="button">ADD CREDITS</button>
-    <div id="creditMsg" class="msg hidden"></div>
-
-    <div class="adminGameBox">
-      <h4>Finish Live Virtual Game</h4>
-      <p class="small">Live game select karke result save karein. Isse joined entries <b>Completed</b> ho jayengi.</p>
-
-      <label for="adminGameSelect">Live Game</label>
-      <select id="adminGameSelect">
-        <option value="">Loading live games...</option>
-      </select>
-
-      <label for="gameWinner">Select Winner</label>
-      <select id="gameWinner">
-        <option value="">-- Select Winning Team --</option>
-      </select>
-
-      <button id="finishGame" class="btn finish" type="button">FINISH GAME</button>
-      <div id="gameMsg" class="msg hidden"></div>
-    </div>
-  </div>
-
-  <section id="realFootball" class="realFootball"><div style="margin:0 0 10px;padding:11px 13px;border-radius:13px;background:#f4efff;color:#5b21b6;font-size:12px;font-weight:800">🔐 You are logged in. Live matches are available below. VC is required to play.</div>
-    <div class="realHeader">
-      <div class="realTitle">⚽ Real Live Football</div>
-      <button id="refreshReal" class="refreshReal" type="button">↻ Refresh</button>
-    </div>
-    <div id="realFootballList"><div class="realEmpty">Loading real matches...</div></div>
-  </section>
-
-  <section id="realCricket" class="realFootball hidden">
-    <div style="margin:0 0 10px;padding:11px 13px;border-radius:13px;background:#f0fdf4;color:#166534;font-size:12px;font-weight:800">🏏 Real cricket data • Live/current matches • Virtual credits only.</div>
-    <div class="realHeader">
-      <div class="realTitle">🏏 Live / Current Cricket</div>
-      <button id="refreshCricket" class="refreshReal" type="button">↻ Refresh</button>
-    </div>
-    <div id="realCricketList"><div class="realEmpty">Loading cricket...</div></div>
-  </section>
-
-  <div id="myGamesSection" class="hidden">
-    <div class="sectionTitle">My Games / History</div>
-    <div id="myGamesList" class="gameGrid"><div class="empty">Loading your games...</div></div>
-  </div>
-
-  <div class="bottom"><button id="logout" class="logout" type="button">LOG OUT</button></div>
+<section id="realFootball" class="realFootball"><div class="realHeader"><div class="realTitle">⚽ Real Live Football</div><button id="refreshReal" class="refreshReal">↻ Refresh</button></div><div id="realFootballList"><div class="realEmpty">Loading real matches...</div></div></section>
+<section id="realCricket" class="realFootball hidden"><div class="realHeader"><div class="realTitle">🏏 Live / Upcoming Cricket</div><button id="refreshCricket" class="refreshReal">↻ Refresh</button></div><div id="realCricketList"><div class="realEmpty">Loading cricket...</div></div></section>
+<div id="myGamesSection" class="hidden"><div class="subHeading" style="padding:10px 14px">📋 MY GAMES</div><div id="myGamesList" class="gameGrid"><div class="empty">Loading...</div></div></div>
+<div class="bottom"><button id="logout" class="logout">LOG OUT</button></div>
 </div>
 
-<div id="drawerBackdrop" class="drawerBackdrop hidden"></div>
-<aside id="drawer" class="drawer hidden">
-  <div class="drawerHead"><div class="drawerTitle">THAALA MENU</div><button id="closeDrawer" class="closeBtn" type="button">✕</button></div>
-  <input id="menuSearch" placeholder="Search..." autocomplete="off">
-  <div class="menuSection">REAL SPORTS</div>
-  <button class="menuLink" data-filter="live" type="button">🔴 Live Football</button>
-  <button class="menuLink" data-filter="Football" type="button">⚽ Football</button>
-  <button class="menuLink" data-filter="Cricket" type="button">🏏 Cricket</button>
-  <div class="menuSection">ACCOUNT</div>
-  <button class="menuLink" data-filter="mygames" type="button">📋 My Games</button>
-  <div style="margin-top:18px;padding:12px;border-radius:14px;background:#f5f1ff;color:#5b21b6;font-size:12px;font-weight:800;line-height:1.45">Real-world football data is loaded from the live sports feed. THAALA uses virtual credits only.</div>
-</aside>
+<div id="drawerBackdrop" class="drawerBackdrop hidden"></div><aside id="drawer" class="drawer hidden"><div class="drawerHead"><div class="drawerTitle">THAALA MENU</div><button id="closeDrawer" class="closeBtn">✕</button></div><input id="menuSearch" placeholder="Search..."><div class="menuSection">REAL SPORTS</div><button class="menuLink" data-filter="live">🔴 Live Football</button><button class="menuLink" data-filter="Football">⚽ Football</button><button class="menuLink" data-filter="Cricket">🏏 Cricket</button><div class="menuSection">ACCOUNT</div><button class="menuLink" data-filter="mygames">📋 My Games</button></aside>
 
 <script>
 "use strict";
-
 const SUPABASE_URL="https://pcenmqernxnxnbatslfo.supabase.co";
 const SUPABASE_PUBLIC_KEY="sb_publishable_TiMGbnZY9VNl4HmDFXjxVg_5-oahZPR";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
-
-const $=id=>document.getElementById(id);
-let pendingPhone="",currentUser=null,currentProfile=null,allGames=[],activeFilter="live",adminUsers=[];
-
-function showMsg(id,text,ok=false){
-  const el=$(id);if(!el)return;
-  el.textContent=text;el.classList.remove("hidden","ok");if(ok)el.classList.add("ok");
-}
-function hideMsg(id){const el=$(id);if(el)el.classList.add("hidden");}
-function normalizePhone(v){return v.replace(/\D/g,"").slice(-10);}
-function validPhone(v){return /^[6-9]\d{9}$/.test(normalizePhone(v));}
-function devEmail(phone){return "dev"+normalizePhone(phone)+"@thaala.local";}
-function devPassword(phone){return "ThaalaDev@"+normalizePhone(phone)+"#2026";}
-function fmt(n){return Number(n||0).toLocaleString("en-IN");}
-function compactVC(n){
-  const v=Number(n||0);
-  if(v>=1000000) return (v/1000000).toFixed(v%1000000?2:0).replace(/\.00$/,'')+'M';
-  if(v>=1000) return (v/1000).toFixed(v%1000?2:0).replace(/\.00$/,'').replace(/\.0$/,'')+'K';
-  return String(Math.round(v));
-}
-let liveRefreshTimer=null;
-function startLiveRefresh(){
-  if(liveRefreshTimer) clearInterval(liveRefreshTimer);
-  liveRefreshTimer=setInterval(()=>{
-    if(!currentUser) return;
-    if(activeFilter==='Cricket') loadCricket();
-    else if(activeFilter==='live' || activeFilter==='Football') loadRealFootball();
-  },30000);
-}
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
-
-function openDrawer(){
-  $("drawer").classList.remove("hidden");$("drawerBackdrop").classList.remove("hidden");
-  document.body.classList.add("drawer-open");document.documentElement.style.overflowX="hidden";
-}
-function closeDrawer(){
-  $("drawer").classList.add("hidden");$("drawerBackdrop").classList.add("hidden");
-  document.body.classList.remove("drawer-open");document.documentElement.style.overflowX="";
-}
-function setAuthTab(tab){
-  const user=tab==="user";
-  $("userTab").classList.toggle("active",user);$("adminTab").classList.toggle("active",!user);
-  $("userAuth").classList.toggle("hidden",!user);$("adminAuth").classList.toggle("hidden",user);
-}
-function showDashboard(){$("authView").classList.add("hidden");$("dashboard").classList.remove("hidden");}
-function showAuth(){$("dashboard").classList.add("hidden");$("authView").classList.remove("hidden");}
-
-async function loadProfile(){
-  if(!currentUser)return null;
-  const result=await sb.from("profiles").select("*").eq("id",currentUser.id).single();
-  if(result.error){console.error("PROFILE",result.error);return null;}
-  const data=result.data;currentProfile=data;
-  $("thaalaId").textContent=data.thaala_id||"—";
-  $("balance").textContent=fmt(data.credits);$("miniBalance").textContent=fmt(data.credits);
-  $("roleBadge").textContent=(data.role||"user").toUpperCase();
-  $("adminPanel").classList.toggle("hidden",data.role!=="admin");
-  if(data.role==="admin"){
-    await loadAdminUsers();
-    await loadAdminLiveGames();
-  }
-  return data;
-}
-
-/* ADMIN USER LIST */
-async function loadAdminUsers(){
-  const select=$("targetUser");
-  if(!select)return;
-  select.innerHTML='<option value="">Loading users...</option>';
-
-  const result=await sb.from("profiles")
-    .select("id,thaala_id,display_name,phone,role,credits")
-    .order("thaala_id",{ascending:true})
-    .limit(1000);
-
-  if(result.error){
-    console.error("ADMIN USERS",result.error);
-    select.innerHTML='<option value="">Users load nahi hue</option>';
-    showMsg("creditMsg","User list load nahi hui: "+result.error.message);
-    return;
-  }
-
-  adminUsers=result.data||[];
-  renderAdminUsers("");
-}
-
-function renderAdminUsers(query){
-  const select=$("targetUser");
-  if(!select)return;
-
-  const q=String(query||"").trim().toLowerCase();
-  const users=adminUsers.filter(u=>{
-    if(!q)return true;
-    return [
-      u.display_name,
-      u.thaala_id,
-      u.phone
-    ].filter(Boolean).some(v=>String(v).toLowerCase().includes(q));
-  });
-
-  select.innerHTML='<option value="">-- Select User --</option>';
-
-  users.forEach(u=>{
-    const option=document.createElement("option");
-    option.value=u.id;
-    option.textContent=`${u.thaala_id||"NO ID"} — ${u.display_name||"THAALA User"}${u.phone?" • "+String(u.phone).slice(-4):""}`;
-    select.appendChild(option);
-  });
-
-  if(!users.length){
-    select.innerHTML='<option value="">No matching user</option>';
-  }
-}
-
-function showSelectedUser(){
-  const uid=$("targetUser").value;
-  const box=$("selectedUserBox");
-  const u=adminUsers.find(x=>x.id===uid);
-  if(!u){box.classList.add("hidden");box.innerHTML="";return;}
-  box.classList.remove("hidden");
-  box.innerHTML=`
-    <div class="adminUserName">${escapeHtml(u.display_name||"THAALA User")}</div>
-    <div class="adminUserMeta">
-      THAALA ID: <b>${escapeHtml(u.thaala_id||"—")}</b>
-      ${u.phone?" • Mobile: ******"+escapeHtml(String(u.phone).slice(-4)):""}
-      <br>Current Credits: <b>${fmt(u.credits)}</b>
-    </div>`;
-}
-
-/* ADMIN GAME RESULT */
-async function loadAdminLiveGames(){
-  const select=$("adminGameSelect");
-  if(!select)return;
-  select.innerHTML='<option value="">Loading live games...</option>';
-  const result=await sb.from("games")
-    .select("id,sport,title,home_team,away_team,status")
-    .eq("status","live")
-    .order("starts_at",{ascending:true})
-    .limit(100);
-  if(result.error){
-    console.error("ADMIN LIVE GAMES",result.error);
-    select.innerHTML='<option value="">Live games load nahi hue</option>';
-    showMsg("gameMsg","Live games load nahi hue: "+result.error.message);
-    return;
-  }
-  const games=result.data||[];
-  select.innerHTML='<option value="">-- Select Live Game --</option>';
-  $("gameWinner").innerHTML='<option value="">-- Select Winning Team --</option>';
-  games.forEach(g=>{
-    const option=document.createElement("option");
-    option.value=g.id;
-    option.dataset.home=g.home_team||"Home";
-    option.dataset.away=g.away_team||"Away";
-    option.textContent=`${g.sport||"SPORTS"} — ${g.title||"Virtual Game"} — ${g.home_team||"Home"} vs ${g.away_team||"Away"}`;
-    select.appendChild(option);
-  });
-  if(!games.length)select.innerHTML='<option value="">No live games</option>';
-}
-
-function updateWinnerOptions(){
-  const gameSelect=$("adminGameSelect");
-  const winner=$("gameWinner");
-  const option=gameSelect.options[gameSelect.selectedIndex];
-  winner.innerHTML='<option value="">-- Select Winning Team --</option>';
-  if(!option || !option.value)return;
-  const home=option.dataset.home||"Home";
-  const away=option.dataset.away||"Away";
-  const a=document.createElement("option");
-  a.value=home;
-  a.textContent=`${home} — WON`;
-  winner.appendChild(a);
-  const b=document.createElement("option");
-  b.value=away;
-  b.textContent=`${away} — WON`;
-  winner.appendChild(b);
-}
-
-async function finishGame(){
-  hideMsg("gameMsg");
-  const gameId=$("adminGameSelect").value;
-  const winner=$("gameWinner").value.trim();
-  if(!gameId){showMsg("gameMsg","Pehle live game select karein.");return;}
-  if(!winner){showMsg("gameMsg","Winning team select karein.");return;}
-  const resultText=`${winner} won`;
-
-  const ok=confirm(`${winner} ko winner select karke game finish karna hai?`);
-  if(!ok)return;
-
-  const result=await sb.rpc("admin_finish_virtual_game_v1",{
-    p_game_id:gameId,
-    p_result:resultText
-  });
-
-  if(result.error){
-    console.error("FINISH GAME",result.error);
-    showMsg("gameMsg","Game finish failed: "+result.error.message);
-    return;
-  }
-
-  const completed=result.data?.completed_entries??0;
-  showMsg("gameMsg",`Game finished. ${completed} joined entr${completed===1?"y was":"ies were"} completed.`,true);
-  $("gameWinner").innerHTML='<option value="">-- Select Winning Team --</option>';
-  await loadAdminLiveGames();
-  await loadGames();
-  await loadProfile();
-}
-
-/* REAL FOOTBALL */
 const SPORTS_LIVE_URL=SUPABASE_URL+"/functions/v1/sports-live";
+const CRICKET_WORKER_URL="https://yellow-water-e57c.maddye-dwivedi4.workers.dev/api/cricket";
+const $=id=>document.getElementById(id);
+let pendingPhone="",currentUser=null,currentProfile=null,activeFilter="live",adminUsers=[],liveTimer=null,cricketTimer=null;
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function compactVC(n){n=Number(n||0);if(n>=1e6)return (n/1e6).toFixed(n%1e6?2:0).replace(/\.00$/,"")+"M";if(n>=1000)return (n/1000).toFixed(n%1000?2:0).replace(/\.00$/,"").replace(/\.0$/,"")+"k";return String(Math.round(n))}
+function fmt(n){return Number(n||0).toLocaleString("en-IN")}
+function msg(id,t,ok=false){let e=$(id);if(!e)return;e.textContent=t;e.classList.remove("hidden","ok");if(ok)e.classList.add("ok")}
+function hide(id){$(id)?.classList.add("hidden")}
+function devEmail(p){return "dev"+p.replace(/\D/g,"").slice(-10)+"@thaala.local"} function devPass(p){return "ThaalaDev@"+p.replace(/\D/g,"").slice(-10)+"#2026"}
+function openDrawer(){$("drawer").classList.remove("hidden");$("drawerBackdrop").classList.remove("hidden");document.body.classList.add("drawer-open")}
+function closeDrawer(){$("drawer").classList.add("hidden");$("drawerBackdrop").classList.add("hidden");document.body.classList.remove("drawer-open")}
+function setAuthTab(x){let u=x==="user";$("userTab").classList.toggle("active",u);$("adminTab").classList.toggle("active",!u);$("userAuth").classList.toggle("hidden",!u);$("adminAuth").classList.toggle("hidden",u)}
+function showDash(){$("authView").classList.add("hidden");$("dashboard").classList.remove("hidden")}
+function showAuth(){$("dashboard").classList.add("hidden");$("authView").classList.remove("hidden")}
+async function loadProfile(){if(!currentUser)return null;let r=await sb.from("profiles").select("*").eq("id",currentUser.id).single();if(r.error)return null;currentProfile=r.data;$("thaalaId").textContent=r.data.thaala_id||"—";$("balance").textContent=compactVC(r.data.credits)+" VC";$("miniBalance").textContent=compactVC(r.data.credits)+" VC";$("roleBadge").textContent=(r.data.role||"user").toUpperCase();$("adminPanel").classList.toggle("hidden",r.data.role!=="admin");if(r.data.role==="admin"){await loadAdminUsers();await loadAdminGames()}return r.data}
+async function loadAdminUsers(){let s=$("targetUser");let r=await sb.from("profiles").select("id,thaala_id,display_name,phone,credits").order("thaala_id").limit(1000);adminUsers=r.data||[];renderUsers($("userSearch").value)}
+function renderUsers(q=""){let s=$("targetUser"),x=String(q).toLowerCase();s.innerHTML='<option value="">-- Select User --</option>';adminUsers.filter(u=>!x||[u.display_name,u.thaala_id,u.phone].filter(Boolean).some(v=>String(v).toLowerCase().includes(x))).forEach(u=>{let o=document.createElement("option");o.value=u.id;o.textContent=`${u.thaala_id||"NO ID"} — ${u.display_name||"User"}`;s.appendChild(o)})}
+function selectedUser(){let u=adminUsers.find(x=>x.id===$("targetUser").value),b=$("selectedUserBox");if(!u){b.classList.add("hidden");return}b.classList.remove("hidden");b.innerHTML=`<div class="adminUserName">${esc(u.display_name||"User")}</div><div class="adminUserMeta">THAALA ID: <b>${esc(u.thaala_id||"—")}</b><br>Current Credits: <b>${compactVC(u.credits)} VC</b></div>`}
+async function addCredits(){let uid=$("targetUser").value,a=Number($("creditAmount").value),note=$("creditNote").value.trim()||"Admin credit";if(!uid)return msg("creditMsg","Pehle user select karein.");if(!Number.isInteger(a)||a<=0)return msg("creditMsg","Valid credits amount enter karein.");let r=await sb.rpc("admin_add_credits_v2",{target_user_uuid:uid,credit_amount:a,note});if(r.error)return msg("creditMsg",r.error.message);msg("creditMsg","Credits successfully add ho gaye.",true);$("creditAmount").value="";await loadProfile()}
+async function loadAdminGames(){let s=$("adminGameSelect");let r=await sb.from("games").select("id,sport,title,home_team,away_team").eq("status","live").limit(100);s.innerHTML='<option value="">-- Select Live Game --</option>';(r.data||[]).forEach(g=>{let o=document.createElement("option");o.value=g.id;o.dataset.home=g.home_team;o.dataset.away=g.away_team;o.textContent=`${g.sport} — ${g.home_team} vs ${g.away_team}`;s.appendChild(o)})}
+$("adminGameSelect").addEventListener("change",()=>{let o=$("adminGameSelect").selectedOptions[0],s=$("gameWinner");s.innerHTML='<option value="">-- Select Winning Team --</option>';if(o?.value)[o.dataset.home,o.dataset.away].forEach(x=>{let z=document.createElement("option");z.value=x;z.textContent=x+" — WON";s.appendChild(z)})});
+$("finishGame").addEventListener("click",async()=>{let id=$("adminGameSelect").value,w=$("gameWinner").value;if(!id||!w)return msg("gameMsg","Game aur winner select karein.");if(!confirm(w+" ko winner select karke finish karein?"))return;let r=await sb.rpc("admin_finish_virtual_game_v1",{p_game_id:id,p_result:w+" won"});if(r.error)return msg("gameMsg",r.error.message);msg("gameMsg","Game finished.",true);await loadAdminGames()});
 
-function virtualEstimate(stake,hs,as,min){
-  // Transparent fixed virtual-value estimate. It never depends on other users' stakes.
-  const diff=Number(hs)-Number(as); let mult=1.50;
-  if(diff>0)mult=1.35; else if(diff<0)mult=1.65;
-  if(Number(min)>=75)mult += diff>0?-0.05:0.05;
-  if(Number(min)>=85)mult += diff>0?-0.03:0.03;
-  mult=Math.max(1.20,Math.min(1.85,mult));
-  return Math.floor(stake*mult);
-}
+function footballCard(m){let f=m.fixture||{},t=m.teams||{},g=m.goals||{},l=m.league||{},h=t.home||{},a=t.away||{},min=f.status?.elapsed||0,diff=(g.home||0)-(g.away||0),mult=diff>0?1.35:diff<0?1.65:1.5;if(min>=75)mult+=diff>0?-0.05:.05;let vals=[1000,2000,5000].map(x=>Math.floor(x*Math.max(1.2,Math.min(1.85,mult))));return `<div class="realCard"><div class="realTop"><div class="realLeague">⚽ ${esc(l.name||"Football")}</div><div class="realLive">🔴 ${esc(min?min+"'":"LIVE")}</div></div><div class="realTeams"><div class="realTeam">${h.logo?`<img class="realLogo" src="${esc(h.logo)}">`:"⚽"}${esc(h.name||"Home")}</div><div><div class="realScore">${g.home??0} : ${g.away??0}</div><div class="realMinute">LIVE</div></div><div class="realTeam">${a.logo?`<img class="realLogo" src="${esc(a.logo)}">`:"⚽"}${esc(a.name||"Away")}</div></div><div class="realMeta">${esc(l.country||"")} • ${f.date?new Date(f.date).toLocaleString("en-IN"):""}</div><div class="valuePanel panelStyle"><div class="valueTitle">LIVE THAALA VALUE <span class="liveDot">● LIVE</span></div><div class="valueGrid">${vals.map((v,i)=>`<div class="valueItem"><div class="valueStake">${[1,2,5][i]}k ENTRY</div><div class="valueReward">${compactVC(v)} VC</div></div>`).join("")}</div><div class="valueNote">Fixed virtual-credit estimate based on match state only.</div></div><div class="feeBox">Minimum wallet: <b>1.5k VC</b> • Joining fee: <b>500 VC</b> • Match allocation: <b>1k / 2k / 5k VC</b></div><button class="realBtn" onclick="joinFootball(${Number(f.id||0)},'${esc(l.name||"Football")}','${esc(h.name||"Home")}','${esc(a.name||"Away")}','${esc(f.date||"")}')">PLAY MATCH</button></div>`}
+async function loadFootball(){let b=$("realFootballList");try{let r=await fetch(SPORTS_LIVE_URL,{cache:"no-store"}),d=await r.json();let live=Array.isArray(d.live)?d.live:[];b.innerHTML=live.length?live.map(footballCard).join(""):'<div class="realEmpty">अभी कोई live football match नहीं है.</div>'}catch(e){b.innerHTML='<div class="realEmpty">Football data unavailable.</div>'}}
+async function joinFootball(id,league,home,away,date){if(!currentUser)return;if(Number(currentProfile?.credits||0)<1500)return alert("Minimum 1.5k VC required.");let x=prompt(`Joining fee: 500 VC\nMatch allocation: 1000 / 2000 / 5000 VC`,"1000");if(x===null)return;let a=Number(x);if(![1000,2000,5000].includes(a))return alert("Only 1000, 2000 or 5000 VC.");if(Number(currentProfile.credits)<a+500)return alert("Insufficient VC.");let r=await sb.rpc("join_real_football_v2",{p_fixture_id:id,p_amount:a,p_joining_fee:500,p_league:league,p_home_team:home,p_away_team:away,p_starts_at:date||null});if(r.error)return alert(r.error.message);alert(`Joined successfully. Total: ${compactVC(a+500)} VC`);await loadProfile()}
 
-function realMatchCard(m,{live=false}={}){
-  const f=m.fixture||{},t=m.teams||{},sc=m.goals||{},l=m.league||{},home=t.home||{},away=t.away||{};
-  const hs=sc.home==null?0:sc.home,as=sc.away==null?0:sc.away,min=Number(f.status?.elapsed||0);
-  const date=f.date||'';
-  const status=f.status||{};
-  const statusText=live ? (status.elapsed!=null?`${status.elapsed}'`:(status.short||'LIVE')) : (status.long||'UPCOMING');
-  const when=date?new Date(date).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'Time unavailable';
+function cricketFinished(m){return /won|lost|draw|tie|abandoned|cancelled|finished|complete|no result|result/i.test(String(m?.status||"").toLowerCase())}
+function cricketLive(m){return !cricketFinished(m)&&(String(m?.category||"").toUpperCase()==="LIVE"||(m?.matchStarted===true&&m?.matchEnded!==true))}
+function teams(m){if(Array.isArray(m?.teams)&&m.teams.length>=2)return [m.teams[0],m.teams[1]];return [m?.homeTeam||m?.team1||"Team 1",m?.awayTeam||m?.team2||"Team 2"]}
+function logo(m,n){return (m.teamInfo||[]).find(x=>String(x.name).toLowerCase()===String(n).toLowerCase())?.img||""}
+function cricketCard(m,i){let [h,a]=teams(m),live=cricketLive(m),scores=Array.isArray(m.score)?m.score:[],id="cd"+i,vals=[1000,2000,5000].map(x=>Math.floor(x*(live?1.45:1.25)+Math.min(x*.2,scores.length*x*.03)));return `<div class="realCard"><div class="realTop"><div class="realLeague">🏏 ${esc(m.name||m.series||"Cricket")}</div><div class="${live?"cricketStatus":"upcomingBadge"}">${live?"🔴 LIVE":"🕒 UPCOMING"}</div></div><div class="realTeams"><div class="realTeam">${logo(m,h)?`<img class="cricketLogo" src="${esc(logo(m,h))}">`:"🏏"}${esc(h)}</div><div><div class="vs">VS</div><div class="realMinute">${m.dateTimeGMT?new Date(m.dateTimeGMT).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):""}</div></div><div class="realTeam">${logo(m,a)?`<img class="cricketLogo" src="${esc(logo(m,a))}">`:"🏏"}${esc(a)}</div></div>${scores.length?`<div class="cricketScore">${scores.map(s=>`<div class="cricketScoreRow"><span>${esc(s.inning||s.team||"Innings")}</span><b>${s.r??"-"}${s.w!=null?"/"+s.w:""}${s.o!=null?" ("+s.o+" ov)":""}</b></div>`).join("")}</div>`:`<div class="cricketScore">${cricketFinished(m)?"Match completed":"Score not available yet."}</div>`}<div class="realMeta">${esc(m.venue||"Venue unavailable")} • ${esc(m.matchType||"cricket")}</div><div class="valuePanel panelStyle"><div class="valueTitle">THAALA VIRTUAL VALUE <span class="liveDot">● ${live?"LIVE":"UPCOMING"}</span></div><div class="valueGrid">${vals.map((v,j)=>`<div class="valueItem"><div class="valueStake">${[1,2,5][j]}k ENTRY</div><div class="valueReward">${compactVC(v)} VC</div></div>`).join("")}</div><div class="valueNote">Fixed virtual-credit estimate. Not betting odds or pooled stakes.</div></div>${live?`<div class="feeBox">Minimum wallet: <b>1.5k VC</b> • Joining fee: <b>500 VC</b> • Match allocation: <b>1k / 2k / 5k VC</b></div>`:""}<button class="cricketDetailsBtn" onclick="toggleCricket('${id}',this)">📋 MATCH DETAILS</button><div id="${id}" class="detailPanel hidden"><div class="detailRow"><span class="detailLabel">Series</span><span class="detailValue">${esc(m.name||m.series||"—")}</span></div><div class="detailRow"><span class="detailLabel">Match Type</span><span class="detailValue">${esc(m.matchType||"—")}</span></div><div class="detailRow"><span class="detailLabel">Venue</span><span class="detailValue">${esc(m.venue||"—")}</span></div><div class="playersBox"><div class="playersTitle">👥 TEAM / PLAYER INFORMATION</div>${(m.teamInfo||[]).map(t=>`<div class="detailRow"><span>${esc(t.name||"Team")}</span><b>${esc(t.shortName||"")}</b></div>`).join("")||'<div class="playerNote">Playing XI अभी cached feed में उपलब्ध नहीं है. Player/role section ready है; squad data बाद में quota-safe तरीके से जोड़ा जाएगा.</div>'}</div><div class="playersBox"><div class="playersTitle">🏏 ROLE FORMAT</div><div class="playerNote"><b>(C)</b> Captain • <b>(WK)</b> Wicketkeeper • <b>(BAT)</b> Batter • <b>(AR)</b> All-rounder • <b>(B)</b> Bowler</div></div></div></div>`}
+function toggleCricket(id,b){let e=$(id),open=e.classList.toggle("hidden");b.textContent=open?"📋 MATCH DETAILS":"✕ HIDE DETAILS"}
+async function loadCricket(){let b=$("realCricketList");b.innerHTML='<div class="realEmpty">Loading cricket cache...</div>';try{let r=await fetch(CRICKET_WORKER_URL,{cache:"no-store"}),d=await r.json();let live=(d.live||[]).filter(cricketLive),up=(d.upcoming||[]).filter(x=>!cricketFinished(x)&&!cricketLive(x));let h=`<div class="realMeta">Live: <b>${live.length}</b> • Upcoming: <b>${up.length}</b> • Cache: ${d.updatedAt?new Date(d.updatedAt).toLocaleTimeString("en-IN"):"—"}</div>`;if(live.length)h+='<div class="subHeading">🔴 LIVE CRICKET <span>'+live.length+'</span></div>'+live.map(cricketCard).join("");else h+='<div class="liveNotice">अभी कोई genuinely live cricket match नहीं मिला. Completed matches LIVE में नहीं दिखेंगे.</div>';if(up.length)h+='<div class="subHeading upcomingHeading">🏏 UPCOMING CRICKET <span>'+up.length+'</span></div>'+up.slice(0,30).map((x,i)=>cricketCard(x,i+live.length)).join("");b.innerHTML=h}catch(e){b.innerHTML='<div class="realEmpty">Cricket data load नहीं हुआ.</div>'}}
 
-  if(live){
-    const r1=virtualEstimate(1000,hs,as,min),r2=virtualEstimate(2000,hs,as,min),r5=virtualEstimate(5000,hs,as,min);
-    return `<div class="realCard">
-      <div class="realTop"><div class="realLeague">⚽ ${escapeHtml(l.name||'Football')}</div><div class="realLive">🔴 ${escapeHtml(statusText)}</div></div>
-      <div class="realTeams">
-        <div class="realTeam">${home.logo?`<img class="realLogo" src="${escapeHtml(home.logo)}" alt="">`:'⚽'}<div>${escapeHtml(home.name||'Home')}</div></div>
-        <div style="text-align:center"><div class="realScore">${hs} : ${as}</div><div class="realMinute">LIVE</div></div>
-        <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:'⚽'}<div>${escapeHtml(away.name||'Away')}</div></div>
-      </div>
-      <div class="realMeta">${escapeHtml(l.country||'')} • ${escapeHtml(when)}</div>
-      <div class="valuePanel panelStyle">
-        <div class="valueTitle"><span>LIVE THAALA VALUE</span><span class="liveDot">● LIVE</span></div>
-        <div class="panelScore"><b>${escapeHtml(home.name||'Home')}</b><strong>${hs} : ${as}</strong><b>${escapeHtml(away.name||'Away')}</b></div>
-        <div class="valueGrid">
-          <div class="valueItem"><div class="valueStake">1K ENTRY</div><div class="valueReward">${compactVC(r1)}</div></div>
-          <div class="valueItem"><div class="valueStake">2K ENTRY</div><div class="valueReward">${compactVC(r2)}</div></div>
-          <div class="valueItem"><div class="valueStake">5K ENTRY</div><div class="valueReward">${compactVC(r5)}</div></div>
-        </div>
-        <div class="valueNote">Live estimate refreshes every 30 seconds from the match state. It is a fixed virtual-credit calculation, not betting odds or pooled stakes.</div>
-      </div>
-      <div class="feeBox">Minimum wallet: <b>1500 VC</b> • Joining fee: <b>500 VC</b> • Match allocation: <b>1000 / 2000 / 5000 VC</b></div>
-      <button class="realBtn realJoin" type="button" data-fixture="${Number(f.id||0)}" data-league="${escapeHtml(l.name||'Football')}" data-home="${escapeHtml(home.name||'Home')}" data-away="${escapeHtml(away.name||'Away')}" data-date="${escapeHtml(date)}">PLAY MATCH</button>
-    </div>`;
-  }
+async function loadMyGames(){let b=$("myGamesList");if(!currentUser)return;b.innerHTML='<div class="empty">Loading...</div>';let r=await sb.from("game_entries").select("game_id,entry_credits,status,result,reward_credits,created_at,completed_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(100);if(r.error)return b.innerHTML='<div class="empty">History load nahi hui.</div>';if(!r.data?.length)return b.innerHTML='<div class="empty">No games joined yet.</div>';let ids=r.data.map(x=>x.game_id),gr=await sb.from("games").select("id,sport,title,home_team,away_team,status").in("id",ids),map={};(gr.data||[]).forEach(g=>map[g.id]=g);b.innerHTML=r.data.map(e=>{let g=map[e.game_id]||{};return `<div class="historyCard"><div class="historyTop"><div class="historySport">${g.sport||"SPORTS"}</div><div class="historyStatus">${esc(e.status||"JOINED")}</div></div><div class="historyTitle">${esc(g.title||"Virtual Game")}</div><div class="historyMeta">${esc(g.home_team||"Home")} vs ${esc(g.away_team||"Away")}</div><div class="historyAmount">💰 Entry: ${compactVC(e.entry_credits)} VC</div><div class="historyMeta">Result: ${esc(e.result||"—")}<br>Reward: ${compactVC(e.reward_credits)} VC</div></div>`}).join("")}
 
-  return `<div class="realCard upcomingCard">
-    <div class="realTop"><div class="realLeague">⚽ ${escapeHtml(l.name||'Football')}</div><div class="upcomingBadge">🕒 UPCOMING</div></div>
-    <div class="realTeams">
-      <div class="realTeam">${home.logo?`<img class="realLogo" src="${escapeHtml(home.logo)}" alt="">`:'⚽'}<div>${escapeHtml(home.name||'Home')}</div></div>
-      <div style="text-align:center"><div class="vs">VS</div><div class="realMinute">${escapeHtml(when)}</div></div>
-      <div class="realTeam">${away.logo?`<img class="realLogo" src="${escapeHtml(away.logo)}" alt="">`:'⚽'}<div>${escapeHtml(away.name||'Away')}</div></div>
-    </div>
-    <div class="realMeta">${escapeHtml(l.country||'')} • ${escapeHtml(l.round||'Scheduled fixture')}</div>
-    <div class="upcomingNote">Match play will open automatically when the fixture becomes LIVE.</div>
-  </div>`;
-}
-
-async function loadRealFootball(){
-  const box=$("realFootballList"); if(!box)return;
-  box.innerHTML='<div class="realEmpty">Loading real football...</div>';
-  try{
-    const res=await fetch(SPORTS_LIVE_URL,{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"});
-    const data=await res.json();
-    if(!res.ok||!data.success)throw new Error(data?.error||"Football data unavailable");
-
-    const live=Array.isArray(data.live)?data.live:[];
-    const upcoming=Array.isArray(data.upcoming)?data.upcoming:[];
-    const provider=data.provider||{};
-    const seen=new Set();
-    const upcomingClean=upcoming.filter(m=>{
-      const id=Number(m?.fixture?.id||0); if(!id||seen.has(id))return false; seen.add(id); return true;
-    }).slice(0,12);
-
-    let html='';
-    if(live.length){
-      html+=`<div class="subHeading">🔴 LIVE NOW <span>${live.length} match${live.length===1?'':'es'}</span></div>`;
-      html+=live.map(m=>realMatchCard(m,{live:true})).join('');
-    }else{
-      html+='<div class="liveNotice">अभी कोई live football match नहीं है. नीचे upcoming real matches दिख रहे हैं.</div>';
-    }
-    if(upcomingClean.length){
-      html+=`<div class="subHeading upcomingHeading">🕒 UPCOMING REAL MATCHES <span>${upcomingClean.length}</span></div>`;
-      html+=upcomingClean.map(m=>realMatchCard(m,{live:false})).join('');
-    }
-    if(!live.length&&!upcomingClean.length){
-      const diag=(provider.live_results!=null||provider.upcoming_results!=null)
-        ? `<div style="margin-top:8px;font-size:11px;opacity:.75">Feed: live ${fmt(provider.live_results||0)} • upcoming ${fmt(provider.upcoming_results||0)}</div>` : '';
-      html=`<div class="realEmpty"><b>इस समय कोई real football fixture उपलब्ध नहीं है.</b><br><span style="font-size:12px">Refresh करके फिर देखें.</span>${diag}<br><button class="refreshReal" style="margin-top:10px" type="button" onclick="loadRealFootball()">↻ REFRESH</button></div>`;
-    }
-    box.innerHTML=html;
-    box.querySelectorAll('.realJoin').forEach(b=>b.addEventListener('click',()=>joinRealFootball({fixtureId:Number(b.dataset.fixture),league:b.dataset.league,home:b.dataset.home,away:b.dataset.away,startsAt:b.dataset.date})));
-  }catch(e){
-    console.error('REAL FOOTBALL',e);
-    box.innerHTML=`<div class="realEmpty"><b>Real football data load नहीं हुआ.</b><br><span style="font-size:12px">${escapeHtml(e.message||'Unknown error')}</span><br><button class="refreshReal" style="margin-top:10px" type="button" onclick="loadRealFootball()">↻ TRY AGAIN</button></div>`;
-  }
-}
-
-async function joinRealFootball(match){
-  if(!currentUser){alert('Please login first.');return;}
-  if(!match.fixtureId){alert('Match ID unavailable.');return;}
-  const balance=Number(currentProfile?.credits||0);
-  if(balance<1500){alert('Play karne ke liye minimum 1500 VC balance required hai.');return;}
-  const raw=prompt(`Match allocation for ${match.home} vs ${match.away}\nJoining fee: 500 VC\nSelect: 1000 / 2000 / 5000 VC`,`1000`);
-  if(raw===null)return;
-  const amount=Number(raw);
-  if(![1000,2000,5000].includes(amount)){alert('Sirf 1000, 2000 ya 5000 VC select karein.');return;}
-  const total=500+amount;
-  if(balance<total){alert(`Required: ${fmt(total)} VC (500 joining fee + ${fmt(amount)} match VC). Current balance: ${fmt(balance)} VC`);return;}
-  if(!confirm(`${match.home} vs ${match.away}\n\nJoining fee: 500 VC\nMatch allocation: ${fmt(amount)} VC\nTotal deduction: ${fmt(total)} VC\n\nContinue?`))return;
-  const result=await sb.rpc('join_real_football_v2',{p_fixture_id:match.fixtureId,p_amount:amount,p_joining_fee:500,p_league:match.league,p_home_team:match.home,p_away_team:match.away,p_starts_at:match.startsAt||null});
-  if(result.error){console.error('REAL JOIN',result.error);alert('PLAY failed: '+result.error.message);return;}
-  alert(`Match joined successfully.\nMatch VC: ${fmt(amount)}\nJoining fee: 500 VC\nTotal deducted: ${fmt(total)} VC\nNew balance: ${fmt(result.data?.balance??0)} VC`);
-  await loadProfile(); await loadMyGames();
-}
-
-/* REAL CRICKET */
-const CRICKET_WORKER_URL="https://yellow-water-e57c.maddye-dwivedi4.workers.dev/";
-
-function cricketVirtualValue(stake,match){
-  // Transparent fixed virtual estimate. It never uses other users' stakes.
-  const live=match?.thaalaStatus==='LIVE' || (match?.matchStarted===true && !match?.matchEnded);
-  const scoreCount=Array.isArray(match?.score)?match.score.length:0;
-  let mult=live?1.45:1.25;
-  mult += Math.min(0.20,scoreCount*0.03);
-  return Math.floor(stake*mult);
-}
-
-function cricketTeamNames(m){
-  if(Array.isArray(m?.teams) && m.teams.length>=2) return [String(m.teams[0]),String(m.teams[1])];
-  const a=String(m?.homeTeam||m?.team1||'Team 1').trim();
-  const b=String(m?.awayTeam||m?.team2||'Team 2').trim();
-  return [a||'Team 1',b||'Team 2'];
-}
-
-function cricketIsLive(m){
-  return m?.thaalaStatus==='LIVE' || (m?.matchStarted===true && m?.matchEnded!==true);
-}
-
-function cricketMatchCard(m){
-  const [home,away]=cricketTeamNames(m);
-  const scores=Array.isArray(m?.score)?m.score:[];
-  const scoreRows=scores.map(x=>{
-    const name=x?.inning||x?.team||'Innings';
-    const r=x?.r==null?'-':x.r;
-    const w=x?.w==null?'':`/${x.w}`;
-    const o=x?.o==null?'':` (${x.o} ov)`;
-    return `<div class="cricketScoreRow"><span class="cricketTeam">${escapeHtml(name)}</span><span class="cricketRuns">${escapeHtml(String(r)+String(w)+String(o))}</span></div>`;
-  }).join('');
-  const live=cricketIsLive(m);
-  const status=live?'LIVE':'UPCOMING';
-  const statusClass=live?'cricketStatus':'upcomingBadge';
-  const when=m?.dateTimeGMT?new Date(m.dateTimeGMT).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):(m?.date||m?.dateTime||'');
-  const series=m?.name||m?.series_id||'Cricket';
-  const r1=cricketVirtualValue(1000,m),r2=cricketVirtualValue(2000,m),r5=cricketVirtualValue(5000,m);
-  return `<div class="realCard">
-    <div class="realTop"><div class="realLeague">🏏 ${escapeHtml(series)}</div><div class="${statusClass}">${live?'🔴 ':''}${status}</div></div>
-    <div class="realTeams">
-      <div class="realTeam">🏏<div>${escapeHtml(home)}</div></div>
-      <div style="text-align:center"><div class="vs">VS</div><div class="realMinute">${escapeHtml(when)}</div></div>
-      <div class="realTeam">🏏<div>${escapeHtml(away)}</div></div>
-    </div>
-    ${scoreRows?`<div class="cricketScore">${scoreRows}</div>`:'<div class="cricketScore">Score not available yet.</div>'}
-    <div class="cricketMeta">${escapeHtml(m?.venue||'Venue unavailable')} • ${escapeHtml(m?.matchType||'cricket')}</div>
-    <div class="valuePanel panelStyle cricketPanel">
-      <div class="valueTitle"><span>THAALA VIRTUAL VALUE</span><span class="liveDot">● ${status}</span></div>
-      <div class="valueGrid">
-        <div class="valueItem"><div class="valueStake">1K ENTRY</div><div class="valueReward">${compactVC(r1)}</div></div>
-        <div class="valueItem"><div class="valueStake">2K ENTRY</div><div class="valueReward">${compactVC(r2)}</div></div>
-        <div class="valueItem"><div class="valueStake">5K ENTRY</div><div class="valueReward">${compactVC(r5)}</div></div>
-      </div>
-      <div class="valueNote">Virtual estimate based on match state only. Not betting odds and not based on other users' stakes.</div>
-    </div>
-  </div>`;
-}
-
-async function loadCricket(){
-  const box=$("realCricketList"); if(!box)return;
-  box.innerHTML='<div class="realEmpty">Loading all cricket matches...</div>';
-  try{
-    const res=await fetch(CRICKET_WORKER_URL,{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"});
-    const data=await res.json();
-    if(!res.ok || data?.success===false) throw new Error(data?.error||data?.message||"Cricket data unavailable");
-    const matches=Array.isArray(data?.data)?data.data:[];
-    const live=matches.filter(cricketIsLive);
-    const upcoming=matches.filter(m=>!cricketIsLive(m) && m?.thaalaStatus==='UPCOMING');
-    let html=`<div class="cricketMeta" style="margin:0 0 12px;text-align:left">Live: <b>${live.length}</b> • Upcoming: <b>${upcoming.length}</b> • All competitions • Auto refresh: 30 sec</div>`;
-    if(live.length){
-      html+=`<div class="subHeading">🔴 ALL LIVE CRICKET <span>${live.length}</span></div>`;
-      html+=live.map(cricketMatchCard).join('');
-    }
-    if(upcoming.length){
-      html+=`<div class="subHeading upcomingHeading">🏏 ALL UPCOMING CRICKET <span>${upcoming.length}</span></div>`;
-      html+=upcoming.map(cricketMatchCard).join('');
-    }
-    if(!live.length&&!upcoming.length) html+='<div class="realEmpty">No live or upcoming cricket matches are currently returned by the CricketData feed.</div>';
-    box.innerHTML=html;
-  }catch(e){
-    console.error('CRICKET',e);
-    box.innerHTML=`<div class="realEmpty"><b>Cricket data load नहीं हुआ.</b><br><span style="font-size:12px">${escapeHtml(e.message||'Unknown error')}</span><br><button class="refreshReal" style="margin-top:10px" type="button" onclick="loadCricket()">↻ TRY AGAIN</button></div>`;
-  }
-}
-
-let cricketRefreshTimer=null;
-function startCricketAutoRefresh(){
-  if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);
-  cricketRefreshTimer=setInterval(()=>{
-    if(currentUser && activeFilter==='Cricket') loadCricket();
-  },30000);
-}
-function stopCricketAutoRefresh(){
-  if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);
-  cricketRefreshTimer=null;
-}
-
-/* GAMES */
-async function loadGames(){
-  const list=$("gameList");
-  list.innerHTML='<div class="empty">Loading games...</div>';
-  const result=await sb.from("games").select("*").order("starts_at",{ascending:true}).limit(100);
-  if(result.error){
-    console.error("GAMES",result.error);
-    list.innerHTML='<div class="empty">Games load nahi hue. Supabase permissions check karein.</div>';
-    return;
-  }
-  allGames=result.data||[];renderGames();
-}
-function matchesFilter(g){
-  if(activeFilter==="all")return false;
-  if(activeFilter==="live")return false;
-  if(activeFilter==="finished")return false;
-  if(activeFilter==="mygames")return false;
-  return false;
-}
-function sportIcon(sport){
-  const s=(sport||"").toLowerCase();
-  if(s.includes("cricket"))return "🏏";if(s.includes("football"))return "⚽";if(s.includes("tennis"))return "🎾";
-  if(s.includes("basketball"))return "🏀";if(s.includes("handball"))return "🤾";if(s.includes("baseball"))return "⚾";
-  if(s.includes("horse"))return "🐎";if(s.includes("greyhound"))return "🐕";return "🎮";
-}
-function renderGames(){
-  const list=$("gameList"),games=allGames.filter(matchesFilter);
-  if(!games.length){
-    list.innerHTML='<div class="empty"><div style="font-size:38px;margin-bottom:8px">🎮</div><div style="font-weight:900;color:#4c1d95">No games available</div><div style="font-size:13px;margin-top:5px">Is category mein abhi koi virtual game nahi hai.</div></div>';return;
-  }
-  list.innerHTML=games.map(g=>{
-    const state=g.current_state&&typeof g.current_state==="object"?g.current_state:{};
-    const score=state.score?`<div class="liveScore">📊 ${escapeHtml(String(state.score))}</div>`:"";
-    const winnerRaw=state.winner || (g.status==="finished" ? state.result : "");
-    const winnerText=winnerRaw?String(winnerRaw).replace(/\s+won\s*$/i,""):"";
-    const winnerBox=g.status==="finished" && winnerText?`<div class="winnerBox">🏆 Winner: <strong>${escapeHtml(winnerText)}</strong></div>`:"";
-    const canJoin=g.status==="live";
-    return `<div class="game">
-      <div class="gameTop"><div class="sportBadge">${sportIcon(g.sport)} ${escapeHtml(g.sport||"SPORTS")}</div><div class="statusBadge ${g.status==="live"?"statusLive":"statusOther"}">${g.status==="live"?"● LIVE":escapeHtml((g.status||"").toUpperCase())}</div></div>
-      <div class="matchTitle">${escapeHtml(g.title||"Virtual Match")}</div>
-      <div class="teams"><div class="team"><div class="teamIcon">🏠</div><div>${escapeHtml(g.home_team||"Home")}</div></div><div class="vs">VS</div><div class="team"><div class="teamIcon">🏳️</div><div>${escapeHtml(g.away_team||"Away")}</div></div></div>
-      ${score}${winnerBox}
-      <div class="gameFooter"><div class="virtualTag">💰 Virtual Credits</div><button class="join" data-game="${escapeHtml(g.id)}" ${canJoin?"":"disabled"}>${canJoin?"JOIN GAME":"NOT LIVE"}</button></div>
-    </div>`;
-  }).join("");
-  list.querySelectorAll(".join").forEach(b=>b.addEventListener("click",()=>joinGame(b.dataset.game)));
-}
-
-/* MY GAMES */
-async function loadMyGames(){
-  const box=$("myGamesList");if(!box||!currentUser)return;
-  box.innerHTML='<div class="empty">Loading your games...</div>';
-  const result=await sb.from("game_entries").select("id,game_id,user_id,entry_credits,status,result,reward_credits,created_at,completed_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(100);
-  if(result.error){console.error("MY GAMES",result.error);box.innerHTML='<div class="empty">History load nahi hui. Supabase permissions check karein.</div>';return;}
-  const entries=result.data||[];
-  if(!entries.length){box.innerHTML='<div class="empty"><div style="font-size:38px">🎮</div><div style="font-weight:900;color:#4c1d95">No games joined yet</div><div style="font-size:13px;margin-top:5px">Jab aap virtual game join karenge, woh yahan dikhega.</div></div>';return;}
-  const ids=[...new Set(entries.map(e=>e.game_id).filter(Boolean))];let gameMap={};
-  if(ids.length){const gr=await sb.from("games").select("id,sport,title,home_team,away_team,status,current_state").in("id",ids);if(!gr.error)(gr.data||[]).forEach(g=>gameMap[g.id]=g);}
-  box.innerHTML=entries.map(e=>{
-    const g=gameMap[e.game_id]||{};
-    const status=String(e.status||g.status||"joined").toUpperCase();
-    const gs=g.current_state&&typeof g.current_state==="object"?g.current_state:{};
-    const winner=gs.winner || (gs.result?String(gs.result).replace(/\s+won\s*$/i,""):"");
-    const resultText=e.result?String(e.result):winner;
-    return `<div class="historyCard">
-      <div class="historyTop"><div class="historySport">${sportIcon(g.sport||"SPORTS")} ${escapeHtml(g.sport||"SPORTS")}</div><div class="historyStatus">${escapeHtml(status)}</div></div>
-      <div class="historyTitle">${escapeHtml(g.title||"Virtual Game")}</div>
-      <div class="historyMeta">${escapeHtml(g.home_team||"Home")} vs ${escapeHtml(g.away_team||"Away")}</div>
-      ${winner?`<div class="winnerBox">🏆 Winner: <strong>${escapeHtml(winner)}</strong></div>`:""}
-      <div class="historyAmount">💰 Entry: ${fmt(e.entry_credits)} Virtual Credits</div>
-      <div class="historyMeta">📌 Result: ${escapeHtml(resultText||"—")}<br>🎁 Reward: ${fmt(e.reward_credits)} Virtual Credits<br>🕒 Joined: ${escapeHtml(e.created_at?new Date(e.created_at).toLocaleString("en-IN"):"—")}<br>✅ Completed: ${escapeHtml(e.completed_at?new Date(e.completed_at).toLocaleString("en-IN"):"—")}</div>
-    </div>`;
-  }).join("");
-}
-
-/* JOIN */
-async function joinGame(gameId){
-  if(!currentUser){alert("Please login first.");return;}
-  const amountRaw=prompt("Virtual credits entry amount:","100");
-  if(amountRaw===null)return;
-  const amount=Number(amountRaw);
-  if(!Number.isInteger(amount)||amount<=0){alert("Valid whole-number credits enter karein.");return;}
-  const result=await sb.rpc("join_virtual_game_v2",{p_game_id:gameId,p_amount:amount});
-  if(result.error){alert("JOIN failed: "+result.error.message);return;}
-  alert("Game joined successfully. Virtual credits deducted.");
-  await loadProfile();
-  if(activeFilter==="mygames")await loadMyGames();
-}
-
-/* ADMIN CREDITS */
-async function addCredits(){
-  hideMsg("creditMsg");
-  const uid=$("targetUser").value;
-  const amount=Number($("creditAmount").value);
-  const note=$("creditNote").value.trim()||"Admin credit";
-
-  if(!uid){showMsg("creditMsg","Pehle user select karein.");return;}
-  if(!Number.isInteger(amount)||amount<=0){showMsg("creditMsg","Valid credits amount enter karein.");return;}
-
-  const result=await sb.rpc("admin_add_credits_v2",{
-    target_user_uuid:uid,
-    credit_amount:amount,
-    note:note
-  });
-
-  if(result.error){
-    console.error("ADMIN CREDIT",result.error);
-    showMsg("creditMsg","Credit failed: "+result.error.message);
-    return;
-  }
-
-  showMsg("creditMsg","Credits successfully add ho gaye.",true);
-  $("creditAmount").value="";
-  await loadAdminUsers();
-  renderAdminUsers($("userSearch").value);
-  $("targetUser").value=uid;
-  showSelectedUser();
-  await loadProfile();
-}
-
-/* APP */
-async function loadApp(){
-  const result=await sb.auth.getUser();
-  if(result.error||!result.data?.user){showAuth();return;}
-  currentUser=result.data.user;
-  const profile=await loadProfile();
-  if(!profile){showAuth();showMsg("phoneMsg","Profile load nahi hua. Supabase permissions check karein.");return;}
-  showDashboard();await loadRealFootball();startLiveRefresh();
-}
-
-async function loginAdmin(){
-  hideMsg("adminMsg");
-  const email=$("adminEmail").value.trim(),password=$("adminPassword").value;
-  if(!email||!password){showMsg("adminMsg","Email aur password dono enter karein.");return;}
-  const result=await sb.auth.signInWithPassword({email,password});
-  if(result.error){showMsg("adminMsg","Login failed: "+result.error.message);return;}
-  currentUser=result.data.user;
-  const profile=await loadProfile();
-  if(!profile||profile.role!=="admin"){await sb.auth.signOut();currentUser=null;showMsg("adminMsg","Ye account THAALA admin nahi hai.");return;}
-  showDashboard();await loadRealFootball();startLiveRefresh();
-}
-
-async function loginDevPhone(){
-  hideMsg("phoneMsg");
-  const token=$("otp").value.trim();
-  if(token!=="123456"){showMsg("phoneMsg","Development OTP galat hai. Test OTP: 123456");return;}
-  if(!pendingPhone){showMsg("phoneMsg","Mobile number enter karein.");return;}
-  const email=devEmail(pendingPhone),password=devPassword(pendingPhone);
-  let result=await sb.auth.signInWithPassword({email,password});
-  if(result.error){
-    const signup=await sb.auth.signUp({email,password,options:{data:{phone_number:pendingPhone,display_name:"THAALA User"}}});
-    if(signup.error){showMsg("phoneMsg","Account create/login failed: "+signup.error.message);return;}
-    if(!signup.data.session){showMsg("phoneMsg","Account created. Supabase mein Confirm Email OFF karke phir VERIFY karein.");return;}
-    result=signup;
-  }
-  if(result.error){showMsg("phoneMsg","Login failed: "+result.error.message);return;}
-  currentUser=result.data.user;await loadApp();
-}
-
-/* EVENTS */
-$("userTab").addEventListener("click",()=>setAuthTab("user"));
-$("adminTab").addEventListener("click",()=>setAuthTab("admin"));
-$("sendOtp").addEventListener("click",()=>{
-  const raw=$("phone").value.trim();
-  if(!validPhone(raw)){showMsg("phoneMsg","Valid 10-digit Indian mobile number enter karein.");return;}
-  pendingPhone=normalizePhone(raw);$("otpBox").classList.remove("hidden");showMsg("phoneMsg","Test OTP ready. Enter 123456.",true);
-});
-$("resendOtp").addEventListener("click",()=>{if(!pendingPhone){showMsg("phoneMsg","Pehle mobile number enter karein.");return;}showMsg("phoneMsg","Test OTP: 123456",true);});
-$("verifyOtp").addEventListener("click",loginDevPhone);
-$("adminLogin").addEventListener("click",loginAdmin);
-$("menuBtn").addEventListener("click",openDrawer);
-$("closeDrawer").addEventListener("click",closeDrawer);
-$("drawerBackdrop").addEventListener("click",closeDrawer);
-$("addCredits").addEventListener("click",addCredits);
-$("finishGame").addEventListener("click",finishGame);
-$("refreshReal").addEventListener("click",loadRealFootball);
-$("refreshCricket").addEventListener("click",loadCricket);
-$("adminGameSelect").addEventListener("change",updateWinnerOptions);
-$("userSearch").addEventListener("input",()=>renderAdminUsers($("userSearch").value));
-$("targetUser").addEventListener("change",showSelectedUser);
-$("logout").addEventListener("click",async()=>{await sb.auth.signOut();if(liveRefreshTimer) clearInterval(liveRefreshTimer);liveRefreshTimer=null;if(cricketRefreshTimer) clearInterval(cricketRefreshTimer);cricketRefreshTimer=null;currentUser=null;currentProfile=null;allGames=[];closeDrawer();showAuth();});
-
-function setFilter(filter){
-  activeFilter=filter;
-  document.querySelectorAll(".navItem").forEach(el=>el.classList.toggle("active",el.dataset.filter===filter));
-  const historyMode=filter==="mygames";
-  const cricketMode=filter==="Cricket";
-  $("myGamesSection").classList.toggle("hidden",!historyMode);
-  $("realFootball").classList.toggle("hidden",historyMode||cricketMode);
-  $("realCricket").classList.toggle("hidden",!cricketMode||historyMode);
-  if(historyMode){stopCricketAutoRefresh();loadMyGames();}
-  else if(cricketMode){loadCricket();startCricketAutoRefresh();}else{stopCricketAutoRefresh();loadRealFootball();}
-  closeDrawer();window.scrollTo({top:0,behavior:"smooth"});
-}
-document.querySelectorAll(".quick,.navItem,.menuLink").forEach(el=>el.addEventListener("click",()=>setFilter(el.dataset.filter)));
-$("menuSearch").addEventListener("input",()=>{
-  const q=$("menuSearch").value.trim().toLowerCase();
-  document.querySelectorAll(".menuLink").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(q)?"block":"none");
-});
-
-sb.auth.getSession().then(async({data})=>{if(data?.session){currentUser=data.session.user;await loadApp();}});
-sb.channel("thaala-live").on("postgres_changes",{event:"*",schema:"public",table:"games"},async()=>{if(currentUser)await loadGames();}).subscribe();
+$("userTab").onclick=()=>setAuthTab("user");$("adminTab").onclick=()=>setAuthTab("admin");$("sendOtp").onclick=()=>{let p=$("phone").value.replace(/\D/g,"").slice(-10);if(!/^[6-9]\d{9}$/.test(p))return msg("phoneMsg","Valid 10-digit Indian mobile number enter karein.");pendingPhone=p;$("otpBox").classList.remove("hidden");msg("phoneMsg","Test OTP ready. Enter 123456.",true)};$("resendOtp").onclick=()=>msg("phoneMsg","Test OTP: 123456",true);
+$("verifyOtp").onclick=async()=>{if($("otp").value.trim()!=="123456")return msg("phoneMsg","Test OTP: 123456");let e=devEmail(pendingPhone),p=devPass(pendingPhone),r=await sb.auth.signInWithPassword({email:e,password:p});if(r.error){r=await sb.auth.signUp({email:e,password:p,options:{data:{phone_number:pendingPhone,display_name:"THAALA User"}}});if(r.error)return msg("phoneMsg",r.error.message);if(!r.data.session)return msg("phoneMsg","Account created. Confirm Email OFF karke login karein.")}currentUser=r.data.user;await startApp()};
+$("adminLogin").onclick=async()=>{let r=await sb.auth.signInWithPassword({email:$("adminEmail").value.trim(),password:$("adminPassword").value});if(r.error)return msg("adminMsg",r.error.message);currentUser=r.data.user;let p=await loadProfile();if(!p||p.role!=="admin"){await sb.auth.signOut();currentUser=null;return msg("adminMsg","Ye account THAALA admin nahi hai.")}showDash();await loadFootball()};
+$("addCredits").onclick=addCredits;$("userSearch").oninput=()=>renderUsers($("userSearch").value);$("targetUser").onchange=selectedUser;$("refreshReal").onclick=loadFootball;$("refreshCricket").onclick=loadCricket;$("menuBtn").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("drawerBackdrop").onclick=closeDrawer;$("logout").onclick=async()=>{await sb.auth.signOut();location.reload()};
+document.querySelectorAll(".quick,.navItem,.menuLink").forEach(x=>x.onclick=()=>setFilter(x.dataset.filter));
+function setFilter(f){activeFilter=f;document.querySelectorAll(".navItem").forEach(x=>x.classList.toggle("active",x.dataset.filter===f));$("realFootball").classList.toggle("hidden",f==="Cricket"||f==="mygames");$("realCricket").classList.toggle("hidden",f!=="Cricket");$("myGamesSection").classList.toggle("hidden",f!=="mygames");closeDrawer();if(f==="Cricket"){loadCricket();if(cricketTimer)clearInterval(cricketTimer);cricketTimer=setInterval(loadCricket,30000)}else if(f==="mygames"){if(cricketTimer)clearInterval(cricketTimer);loadMyGames()}else{if(cricketTimer)clearInterval(cricketTimer);loadFootball()}}
+async function startApp(){let p=await loadProfile();if(!p){return showAuth()}showDash();await loadFootball()}
+sb.auth.getSession().then(x=>{if(x.data?.session){currentUser=x.data.session.user;startApp()}});
 </script>
 </body>
 </html>
