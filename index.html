@@ -98,7 +98,16 @@ async function joinFootball(id,league,home,away,date){if(!currentUser)return;if(
 function boolish(v){return v===true||String(v).toLowerCase()==="true"||v===1||String(v)==="1"}
 function cricketFinished(m){return boolish(m?.matchEnded)||/won by|lost by|draw|tie|abandoned|cancelled|finished|complete|no result|result:/i.test(String(m?.status||""))}
 function cricketLive(m){return !cricketFinished(m)&&(String(m?.category||"").toUpperCase()==="LIVE"||boolish(m?.matchStarted))}
-function teams(m){let h=m?.homeTeam||m?.team1||m?.t1||"",a=m?.awayTeam||m?.team2||m?.t2||"";if((!h||!a)&&Array.isArray(m?.teams)&&m.teams.length>=2){h=h||(typeof m.teams[0]==="string"?m.teams[0]:(m.teams[0]?.name||""));a=a||(typeof m.teams[1]==="string"?m.teams[1]:(m.teams[1]?.name||""))}if((!h||!a)&&Array.isArray(m?.teamInfo)&&m.teamInfo.length>=2){h=h||(m.teamInfo[0]?.name||m.teamInfo[0]?.teamName||"");a=a||(m.teamInfo[1]?.name||m.teamInfo[1]?.teamName||"")}return [h||"Team 1",a||"Team 2"]}
+function teams(m){
+  const pick=v=>typeof v==="string"?v:(v?.name||v?.teamName||v?.longname||v?.longName||v?.shortname||v?.shortName||"");
+  let h=m?.homeTeam||m?.home_team||m?.team1||m?.team_1||pick(m?.home)||"";
+  let a=m?.awayTeam||m?.away_team||m?.team2||m?.team_2||pick(m?.away)||"";
+  if((!h||!a)&&Array.isArray(m?.teams)&&m.teams.length>=2){h=h||pick(m.teams[0]);a=a||pick(m.teams[1])}
+  if((!h||!a)&&Array.isArray(m?.teamInfo)&&m.teamInfo.length>=2){h=h||pick(m.teamInfo[0]);a=a||pick(m.teamInfo[1])}
+  if(!h||!a){let title=String(m?.name||m?.matchName||m?.match_name||"").split(",")[0].trim();let p=title.split(/\s+vs\.?\s+|\s+v\.?\s+/i).map(x=>x.trim()).filter(Boolean);if(p.length>=2){h=h||p[0];a=a||p[1]}}
+  return [h||"Team name unavailable",a||"Team name unavailable"]
+}
+
 function logo(m,n){let info=Array.isArray(m?.teamInfo)?m.teamInfo:[];return info.find(x=>String(x?.name||x?.teamName||"").toLowerCase()===String(n||"").toLowerCase())?.img||""}
 function playerRole(p){let r=String(p?.role||p?.playingRole||p?.type||"").toLowerCase();let c=p?.captain===true||p?.isCaptain===true;let w=p?.wicketKeeper===true||p?.isWicketkeeper===true||p?.wk===true;if(c)return "C";if(w)return "WK";if(r.includes("all"))return "AR";if(r.includes("bowl"))return "B";if(r.includes("bat"))return "BAT";return r?String(p.role):""}
 function renderPlayer(p){let name=p?.name||p?.playerName||p?.fullName||"Player";let role=playerRole(p);return `<div class="playerRow"><div class="playerPhoto"></div><div><div class="playerName">${esc(name)}${role?` <span class="playerRole">(${esc(role)})</span>`:""}</div><div class="playerRole">${esc(p?.battingStyle||p?.batting||"")}${p?.bowlingStyle||p?.bowling?` • ${esc(p.bowlingStyle||p.bowling)}`:""}</div></div>${role?`<span class="roleBadge">${esc(role)}</span>`:""}</div>`}
