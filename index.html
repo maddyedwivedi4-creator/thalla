@@ -98,16 +98,8 @@ async function joinFootball(id,league,home,away,date){if(!currentUser)return;if(
 function boolish(v){return v===true||String(v).toLowerCase()==="true"||v===1||String(v)==="1"}
 function cricketFinished(m){return boolish(m?.matchEnded)||/won by|lost by|draw|tie|abandoned|cancelled|finished|complete|no result|result:/i.test(String(m?.status||""))}
 function cricketLive(m){return !cricketFinished(m)&&(String(m?.category||"").toUpperCase()==="LIVE"||boolish(m?.matchStarted))}
-function teams(m){
-  const pick=v=>typeof v==="string"?v:(v?.name||v?.teamName||v?.longname||v?.longName||v?.shortname||v?.shortName||"");
-  let h=m?.homeTeam||m?.home_team||m?.team1||m?.team_1||pick(m?.home)||"";
-  let a=m?.awayTeam||m?.away_team||m?.team2||m?.team_2||pick(m?.away)||"";
-  if((!h||!a)&&Array.isArray(m?.teams)&&m.teams.length>=2){h=h||pick(m.teams[0]);a=a||pick(m.teams[1])}
-  if((!h||!a)&&Array.isArray(m?.teamInfo)&&m.teamInfo.length>=2){h=h||pick(m.teamInfo[0]);a=a||pick(m.teamInfo[1])}
-  if(!h||!a){let title=String(m?.name||m?.matchName||m?.match_name||"").split(",")[0].trim();let p=title.split(/\s+vs\.?\s+|\s+v\.?\s+/i).map(x=>x.trim()).filter(Boolean);if(p.length>=2){h=h||p[0];a=a||p[1]}}
-  return [h||"Team name unavailable",a||"Team name unavailable"]
-}
-
+function teamText(x){if(typeof x==="string")return x.trim();if(!x||typeof x!=="object")return "";return String(x.name||x.teamName||x.team_name||x.longname||x.longName||x.displayName||x.display_name||x.shortname||x.shortName||x.short_name||"").trim()}
+function teams(m){let h=teamText(m?.homeTeam)||teamText(m?.home_team)||teamText(m?.team1)||teamText(m?.team_1),a=teamText(m?.awayTeam)||teamText(m?.away_team)||teamText(m?.team2)||teamText(m?.team_2);if((!h||!a)&&Array.isArray(m?.teams)){h=h||teamText(m.teams[0]);a=a||teamText(m.teams[1])}if((!h||!a)&&Array.isArray(m?.teamInfo)){h=h||teamText(m.teamInfo[0]);a=a||teamText(m.teamInfo[1])}if((!h||!a)&&m?.name){let z=String(m.name).match(/^(.*?)\s+vs\.?\s+(.*?)(?:,|\s+-\s+|$)/i);if(!z)z=String(m.name).match(/^(.*?)\s+v\s+(.*?)(?:,|\s+-\s+|$)/i);if(z){h=h||z[1].trim();a=a||z[2].trim()}}return [h||"Team name unavailable",a||"Team name unavailable"]}
 function logo(m,n){let info=Array.isArray(m?.teamInfo)?m.teamInfo:[];return info.find(x=>String(x?.name||x?.teamName||"").toLowerCase()===String(n||"").toLowerCase())?.img||""}
 function playerRole(p){let r=String(p?.role||p?.playingRole||p?.type||"").toLowerCase();let c=p?.captain===true||p?.isCaptain===true;let w=p?.wicketKeeper===true||p?.isWicketkeeper===true||p?.wk===true;if(c)return "C";if(w)return "WK";if(r.includes("all"))return "AR";if(r.includes("bowl"))return "B";if(r.includes("bat"))return "BAT";return r?String(p.role):""}
 function renderPlayer(p){let name=p?.name||p?.playerName||p?.fullName||"Player";let role=playerRole(p);return `<div class="playerRow"><div class="playerPhoto"></div><div><div class="playerName">${esc(name)}${role?` <span class="playerRole">(${esc(role)})</span>`:""}</div><div class="playerRole">${esc(p?.battingStyle||p?.batting||"")}${p?.bowlingStyle||p?.bowling?` • ${esc(p.bowlingStyle||p.bowling)}`:""}</div></div>${role?`<span class="roleBadge">${esc(role)}</span>`:""}</div>`}
